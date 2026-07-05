@@ -15,7 +15,7 @@ export const routes: Routes = [
     path: 'home',
     loadComponent: () => import('./features/home/home/home-component').then(m => m.HomeComponent)
   },
-
+// hello wir
   {
     path: 'auth',
     children: [
