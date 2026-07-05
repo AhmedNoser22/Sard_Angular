@@ -1,0 +1,144 @@
+:host {
+  --sard-bg: #faf3ec;
+  --sard-card: #fffdfb;
+  --sard-primary: #c0785a;
+  --sard-primary-dark: #a5624a;
+  --sard-maroon: #6b2d2d;
+  --sard-tan: #ddc8b4;
+  --sard-text: #4a3428;
+  --sard-text-light: #8a7264;
+  --sard-border: #ecdfd2;
+  display: block;
+  font-family: 'Amiri', serif;
+  direction: rtl;
+}
+
+:host-context([data-theme='dark']) {
+  --sard-bg: #201812;
+  --sard-card: #2a201a;
+  --sard-primary: #d98f6c;
+  --sard-primary-dark: #c0785a;
+  --sard-maroon: #f0d9c8;
+  --sard-tan: #4a382c;
+  --sard-text: #ece1d6;
+  --sard-text-light: #b3a294;
+  --sard-border: #3c2e24;
+}
+
+.create-post {
+  background: var(--sard-card);
+  border: 1px solid var(--sard-border);
+  border-radius: 16px;
+  padding: 16px 20px;
+  box-shadow: 0 2px 12px rgba(107, 45, 45, 0.05);
+  margin-bottom: 20px;
+
+  &__row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: text;
+  }
+
+  &__avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--sard-tan);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+
+  &__placeholder {
+    flex: 1;
+    color: var(--sard-text-light);
+    font-size: 15px;
+    padding: 10px 14px;
+    background: var(--sard-bg);
+    border: 1px solid var(--sard-border);
+    border-radius: 999px;
+
+    &.hidden {
+      display: none;
+    }
+  }
+
+  &__form {
+    margin-top: 12px;
+  }
+
+  &__textarea {
+    width: 100%;
+    font-family: inherit;
+    font-size: 16px;
+    color: var(--sard-text);
+    background: var(--sard-bg);
+    border: 1px solid var(--sard-border);
+    border-radius: 12px;
+    padding: 12px 16px;
+    resize: none;
+    outline: none;
+    box-sizing: border-box;
+
+    &:focus {
+      border-color: var(--sard-primary);
+    }
+  }
+
+  &__actions {
+    display: flex;
+    justify-content: flex-start;
+    gap: 10px;
+    margin-top: 10px;
+  }
+
+  &__submit {
+    background: var(--sard-primary);
+    color: #fff;
+    border: none;
+    font-family: inherit;
+    font-weight: 700;
+    font-size: 14px;
+    padding: 9px 24px;
+    border-radius: 999px;
+    cursor: pointer;
+
+    &:hover:not(:disabled) {
+      background: var(--sard-primary-dark);
+    }
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  }
+
+  &__cancel {
+    background: transparent;
+    color: var(--sard-text-light);
+    border: 1px solid var(--sard-border);
+    font-family: inherit;
+    font-size: 14px;
+    padding: 9px 20px;
+    border-radius: 999px;
+    cursor: pointer;
+
+    &__dropdown-item {
+      &--danger {
+        color: #c0392b; // كويس، لكن الـ hover:
+
+        &:hover {
+          background: #fdf0ee;
+        }
+
+      }
+    }
+
+    &:hover {
+      background: var(--sard-bg);
+    }
+  }
+}

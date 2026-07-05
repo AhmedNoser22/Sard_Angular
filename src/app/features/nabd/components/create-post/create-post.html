@@ -1,0 +1,28 @@
+<div class="create-post">
+  <div class="create-post__row" (click)="expand()">
+    <div class="create-post__avatar">✍</div>
+    <div class="create-post__placeholder" [class.hidden]="isExpanded()">
+      بم تفكر اليوم؟
+    </div>
+  </div>
+
+  @if (isExpanded()) {
+    <form [formGroup]="form" (ngSubmit)="submit()" class="create-post__form">
+      <textarea
+        formControlName="content"
+        class="create-post__textarea"
+        placeholder="شارك فكرة، اقتباساً، أو سؤالاً..."
+        rows="4"
+        dir="rtl"
+        autofocus
+      ></textarea>
+
+      <div class="create-post__actions">
+        <button type="button" class="create-post__cancel" (click)="cancel()">إلغاء</button>
+        <button type="submit" class="create-post__submit" [disabled]="form.invalid || isLoading()">
+          @if (isLoading()) { جارٍ النشر... } @else { نشر }
+        </button>
+      </div>
+    </form>
+  }
+</div>

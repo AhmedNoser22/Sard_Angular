@@ -1,0 +1,44 @@
+<div class="nabd-layout">
+  
+
+  <main class="nabd-main">
+    <div class="nabd-feed">
+      <app-create-post (postCreated)="onPostCreated($event)" />
+
+      @if (isLoading()) {
+      <div class="nabd-feed__loading">
+        <span class="nabd-feed__spinner"></span>
+      </div>
+      } @else if (posts().length) {
+      @for (post of posts(); track post.id) {
+      <div [id]="'post-' + post.id">
+        <app-post-card [post]="post" (postDeleted)="onPostDeleted($event)" />
+      </div>
+      }
+      } @else {
+      <div class="nabd-feed__empty">
+        <div class="nabd-feed__empty-icon">📖</div>
+        <p>لا توجد منشورات بعد</p>
+        <span>كن أول من يشارك فكرة أو اقتباساً</span>
+      </div>
+      }
+    </div>
+
+    <aside class="nabd-sidebar">
+      <div class="nabd-sidebar__card">
+        <h3 class="nabd-sidebar__title">عن ساحة الحكاية</h3>
+        <p class="nabd-sidebar__text">مساحة للكتّاب والقراء لتبادل الأفكار والاقتباسات والأسئلة حول عالم الروايات.</p>
+      </div>
+
+      <div class="nabd-sidebar__card nabd-sidebar__tips">
+        <h3 class="nabd-sidebar__title">💡 أفكار للنشر</h3>
+        <ul class="nabd-sidebar__list">
+          <li>اقتباس أثّر فيك من رواية</li>
+          <li>سؤال عن رواية تقرأها</li>
+          <li>فكرة لقصة جديدة</li>
+          <li>توصية بكتاب</li>
+        </ul>
+      </div>
+    </aside>
+  </main>
+</div>

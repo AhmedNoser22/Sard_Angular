@@ -1,0 +1,422 @@
+@import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap');
+
+:host {
+  --sard-bg: #faf3ec;
+  --sard-card: #fffdfb;
+  --sard-primary: #c0785a;
+  --sard-primary-dark: #a5624a;
+  --sard-maroon: #6b2d2d;
+  --sard-tan: #ddc8b4;
+  --sard-text: #4a3428;
+  --sard-text-light: #8a7264;
+  --sard-border: #ecdfd2;
+  --sard-amber-glow: rgba(192, 120, 90, 0.16);
+
+  display: block;
+  font-family: 'Amiri', serif;
+  direction: rtl;
+}
+
+// الوضع الداكن — إضافة بس، مش بتلمس ولا بتشيل حاجة فوق.
+// لما <html> ياخد data-theme="dark" (زرار الإعدادات بيعمل كده)، القيم دي
+// بتحل محل القيم العادية جوه الـ component ده بس.
+:host-context([data-theme='dark']) {
+  --sard-bg: #201812;
+  --sard-card: #2a201a;
+  --sard-primary: #d98f6c;
+  --sard-primary-dark: #c0785a;
+  --sard-maroon: #f0d9c8;
+  --sard-tan: #4a382c;
+  --sard-text: #ece1d6;
+  --sard-text-light: #b3a294;
+  --sard-border: #3c2e24;
+}
+
+.highlights {
+  &__back {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 16px;
+    color: var(--sard-primary);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 700;
+  }
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 26px;
+
+    @media (max-width: 560px) { flex-direction: column; align-items: stretch; }
+  }
+
+  &__intro {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  &__deco {
+    width: 42px;
+    height: 42px;
+    flex-shrink: 0;
+    border-radius: 12px;
+    box-shadow: 0 4px 14px rgba(107, 45, 45, 0.12);
+  }
+
+  &__title {
+    margin: 0 0 2px;
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--sard-maroon);
+  }
+
+  &__subtitle {
+    margin: 0;
+    font-size: 14px;
+    color: var(--sard-text-light);
+  }
+
+  &__add-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--sard-primary);
+    color: #fff;
+    border: none;
+    font-family: inherit;
+    font-weight: 700;
+    font-size: 14px;
+    padding: 10px 22px;
+    border-radius: 999px;
+    cursor: pointer;
+    white-space: nowrap;
+    box-shadow: 0 6px 18px rgba(192, 120, 90, 0.28);
+    transition: background 0.2s, transform 0.15s;
+    &:hover { background: var(--sard-primary-dark); transform: translateY(-1px); }
+    &:active { transform: translateY(0); }
+  }
+
+  &__add-icon { font-size: 18px; line-height: 1; }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+  }
+
+  &__empty {
+    text-align: center;
+    padding: 64px 24px;
+    color: var(--sard-text-light);
+    font-size: 15px;
+    background: var(--sard-card);
+    border: 1px dashed var(--sard-border);
+    border-radius: 20px;
+  }
+
+  &__empty-mark {
+    display: block;
+    font-size: 46px;
+    line-height: 1;
+    color: var(--sard-tan);
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+
+  &__empty-btn {
+    margin-top: 16px;
+    background: transparent;
+    border: 1.5px solid var(--sard-primary);
+    color: var(--sard-primary);
+    font-family: inherit;
+    font-weight: 700;
+    font-size: 13px;
+    padding: 8px 20px;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: all 0.2s;
+    &:hover { background: var(--sard-primary); color: #fff; }
+  }
+}
+
+.highlight-card {
+  position: relative;
+  background: var(--sard-card);
+  border: 1px solid var(--sard-border);
+  border-radius: 18px;
+  padding: 22px 20px 18px;
+  box-shadow: 0 4px 16px rgba(107,45,45,0.05);
+  transition: transform 0.2s, box-shadow 0.2s;
+  animation: highlight-rise 0.35s ease both;
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 30px rgba(107,45,45,0.12), 0 0 0 1px var(--sard-amber-glow);
+    .highlight-card__delete { opacity: 1; }
+  }
+
+  &--skeleton {
+    height: 190px;
+    animation: highlight-shimmer 1.4s ease-in-out infinite;
+    background: linear-gradient(100deg, var(--sard-card) 30%, var(--sard-bg) 50%, var(--sard-card) 70%);
+    background-size: 200% 100%;
+  }
+
+  &__delete {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    width: 28px;
+    height: 28px;
+    border: none;
+    background: #fdf0ee;
+    color: #c0392b;
+    font-size: 18px;
+    line-height: 1;
+    cursor: pointer;
+    opacity: 0;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.2s, background 0.2s;
+    &:hover { background: #f5c6c2; }
+  }
+
+  &__quote-mark {
+    display: block;
+    font-size: 48px;
+    line-height: 0.8;
+    color: var(--sard-tan);
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+
+  &__content {
+    margin: 0 0 14px;
+    font-size: 16px;
+    line-height: 1.9;
+    color: var(--sard-text);
+  }
+
+  &__novel {
+    margin: 0 0 14px;
+    font-size: 13px;
+    color: var(--sard-primary-dark);
+    font-weight: 700;
+  }
+
+  &__footer {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-top: 12px;
+    border-top: 1px solid var(--sard-border);
+  }
+
+  &__avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--sard-tan);
+    color: var(--sard-maroon);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+
+  &__meta {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  &__author {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--sard-text);
+  }
+
+  &__date {
+    font-size: 11px;
+    color: var(--sard-text-light);
+  }
+}
+
+// ---- Modal ----
+.highlight-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(74, 52, 40, 0.45);
+  backdrop-filter: blur(3px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  z-index: 1000;
+  animation: highlight-fade-in 0.2s ease both;
+
+  &--closing {
+    animation: highlight-fade-out 0.18s ease both;
+    .highlight-modal__panel { animation: highlight-pop-out 0.18s ease both; }
+  }
+
+  &__panel {
+    width: 100%;
+    max-width: 460px;
+    max-height: 88vh;
+    overflow-y: auto;
+    background: var(--sard-card);
+    border-radius: 22px;
+    padding: 26px 26px 22px;
+    box-shadow: 0 24px 60px rgba(74, 52, 40, 0.28);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    animation: highlight-pop-in 0.25s cubic-bezier(.2,.8,.3,1.1) both;
+    font-family: 'Amiri', serif;
+    direction: rtl;
+  }
+
+  &__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+
+    h3 {
+      display: inline-block;
+      margin: 0;
+      font-size: 19px;
+      font-weight: 700;
+      color: var(--sard-maroon);
+    }
+  }
+
+  &__quote-mark {
+    display: block;
+    font-size: 30px;
+    line-height: 0.6;
+    color: var(--sard-tan);
+    margin-bottom: 4px;
+  }
+
+  &__close {
+    width: 30px;
+    height: 30px;
+    flex-shrink: 0;
+    border: none;
+    background: var(--sard-bg);
+    color: var(--sard-text-light);
+    font-size: 18px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+    &:hover { background: var(--sard-tan); color: var(--sard-maroon); }
+  }
+
+  &__field {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    text-align: right;
+
+    label {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--sard-maroon);
+    }
+
+    input, textarea {
+      font-family: inherit;
+      font-size: 15px;
+      color: var(--sard-text);
+      background: var(--sard-bg);
+      border: 1px solid var(--sard-border);
+      border-radius: 12px;
+      padding: 11px 14px;
+      resize: vertical;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      &:focus { outline: none; border-color: var(--sard-primary); box-shadow: 0 0 0 3px var(--sard-amber-glow); }
+      &::placeholder { color: var(--sard-tan); }
+    }
+  }
+
+  &__row {
+    display: flex;
+    gap: 14px;
+    @media (max-width: 480px) { flex-direction: column; }
+  }
+
+  &__error { color: #a53d3d; font-size: 13px; }
+
+  &__actions { display: flex; gap: 10px; margin-top: 4px; }
+
+  &__save-btn {
+    flex: 1;
+    background: var(--sard-primary);
+    color: #fff;
+    border: none;
+    font-family: inherit;
+    font-weight: 700;
+    font-size: 14px;
+    padding: 11px 22px;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: background 0.2s;
+    &:hover:not(:disabled) { background: var(--sard-primary-dark); }
+    &:disabled { opacity: 0.6; cursor: not-allowed; }
+  }
+
+  &__cancel-btn {
+    background: transparent;
+    color: var(--sard-text-light);
+    border: 1px solid var(--sard-border);
+    font-family: inherit;
+    font-weight: 700;
+    font-size: 14px;
+    padding: 11px 22px;
+    border-radius: 999px;
+    cursor: pointer;
+    &:hover:not(:disabled) { background: var(--sard-bg); }
+  }
+}
+
+@keyframes highlight-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes highlight-fade-out {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+@keyframes highlight-pop-in {
+  from { opacity: 0; transform: translateY(14px) scale(0.96); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes highlight-pop-out {
+  from { opacity: 1; transform: translateY(0) scale(1); }
+  to { opacity: 0; transform: translateY(10px) scale(0.97); }
+}
+@keyframes highlight-rise {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes highlight-shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .highlight-card, .highlight-modal, .highlight-modal__panel {
+    animation: none !important;
+  }
+}

@@ -1,0 +1,359 @@
+:host {
+  --sard-bg: #faf3ec;
+  --sard-card: #fffdfb;
+  --sard-primary: #c0785a;
+  --sard-primary-dark: #a5624a;
+  --sard-maroon: #6b2d2d;
+  --sard-tan: #ddc8b4;
+  --sard-text: #4a3428;
+  --sard-text-light: #8a7264;
+  --sard-border: #ecdfd2;
+  --sard-amber-glow: rgba(192, 120, 90, 0.16);
+
+  display: block;
+  font-family: 'Amiri', serif;
+  direction: rtl;
+  margin-top: 28px;
+}
+
+:host-context([data-theme='dark']) {
+  --sard-bg: #201812;
+  --sard-card: #2a201a;
+  --sard-primary: #d98f6c;
+  --sard-primary-dark: #c0785a;
+  --sard-maroon: #f0d9c8;
+  --sard-tan: #4a382c;
+  --sard-text: #ece1d6;
+  --sard-text-light: #b3a294;
+  --sard-border: #3c2e24;
+}
+
+// ---- الهيدر وزرار "رواية جديدة" ----
+.novels-list {
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 18px;
+  }
+
+  &__title {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--sard-maroon);
+  }
+
+  &__add-trigger {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--sard-primary);
+    color: #fff;
+    border: none;
+    font-family: inherit;
+    font-weight: 700;
+    font-size: 14px;
+    padding: 10px 20px;
+    border-radius: 999px;
+    cursor: pointer;
+    box-shadow: 0 6px 18px rgba(192, 120, 90, 0.28);
+    transition: background 0.2s ease, transform 0.15s;
+
+    &:hover { background: var(--sard-primary-dark); transform: translateY(-1px); }
+    &:active { transform: translateY(0); }
+  }
+
+  &__add-icon { font-size: 16px; line-height: 1; }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 20px;
+  }
+
+  &__empty {
+    text-align: center;
+    padding: 48px 24px;
+    background: var(--sard-card);
+    border: 1px dashed var(--sard-border);
+    border-radius: 20px;
+    color: var(--sard-text-light);
+    font-size: 14px;
+  }
+}
+
+// ---- كارت الرواية ----
+.novel-card {
+  background: var(--sard-card);
+  border: 1px solid var(--sard-border);
+  border-radius: 16px;
+  overflow: hidden;
+  cursor: pointer;
+  box-shadow: 0 6px 20px rgba(107, 45, 45, 0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  animation: novel-rise 0.35s ease both;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 28px rgba(107, 45, 45, 0.12);
+  }
+
+  &__cover-wrap {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    background: var(--sard-tan);
+  }
+
+  &__cover {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+
+    &--placeholder {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 42px;
+      font-weight: 700;
+      color: var(--sard-maroon);
+    }
+  }
+
+  &__status {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.9);
+    color: var(--sard-maroon);
+
+    &--Published { background: #4c7a4c; color: #fff; }
+    &--PendingPayment { background: #c98f2c; color: #fff; }
+    &--Draft { background: var(--sard-tan); color: var(--sard-maroon); }
+  }
+
+  &__body { padding: 14px 16px 16px; }
+
+  &__title {
+    margin: 0 0 6px;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--sard-maroon);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__desc {
+    margin: 0 0 10px;
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--sard-text-light);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  &__meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 12px;
+    color: var(--sard-text-light);
+  }
+
+  &__price { font-weight: 700; color: var(--sard-primary-dark); }
+
+  &__continue {
+    display: inline-block;
+    margin-top: 10px;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--sard-primary);
+  }
+}
+
+// ---- المودال: "رواية جديدة" ----
+// أسماء الـ classes هنا مطابقة بالظبط لملف الـ HTML بتاعك
+// (novel-modal-overlay هو الخلفية، novel-modal هو الصندوق الأبيض نفسه)
+.novel-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(74, 52, 40, 0.45);
+  backdrop-filter: blur(3px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  z-index: 1000;
+  animation: novel-fade-in 0.2s ease both;
+}
+
+.novel-modal {
+  width: 100%;
+  max-width: 440px;
+  max-height: 88vh;
+  overflow-y: auto;
+  background: var(--sard-card);
+  border-radius: 22px;
+  padding: 26px 26px 22px;
+  box-shadow: 0 24px 60px rgba(74, 52, 40, 0.28);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  animation: novel-pop-in 0.25s cubic-bezier(.2,.8,.3,1.1) both;
+  font-family: 'Amiri', serif;
+  direction: rtl;
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    h3 { margin: 0; font-size: 19px; font-weight: 700; color: var(--sard-maroon); }
+  }
+
+  &__close {
+    width: 30px;
+    height: 30px;
+    border: none;
+    background: var(--sard-bg);
+    color: var(--sard-text-light);
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s, color 0.2s;
+    &:hover { background: var(--sard-tan); color: var(--sard-maroon); }
+  }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  // ---- غلاف الرواية ----
+  &__cover-field {
+    display: flex;
+    justify-content: center;
+  }
+
+  &__cover-upload {
+    width: 140px;
+    height: 140px;
+    border-radius: 16px;
+    border: 1.5px dashed var(--sard-border);
+    background: var(--sard-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    overflow: hidden;
+    transition: border-color 0.2s, background 0.2s;
+
+    &:hover { border-color: var(--sard-primary); background: var(--sard-amber-glow); }
+
+    img { width: 100%; height: 100%; object-fit: cover; }
+  }
+
+  &__cover-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    color: var(--sard-text-light);
+    font-size: 12px;
+    font-weight: 700;
+  }
+
+  &__cover-input { display: none; }
+
+  // ---- حقول النص ----
+  &__field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    text-align: right;
+
+    label { font-size: 13px; font-weight: 700; color: var(--sard-maroon); }
+
+    input, textarea {
+      font-family: inherit;
+      font-size: 15px;
+      color: var(--sard-text);
+      background: var(--sard-bg);
+      border: 1px solid var(--sard-border);
+      border-radius: 12px;
+      padding: 11px 14px;
+      resize: vertical;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      &:focus { outline: none; border-color: var(--sard-primary); box-shadow: 0 0 0 3px var(--sard-amber-glow); }
+      &::placeholder { color: var(--sard-tan); }
+    }
+  }
+
+  &__error {
+    color: #a53d3d;
+    font-size: 13px;
+    margin: 0;
+
+    &--general {
+      background: #fdf0ee;
+      padding: 8px 12px;
+      border-radius: 10px;
+    }
+  }
+
+  &__actions { display: flex; gap: 10px; margin-top: 4px; }
+
+  &__save {
+    flex: 1;
+    background: var(--sard-primary);
+    color: #fff;
+    border: none;
+    font-family: inherit;
+    font-weight: 700;
+    font-size: 14px;
+    padding: 11px 22px;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: background 0.2s;
+    &:hover:not(:disabled) { background: var(--sard-primary-dark); }
+    &:disabled { opacity: 0.6; cursor: not-allowed; }
+  }
+
+  &__cancel {
+    background: transparent;
+    color: var(--sard-text-light);
+    border: 1px solid var(--sard-border);
+    font-family: inherit;
+    font-weight: 700;
+    font-size: 14px;
+    padding: 11px 22px;
+    border-radius: 999px;
+    cursor: pointer;
+    &:hover:not(:disabled) { background: var(--sard-bg); }
+  }
+}
+
+@keyframes novel-fade-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes novel-pop-in {
+  from { opacity: 0; transform: translateY(14px) scale(0.96); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes novel-rise {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .novel-card, .novel-modal-overlay, .novel-modal { animation: none !important; }
+}

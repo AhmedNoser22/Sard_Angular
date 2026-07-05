@@ -1,0 +1,30 @@
+:host {
+  display: block;
+  font-family: 'Amiri', serif;
+  direction: rtl;
+  margin-top: 40px;
+}
+
+.profile-footer {
+  text-align: center;
+  padding: 32px 20px;
+  background: var(--sard-card);
+  border: 1px solid var(--sard-border);
+  border-radius: 20px;
+}
+
+.profile-footer__quote {
+  margin: 0 auto 8px;
+  max-width: 520px;
+  font-size: 18px;
+  line-height: 1.9;
+  font-style: italic;
+  color: var(--sard-maroon);
+}
+
+.profile-footer__author {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--sard-primary);
+}

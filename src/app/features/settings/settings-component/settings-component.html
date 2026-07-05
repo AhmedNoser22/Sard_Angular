@@ -1,0 +1,80 @@
+<button type="button" class="settings-fab" title="الإعدادات" (click)="open()">
+  <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
+    <path
+      d="M19.14 12.94a7.14 7.14 0 0 0 .06-.94 7.14 7.14 0 0 0-.06-.94l2.03-1.58a.5.5 0 0 0 .12-.64l-1.92-3.32a.5.5 0 0 0-.6-.22l-2.39.96a7.03 7.03 0 0 0-1.62-.94l-.36-2.54a.5.5 0 0 0-.5-.42h-3.84a.5.5 0 0 0-.5.42l-.36 2.54c-.59.24-1.13.56-1.62.94l-2.39-.96a.5.5 0 0 0-.6.22L2.71 8.84a.5.5 0 0 0 .12.64l2.03 1.58c-.04.31-.06.62-.06.94s.02.63.06.94l-2.03 1.58a.5.5 0 0 0-.12.64l1.92 3.32c.14.24.42.32.6.22l2.39-.96c.49.38 1.03.7 1.62.94l.36 2.54c.05.24.26.42.5.42h3.84c.24 0 .45-.18.5-.42l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.24.1.46 0 .6-.22l1.92-3.32a.5.5 0 0 0-.12-.64l-2.03-1.58zM12 15.5A3.5 3.5 0 1 1 12 8.5a3.5 3.5 0 0 1 0 7z" />
+  </svg>
+</button>
+
+@if (isOpen()) {
+<div class="settings-overlay" [class.settings-overlay--closing]="isClosing()" (click)="onBackdropClick($event)">
+  <aside class="settings-drawer" [class.settings-drawer--closing]="isClosing()">
+    <div class="settings-drawer__header">
+      <h2>الإعدادات</h2>
+      <button type="button" class="settings-drawer__close" (click)="close()" title="إغلاق">×</button>
+    </div>
+
+    <div class="settings-drawer__body">
+
+      <section class="settings-block">
+        <div class="settings-avatar">
+          <div class="settings-avatar__wrap">
+            @if (showRealImage()) {
+            <img class="settings-avatar__img" [src]="profileImageUrl()" [alt]="displayName()"
+              (error)="onImageError()" />
+            } @else {
+            <div class="settings-avatar__img settings-avatar__img--fallback" [style.background]="avatarColor()">
+              {{ initials() }}
+            </div>
+            }
+            <label class="settings-avatar__edit" for="avatarInput" title="تغيير الصورة">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
+                <path
+                  d="M9 2l-1.5 2H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-3.5L15 2H9zm3 15a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-2a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" />
+              </svg>
+            </label>
+            <input id="avatarInput" type="file" accept="image/*" class="settings-avatar__input"
+              (change)="onImageSelected($event)" />
+          </div>
+          <p class="settings-avatar__hint">اضغط على الأيقونة لتغيير الصورة</p>
+        </div>
+      </section>
+
+      <section class="settings-block">
+        <h3 class="settings-block__title">المعلومات الشخصية</h3>
+        <form class="settings-form" [formGroup]="form" (ngSubmit)="saveProfile()">
+          <div class="settings-form__field">
+            <label for="displayName">الاسم</label>
+            <input id="displayName" type="text" formControlName="displayName" maxlength="100" />
+            @if (form.get('displayName')?.invalid && form.get('displayName')?.touched) {
+            <span class="settings-form__error">الاسم مطلوب</span>
+            }
+          </div>
+
+          <div class="settings-form__field">
+            <label for="bio">نبذة عنك</label>
+            <textarea id="bio" formControlName="bio" maxlength="500" rows="3"></textarea>
+          </div>
+
+          @if (errorMessage()) { <p class="settings-form__error">{{ errorMessage() }}</p> }
+          @if (isSaved()) { <p class="settings-form__success">تم الحفظ بنجاح ✅</p> }
+
+          <button type="submit" class="settings-form__btn" [disabled]="isLoading() || form.invalid">
+            @if (isLoading()) { جارٍ الحفظ... } @else { حفظ التغييرات }
+          </button>
+        </form>
+      </section>
+
+      <section class="settings-block">
+        <h3 class="settings-block__title">المظهر</h3>
+        <div class="settings-row">
+          <span>{{ isDarkMode() ? 'الوضع الداكن' : 'الوضع الفاتح' }}</span>
+          <button type="button" class="settings-toggle" [class.active]="isDarkMode()" (click)="toggleTheme()">
+            <span class="settings-toggle__knob"></span>
+          </button>
+        </div>
+      </section>
+
+    </div>
+  </aside>
+</div>
+}

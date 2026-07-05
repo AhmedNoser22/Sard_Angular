@@ -1,0 +1,22 @@
+<div class="notif-panel">
+  <div class="notif-panel__header">
+    <h3>الإشعارات</h3>
+    <button type="button" (click)="markAllRead()">تعليم الكل كمقروء</button>
+  </div>
+
+  @if (notificationService.notifications().length) {
+    @for (n of notificationService.notifications(); track n.createdAt) {
+      <div class="notif-item" [class.unread]="!n.isRead" (click)="openPost(n.postId)">
+        <div class="notif-item__icon">
+          @if (n.type === 'like') { ❤️ } @else { 💬 }
+        </div>
+        <div class="notif-item__body">
+          <p class="notif-item__text"><strong>{{ n.actorName }}</strong> {{ n.message }}</p>
+          <span class="notif-item__time">{{ n.createdAt | date: 'shortTime' }}</span>
+        </div>
+      </div>
+    }
+  } @else {
+    <p class="notif-panel__empty">لا توجد إشعارات</p>
+  }
+</div>

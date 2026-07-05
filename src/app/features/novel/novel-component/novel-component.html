@@ -1,0 +1,47 @@
+<div class="novel-page">
+  <aside class="novel-page__sidebar">
+    <a [routerLink]="['/profile']" class="novel-page__back">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+        <path d="M14 19l-7-7 7-7v14z" />
+      </svg>
+      رجوع
+    </a>
+
+    @if (novel(); as n) {
+    <h2 class="novel-page__novel-title">{{ n.title }}</h2>
+    }
+
+    <div class="novel-page__chapters">
+      <div class="novel-page__chapters-header">
+        <span>الفصول</span>
+        <button type="button" class="novel-page__new-chapter-btn" (click)="startNewChapter()">+ جديد</button>
+      </div>
+
+      @if (isLoading()) {
+      <p class="novel-page__loading">جارٍ التحميل...</p>
+      } @else if (chapters().length) {
+      @for (ch of chapters(); track ch.id) {
+      <button type="button" class="novel-page__chapter-item" [class.active]="activeChapter()?.id === ch.id"
+        (click)="openChapter(ch)">
+        {{ ch.order }}. {{ ch.title }}
+      </button>
+      }
+      } @else {
+      <p class="novel-page__empty">لا توجد فصول بعد</p>
+      }
+    </div>
+  </aside>
+
+  <main class="novel-page__editor">
+    @if (activeChapter(); as ch) {
+    <app-chapter-editor [chapter]="ch" [novelId]="novelId()" (chapterSaved)="onChapterSaved($event)" />
+    } @else if (isCreatingChapter()) {
+    <app-chapter-editor [novelId]="novelId()" [nextOrder]="chapters().length + 1"
+      (chapterSaved)="onNewChapterSaved($event)" />
+    } @else {
+    <div class="novel-page__placeholder">
+      <p>اختر فصلاً من القائمة أو أنشئ فصلاً جديداً</p>
+    </div>
+    }
+  </main>
+</div>

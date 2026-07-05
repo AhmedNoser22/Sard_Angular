@@ -1,0 +1,243 @@
+@import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap');
+
+:host {
+  --sard-bg: #faf3ec;
+  --sard-card: #fffdfb;
+  --sard-primary: #c0785a;
+  --sard-primary-dark: #a5624a;
+  --sard-maroon: #6b2d2d;
+  --sard-tan: #ddc8b4;
+  --sard-text: #4a3428;
+  --sard-text-light: #8a7264;
+  --sard-border: #ecdfd2;
+
+  display: block;
+  font-family: 'Amiri', serif;
+  direction: rtl;
+}
+
+:host-context([data-theme='dark']) {
+  --sard-bg: #201812;
+  --sard-card: #2a201a;
+  --sard-primary: #c0785a;
+  --sard-primary-dark: #a5624a;
+  --sard-maroon: #f0d9c8;
+  --sard-tan: #4a382c;
+  --sard-text: #ece1d6;
+  --sard-text-light: #b3a294;
+  --sard-border: #3c2e24;
+}
+
+.profile-card__photo,
+.profile-card__photo--fallback {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  object-fit: cover;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.profile-card__photo--fallback {
+  color: #fff;
+  font-family: 'Amiri', serif;
+  font-size: 2.5rem;
+  font-weight: 700;
+  user-select: none;
+}
+
+.profile-card {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  background: var(--sard-card);
+  border: 1px solid var(--sard-border);
+  border-radius: 20px;
+  padding: 28px 32px;
+  box-shadow: 0 6px 24px rgba(107, 45, 45, 0.06);
+
+  @media (max-width: 640px) {
+    flex-direction: column;
+    text-align: center;
+    padding: 24px 20px;
+  }
+
+  &__photo-wrap {
+    position: relative;
+    flex-shrink: 0;
+    width: 110px;
+    height: 110px;
+  }
+
+  &__photo {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid var(--sard-tan);
+    background: var(--sard-bg);
+  }
+
+  &__photo-edit {
+    position: absolute;
+    bottom: 2px;
+    left: 2px;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--sard-primary);
+    color: #fff;
+    border-radius: 50%;
+    border: 2px solid var(--sard-card);
+    cursor: pointer;
+    transition: background 0.2s ease;
+
+    &:hover {
+      background: var(--sard-primary-dark);
+    }
+  }
+
+  &__photo-input {
+    display: none;
+  }
+
+  &__info {
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__name {
+    margin: 0 0 6px;
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--sard-maroon);
+  }
+
+  &__bio {
+    margin: 0 0 8px;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--sard-text);
+
+    &--empty {
+      color: var(--sard-text-light);
+      font-style: italic;
+    }
+  }
+
+  &__meta {
+    margin: 0 0 16px;
+    font-size: 13px;
+    color: var(--sard-text-light);
+  }
+
+  &__edit-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: transparent;
+    border: 1.5px solid var(--sard-primary);
+    color: var(--sard-primary);
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 700;
+    padding: 8px 18px;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: var(--sard-primary);
+      color: #fff;
+    }
+  }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  &__field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    text-align: right;
+
+    label {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--sard-maroon);
+    }
+
+    input,
+    textarea {
+      font-family: inherit;
+      font-size: 15px;
+      color: var(--sard-text);
+      background: var(--sard-bg);
+      border: 1px solid var(--sard-border);
+      border-radius: 10px;
+      padding: 10px 14px;
+      resize: vertical;
+
+      &:focus {
+        outline: none;
+        border-color: var(--sard-primary);
+      }
+    }
+  }
+
+  &__field-error,
+  &__error {
+    color: #a53d3d;
+    font-size: 13px;
+  }
+
+  &__actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 4px;
+  }
+
+  &__save-btn {
+    background: var(--sard-primary);
+    color: #fff;
+    border: none;
+    font-family: inherit;
+    font-weight: 700;
+    font-size: 14px;
+    padding: 9px 22px;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+
+    &:hover:not(:disabled) {
+      background: var(--sard-primary-dark);
+    }
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  }
+
+  &__cancel-btn {
+    background: transparent;
+    color: var(--sard-text-light);
+    border: 1px solid var(--sard-border);
+    font-family: inherit;
+    font-weight: 700;
+    font-size: 14px;
+    padding: 9px 22px;
+    border-radius: 999px;
+    cursor: pointer;
+
+    &:hover:not(:disabled) {
+      background: var(--sard-bg);
+    }
+  }
+}

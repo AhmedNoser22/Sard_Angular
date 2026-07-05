@@ -1,0 +1,68 @@
+:host {
+  --sard-bg: #faf3ec;
+  --sard-card: #fffdfb;
+  --sard-primary: #c0785a;
+  --sard-primary-dark: #a5624a;
+  --sard-maroon: #6b2d2d;
+  --sard-tan: #ddc8b4;
+  --sard-text: #4a3428;
+  --sard-text-light: #8a7264;
+  --sard-border: #ecdfd2;
+
+  display: block;
+  font-family: 'Amiri', serif;
+  direction: rtl;
+}
+
+:host-context([data-theme='dark']) {
+  --sard-bg: #201812;
+  --sard-card: #2a201a;
+  --sard-primary: #d98f6c;
+  --sard-primary-dark: #c0785a;
+  --sard-maroon: #f0d9c8;
+  --sard-tan: #4a382c;
+  --sard-text: #ece1d6;
+  --sard-text-light: #b3a294;
+  --sard-border: #3c2e24;
+}
+
+.profile-stats {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  background: var(--sard-card);
+  border: 1px solid var(--sard-border);
+  border-radius: 20px;
+  padding: 20px 16px;
+  margin-top: 18px;
+  box-shadow: 0 6px 24px rgba(107, 45, 45, 0.05);
+
+  @media (max-width: 640px) {
+    padding: 16px 8px;
+  }
+
+  &__item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    flex: 1;
+  }
+
+  &__value {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--sard-maroon);
+  }
+
+  &__label {
+    font-size: 13px;
+    color: var(--sard-text-light);
+  }
+
+  &__divider {
+    width: 1px;
+    height: 34px;
+    background: var(--sard-border);
+  }
+}

@@ -1,0 +1,303 @@
+<div class="home-page" dir="rtl">
+
+  <!-- ===== NAVBAR ===== -->
+  <nav class="navbar">
+    <div class="navbar-inner">
+      <div class="nav-links">
+        <a href="#" class="nav-link" (click)="scrollToExplore($event)">استكشف</a>
+        <a class="nav-link" (click)="goToLogin()">
+          لنبدأ
+        </a>
+        <a href="#" class="nav-link" (click)="scrollToAI($event)">اكتب فكرتك</a>
+      </div>
+      <a href="#" class="nav-logo" (click)="scrollToTop($event)">
+        <svg class="nav-logo-ornament" viewBox="0 0 60 40" xmlns="http://www.w3.org/2000/svg">
+          <path d="M30 2 L34 10 L42 10 L36 16 L38 24 L30 20 L22 24 L24 16 L18 10 L26 10 Z" fill="none" stroke="#c0785a"
+            stroke-width="1.2" />
+          <circle cx="30" cy="13" r="2" fill="#c0785a" opacity="0.5" />
+          <line x1="10" y1="36" x2="50" y2="36" stroke="#c0785a" stroke-width="0.8" opacity="0.4" />
+          <circle cx="10" cy="36" r="1.5" fill="#c0785a" opacity="0.4" />
+          <circle cx="50" cy="36" r="1.5" fill="#c0785a" opacity="0.4" />
+          <circle cx="30" cy="36" r="1.5" fill="#c0785a" opacity="0.6" />
+        </svg>
+        <span class="nav-logo-text">سرد</span>
+      </a>
+      <div class="nav-actions">
+        <button class="nav-icon-btn" (click)="goToLogin()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="20" height="20">
+            <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
+            <circle cx="12" cy="7" r="4" />
+          </svg>
+        </button>
+        <button class="nav-icon-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="20" height="20">
+            <path d="M4 19.5A2.5 2.5 0 016.5 17H20" />
+            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ===== HERO ===== -->
+  <section class="hero-section">
+    <div class="hero-inner">
+
+      <!-- Left: Time Wheel -->
+      <div class="carousel-col">
+        <div class="carousel-header">
+          <h2 class="carousel-title">عجلة الزمن الروائية</h2>
+          <p class="carousel-sub">رحلة عبر العصور.. من الكلاسيكيات إلى الإبداعات الحديثة</p>
+        </div>
+        <div class="wheel-stage">
+          <div class="wheel-container">
+            <div class="wheel-ring wheel-ring--outer">
+              <div class="wheel-tick" *ngFor="let tick of wheelTicks" [style.transform]="'rotate(' + tick + 'deg)'">
+                <div class="wheel-tick-line"></div>
+              </div>
+            </div>
+            <div class="wheel-ring wheel-ring--middle">
+              <div class="era-item era-item--1"><span class="era-label">كلاسيكي</span></div>
+              <div class="era-item era-item--2"><span class="era-label">فيكتوري</span></div>
+              <div class="era-item era-item--3"><span class="era-label">حديث</span></div>
+              <div class="era-item era-item--4"><span class="era-label">مفقود</span></div>
+            </div>
+            <div class="wheel-hub">
+              <div class="wheel-hub-inner">
+                <p class="hub-era">{{ activeEra }}</p>
+                <span class="hub-count">{{ activeCount }}</span>
+                <span class="hub-num">{{ activeNum }}</span>
+              </div>
+            </div>
+            <div class="wheel-pointer"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Mood Lab -->
+      <div class="mood-col">
+        <div class="mood-card">
+          <h3 class="mood-title">مختبر المزاج</h3>
+          <p class="mood-sub">اختر أو حرك المشاعر التي تعبر عن حالتك الآن</p>
+          <div class="mood-body">
+            <div class="mood-bars">
+              <div class="mood-bar-row" *ngFor="let mood of moods" (click)="toggleMood(mood)">
+                <span class="mood-label">{{ mood.label }}</span>
+                <div class="mood-track">
+                  <div class="mood-fill" [class.mood-fill--low]="mood.value < 30"
+                    [class.mood-fill--zero]="mood.value < 10" [style.width]="mood.value + '%'">
+                  </div>
+                </div>
+                <span class="mood-pct">{{ mood.value > 10 ? mood.value + '%' : '—' }}</span>
+              </div>
+            </div>
+            <div class="mood-radar">
+              <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                <polygon points="100,20 170,60 170,140 100,180 30,140 30,60" fill="none" stroke="#e8d8d0"
+                  stroke-width="1" />
+                <polygon points="100,40 155,72 155,128 100,160 45,128 45,72" fill="none" stroke="#e8d8d0"
+                  stroke-width="1" />
+                <polygon points="100,60 140,84 140,116 100,140 60,116 60,84" fill="none" stroke="#e8d8d0"
+                  stroke-width="1" />
+                <line x1="100" y1="20" x2="100" y2="180" stroke="#e8d8d0" stroke-width="0.8" />
+                <line x1="30" y1="60" x2="170" y2="140" stroke="#e8d8d0" stroke-width="0.8" />
+                <line x1="30" y1="140" x2="170" y2="60" stroke="#e8d8d0" stroke-width="0.8" />
+                <polygon [attr.points]="radarPoints" fill="rgba(192,120,90,0.18)" stroke="#c0785a" stroke-width="1.5" />
+                <circle cx="100" cy="35" r="3" fill="#c0785a" />
+                <circle cx="155" cy="85" r="3" fill="#c0785a" />
+                <circle cx="145" cy="128" r="3" fill="#c0785a" />
+                <circle cx="100" cy="155" r="3" fill="#c0785a" />
+                <circle cx="55" cy="120" r="3" fill="#c0785a" />
+                <circle cx="55" cy="75" r="3" fill="#c0785a" />
+                <text x="100" y="14" text-anchor="middle" font-size="9" fill="#9a7a6e">غموض</text>
+                <text x="176" y="63" text-anchor="start" font-size="9" fill="#9a7a6e">فلسفة</text>
+                <text x="176" y="143" text-anchor="start" font-size="9" fill="#9a7a6e">تاريخي</text>
+                <text x="100" y="192" text-anchor="middle" font-size="9" fill="#9a7a6e">رومانسي</text>
+                <text x="22" y="143" text-anchor="end" font-size="9" fill="#9a7a6e">خيال علمي</text>
+                <text x="22" y="63" text-anchor="end" font-size="9" fill="#9a7a6e">رعب</text>
+              </svg>
+            </div>
+          </div>
+          <button class="mood-discover-btn" (click)="scrollToExplore($event)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="14" height="14">
+              <circle cx="11" cy="11" r="8" />
+              <line x1="21" y1="21" x2="16.65" y2="16.65" />
+            </svg>
+            اكتشف رواياتي الآن
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===== EXPLORE / QUOTES ===== -->
+  <section class="explore-section" id="explore-section">
+    <div class="explore-inner">
+      <div class="explore-header">
+        <span class="explore-eyebrow">استكشف</span>
+        <h2 class="explore-title">أصوات تتجاوز الزمن</h2>
+        <p class="explore-sub">كلمات نُقشت في وجدان الأدب العالمي</p>
+      </div>
+      <div class="quotes-grid">
+        <div class="quote-card" *ngFor="let q of authorQuotes">
+          <div class="qcard-ornament">❝</div>
+          <p class="qcard-text">{{ q.text }}</p>
+          <div class="qcard-author">
+            <div class="qcard-avatar">{{ q.initial }}</div>
+            <div>
+              <p class="qcard-name">{{ q.author }}</p>
+              <span class="qcard-era">{{ q.era }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== AI NOVEL ANALYZER ===== -->
+  <section class="ai-section" id="ai-section">
+    <div class="ai-inner">
+
+      <div class="ai-section-header">
+        <h2>اكتب فكرتك الجديدة</h2>
+        <p>شاركنا فكرتك وسنساعدك على اكتشاف إمكانياتها</p>
+      </div>
+
+      <div class="ai-grid">
+
+        <!-- Input panel -->
+        <div class="ai-input-panel">
+          <div class="ai-field">
+            <label>عنوان الفكرة</label>
+            <input type="text" [(ngModel)]="novelTitle" placeholder="اكتب عنوان فكرتك هنا..." class="ai-text-input"
+              dir="rtl" />
+          </div>
+          <div class="ai-field">
+            <label>وصف الفكرة</label>
+            <textarea [(ngModel)]="novelDescription" placeholder="اكتب وصفاً موجزاً لفكرتك..." class="ai-textarea"
+              rows="5" dir="rtl"></textarea>
+          </div>
+          <button class="ai-analyze-btn" (click)="analyzeNovel()"
+            [disabled]="isAnalyzing || !novelTitle || !novelDescription">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="16" height="16">
+              <path d="M12 20h9" />
+              <path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z" />
+            </svg>
+            @if (isAnalyzing) { } @else { حلل فكرتي }
+          </button>
+        </div>
+
+        <!-- Result panel -->
+        <div class="ai-result-panel" [class.ai-result-panel--empty]="!analysisResult && !isAnalyzing && !analysisError">
+
+          @if (!analysisResult && !isAnalyzing && !analysisError) {
+          <div class="ai-empty-state">
+            <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg" width="64" height="64">
+              <circle cx="40" cy="40" r="36" stroke="#e8d8d0" stroke-width="1.5" />
+              <path d="M28 40h24M40 28v24" stroke="#c0785a" stroke-width="1.5" stroke-linecap="round" opacity="0.5" />
+              <circle cx="40" cy="40" r="6" fill="none" stroke="#c0785a" stroke-width="1.5" opacity="0.4" />
+            </svg>
+            <p>أدخل عنوان فكرتك ووصفها<br />وسيظهر تحليل الذكاء الاصطناعي هنا</p>
+          </div>
+          }
+
+          @if (isAnalyzing) {
+          <div class="ai-loading-state">
+            <div class="ai-spinner"></div>
+            <p>يحلل الذكاء الاصطناعي فكرتك...</p>
+          </div>
+          }
+
+          @if (analysisResult && !isAnalyzing) {
+          <div class="na-root">
+
+            <div class="na-top">
+              <div style="flex:1">
+                <div class="na-title">{{ novelTitle }}</div>
+                <span class="na-genre-badge">{{ analysisResult.genre }}</span>
+              </div>
+              <div style="text-align:center">
+                <div class="na-score-ring">
+                  <svg viewBox="0 0 72 72">
+                    <circle cx="36" cy="36" r="30" fill="none" stroke="#f0e8e0" stroke-width="6" />
+                    <circle cx="36" cy="36" r="30" fill="none" stroke="#c0785a" stroke-width="6" stroke-linecap="round"
+                      stroke-dasharray="188.5" [attr.stroke-dashoffset]="scoreOffset(analysisResult.score)" />
+                  </svg>
+                  <div class="na-score-num">{{ analysisResult.score }}</div>
+                </div>
+                <div class="na-score-label">من 100</div>
+              </div>
+            </div>
+
+            <hr class="na-divider" />
+
+            <div class="na-section">
+              <div class="na-section-label">نقاط القوة <span class="na-tag">قوة</span></div>
+              <div class="na-pills">
+                <span class="na-pill" *ngFor="let s of analysisResult.strengths">{{ s }}</span>
+              </div>
+            </div>
+
+            <div class="na-section">
+              <div class="na-section-label">نقاط الضعف <span class="na-tag">ضعف</span></div>
+              <div class="na-pills">
+                <span class="na-pill" *ngFor="let w of analysisResult.weaknesses">{{ w }}</span>
+              </div>
+            </div>
+
+            <div class="na-section">
+              <div class="na-section-label">اقتراحات <span class="na-tag">تحسين</span></div>
+              <div class="na-pills">
+                <span class="na-pill" *ngFor="let sg of analysisResult.suggestions">{{ sg }}</span>
+              </div>
+            </div>
+
+            <hr class="na-divider" />
+
+            <div class="na-section" style="margin-bottom:0">
+              <div class="na-section-label">الرأي النهائي</div>
+              <div class="na-verdict">{{ analysisResult.verdict }}</div>
+            </div>
+
+          </div>
+          }
+
+          @if (analysisError && !isAnalyzing) {
+          <div class="ai-error-state">
+            <p>{{ analysisError }}</p>
+          </div>
+          }
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER QUOTE ===== -->
+  <footer class="footer-quote" id="footer-quote">
+    <div class="footer-ornament-top">
+      <svg viewBox="0 0 200 12" xmlns="http://www.w3.org/2000/svg" width="200" height="12">
+        <line x1="0" y1="6" x2="80" y2="6" stroke="#c0785a" stroke-width="0.8" opacity="0.3" />
+        <circle cx="100" cy="6" r="3" fill="none" stroke="#c0785a" stroke-width="1" opacity="0.5" />
+        <circle cx="100" cy="6" r="1" fill="#c0785a" opacity="0.4" />
+        <line x1="120" y1="6" x2="200" y2="6" stroke="#c0785a" stroke-width="0.8" opacity="0.3" />
+      </svg>
+    </div>
+    <div class="footer-inner">
+      <span class="footer-qmark footer-qmark--open">"</span>
+      <p class="footer-quote-text">الجمال سينقذ العالم.</p>
+      <span class="footer-qmark footer-qmark--close">"</span>
+      <p class="footer-author">فيودور دوستويفسكي</p>
+      <p class="footer-work">الأبله، ١٨٦٩</p>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-logo-sm">
+        <span class="footer-logo-text">سرد</span>
+        <span class="footer-logo-dot">·</span>
+        <span class="footer-copy">حيث كل رواية تنبض</span>
+      </div>
+    </div>
+  </footer>
+
+</div>

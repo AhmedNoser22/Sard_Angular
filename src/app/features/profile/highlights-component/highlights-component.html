@@ -1,0 +1,104 @@
+<section class="highlights">
+  <div class="highlights__header">
+    <div class="highlights__intro">
+      <svg class="highlights__deco" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <rect width="64" height="64" rx="16" fill="#ecdfd2" />
+        <path d="M32 20c-3.5-3-8-4-13-3v22c5-1 9.5 0 13 3 3.5-3 8-4 13-3V17c-5-1-9.5 0-13 3z"
+              fill="none" stroke="#a5624a" stroke-width="2" stroke-linejoin="round" />
+        <line x1="32" y1="20" x2="32" y2="42" stroke="#a5624a" stroke-width="2" />
+      </svg>
+
+      <div class="highlights__heading">
+        <h2 class="highlights__title">الأثر</h2>
+        <p class="highlights__subtitle">جمل ومقولات تركت أثرًا في قلوبنا</p>
+      </div>
+    </div>
+
+    <button type="button" class="highlights__add-btn" (click)="startAdd()">
+      <span class="highlights__add-icon">+</span>
+      إضافة أثر جديد
+    </button>
+  </div>
+
+  @if (isLoadingList()) {
+  <div class="highlights__grid">
+    @for (i of [1,2,3]; track i) {
+    <div class="highlight-card highlight-card--skeleton"></div>
+    }
+  </div>
+  } @else if (localHighlights().length) {
+  <div class="highlights__grid">
+    @for (item of localHighlights(); track item.id) {
+    <article class="highlight-card">
+      <button type="button" class="highlight-card__delete" title="حذف" (click)="deleteHighlight(item.id)">
+        ×
+      </button>
+
+      <span class="highlight-card__quote-mark">”</span>
+
+      <p class="highlight-card__content">{{ item.content }}</p>
+
+      @if (item.novelTitle) {
+      <p class="highlight-card__novel">من رواية: {{ item.novelTitle }}</p>
+      }
+
+      <div class="highlight-card__footer">
+        <span class="highlight-card__avatar">
+          {{ (item.novelAuthor || '؟').charAt(0) }}
+        </span>
+        <div class="highlight-card__meta">
+          <span class="highlight-card__author">{{ item.novelAuthor || 'غير معروف' }}</span>
+          <span class="highlight-card__date">{{ item.createdAt | date: 'd MMMM yyyy' }}</span>
+        </div>
+      </div>
+    </article>
+    }
+  </div>
+  } @else {
+  <div class="highlights__empty">
+    <span class="highlights__empty-mark">”</span>
+    <p>لسه مافيش أثر مضاف. أول جملة أثّرت فيك، ابدأ بيها.</p>
+    <button type="button" class="highlights__empty-btn" (click)="startAdd()">إضافة أول أثر</button>
+  </div>
+  }
+</section>
+
+@if (isAdding()) {
+<div class="highlight-modal" [class.highlight-modal--closing]="isClosing()" (click)="onBackdropClick($event)">
+  <form class="highlight-modal__panel" [formGroup]="form" (ngSubmit)="addHighlight()">
+    <div class="highlight-modal__header">
+      <h3>إضافة أثر جديد</h3>
+      <button type="button" class="highlight-modal__close" (click)="cancelAdd()" title="إغلاق">×</button>
+    </div>
+
+    <div class="highlight-modal__field">
+      <label for="content">النص</label>
+      <textarea id="content" formControlName="content" maxlength="1000" rows="4"
+        placeholder="اكتب الجملة التي أثّرت فيك..."></textarea>
+      @if (form.get('content')?.invalid && form.get('content')?.touched) {
+      <span class="highlight-modal__error">النص مطلوب</span>
+      }
+    </div>
+
+    <div class="highlight-modal__row">
+      <div class="highlight-modal__field">
+        <label for="novelTitle">اسم الرواية</label>
+        <input id="novelTitle" type="text" formControlName="novelTitle" maxlength="200" placeholder="اختياري" />
+      </div>
+      <div class="highlight-modal__field">
+        <label for="novelAuthor">الكاتب</label>
+        <input id="novelAuthor" type="text" formControlName="novelAuthor" maxlength="100" placeholder="اختياري" />
+      </div>
+    </div>
+
+    <div class="highlight-modal__actions">
+      <button type="submit" class="highlight-modal__save-btn" [disabled]="isLoading() || form.invalid">
+        @if (isLoading()) { جارٍ الإضافة... } @else { إضافة الأثر }
+      </button>
+      <button type="button" class="highlight-modal__cancel-btn" (click)="cancelAdd()" [disabled]="isLoading()">
+        إلغاء
+      </button>
+    </div>
+  </form>
+</div>
+}

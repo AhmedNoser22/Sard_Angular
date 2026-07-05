@@ -1,0 +1,52 @@
+<div class="chapter-editor">
+  <form [formGroup]="form" class="chapter-editor__form">
+
+    <div class="chapter-editor__top">
+      <input
+        type="text"
+        formControlName="title"
+        placeholder="عنوان الفصل"
+        class="chapter-editor__title-input"
+        dir="rtl"
+      />
+      <input
+        type="number"
+        formControlName="order"
+        class="chapter-editor__order-input"
+        min="1"
+        title="ترتيب الفصل"
+      />
+    </div>
+
+    <div class="chapter-editor__toolbar">
+      <button type="button" class="chapter-editor__ai-btn" (click)="correctWithAi()" [disabled]="isCorrectingAi()">
+        @if (isCorrectingAi()) { جارٍ التصحيح... } @else {
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+            <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm1 15h-2v-2h2zm0-4h-2V7h2z"/>
+          </svg>
+          تصحيح بالذكاء الاصطناعي
+        }
+      </button>
+
+      <div class="chapter-editor__status">
+        @if (isLoading()) { <span>جارٍ الحفظ...</span> }
+        @else if (isSaved()) { <span class="saved">تم الحفظ ✅</span> }
+      </div>
+
+      <button type="button" class="chapter-editor__save-btn" (click)="save()" [disabled]="isLoading() || form.invalid">
+        حفظ
+      </button>
+    </div>
+
+    <textarea
+      formControlName="content"
+      class="chapter-editor__content"
+      placeholder="ابدأ الكتابة هنا..."
+      dir="rtl"
+    ></textarea>
+
+    @if (errorMessage()) {
+      <p class="chapter-editor__error">{{ errorMessage() }}</p>
+    }
+  </form>
+</div>

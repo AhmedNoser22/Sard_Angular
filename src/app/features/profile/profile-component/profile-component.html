@@ -1,0 +1,16 @@
+<main class="profile-page">
+  @if (isLoading()) {
+  <div class="profile-page__state">جارٍ التحميل...</div>
+  } @else if (errorMessage()) {
+  <div class="profile-page__state profile-page__state--error">{{ errorMessage() }}</div>
+  } @else if (profile(); as p) {
+  <div class="profile-page__inner">
+    <app-profile-card [profile]="p" (profileUpdated)="onProfileUpdated()" />
+    <app-profile-stats [profile]="p" />
+    <app-highlights [highlights]="p.highlights" [showBackLink]="false" (highlightChanged)="onProfileUpdated()" />
+    <app-novels-list [novels]="p.novels" (novelChanged)="onProfileUpdated()" />
+  </div>
+  }
+</main>
+
+<app-settings-panel />

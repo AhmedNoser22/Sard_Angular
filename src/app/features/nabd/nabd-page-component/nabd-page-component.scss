@@ -1,0 +1,233 @@
+@import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap');
+
+:host {
+  --sard-bg: #faf3ec;
+  --sard-card: #fffdfb;
+  --sard-primary: #c0785a;
+  --sard-primary-dark: #a5624a;
+  --sard-maroon: #6b2d2d;
+  --sard-tan: #ddc8b4;
+  --sard-text: #4a3428;
+  --sard-text-light: #8a7264;
+  --sard-border: #ecdfd2;
+  display: block;
+  font-family: 'Amiri', serif;
+  direction: rtl;
+  background: var(--sard-bg);
+  min-height: 100vh;
+}
+:host-context([data-theme='dark']) {
+  --sard-bg: #201812;
+  --sard-card: #2a201a;
+  --sard-primary: #d98f6c;
+  --sard-primary-dark: #c0785a;
+  --sard-maroon: #f0d9c8;
+  --sard-tan: #4a382c;
+  --sard-text: #ece1d6;
+  --sard-text-light: #b3a294;
+  --sard-border: #3c2e24;
+}
+
+.nabd-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 32px;
+   background: linear-gradient(180deg, var(--sard-card), var(--sard-bg));
+  backdrop-filter: blur(6px);
+  border-bottom: 1px solid var(--sard-border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  user-select: none;
+
+  &__side {
+    display: flex;
+    align-items: center;
+    position: relative;
+  }
+
+  &__icon-btn {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    border: none;
+    background: transparent;
+    color: var(--sard-maroon);
+    border-radius: 50%;
+    cursor: pointer;
+
+    &:hover {
+      background: var(--sard-tan);
+    }
+  }
+
+  &__badge {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    min-width: 18px;
+    height: 18px;
+    background: #c0392b;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    border-radius: 999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 4px;
+  }
+
+  &__center {
+    text-align: center;
+  }
+
+  &__title {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--sard-maroon);
+  }
+
+  &__sub {
+    margin: 0;
+    font-size: 12px;
+    color: var(--sard-text-light);
+  }
+
+  &__brand {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    text-decoration: none;
+    color: var(--sard-maroon);
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--sard-primary);
+  }
+}
+
+.notif-wrapper {
+  position: relative;
+}
+
+.nabd-main {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 24px 20px 60px;
+
+  @media (min-width: 1024px) {
+    display: grid;
+    grid-template-columns: 1fr 280px;
+    gap: 24px;
+    max-width: 1080px;
+    align-items: start;
+  }
+}
+
+.nabd-feed {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.nabd-sidebar {
+  &__card {
+    background: var(--sard-card);
+    border: 1px solid var(--sard-border);
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 12px rgba(107, 45, 45, 0.05);
+  }
+
+  &__title {
+    margin: 0 0 10px;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--sard-maroon);
+  }
+
+  &__text {
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.8;
+    color: var(--sard-text-light);
+  }
+
+  &__list {
+    margin: 0;
+    padding-right: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    li {
+      font-size: 13px;
+      color: var(--sard-text);
+      line-height: 1.6;
+    }
+  }
+}
+
+.nabd-feed {
+  &__empty {
+    text-align: center;
+    padding: 60px 0;
+    color: var(--sard-text-light);
+
+    &-icon {
+      font-size: 48px;
+      margin-bottom: 12px;
+    }
+
+    p {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--sard-maroon);
+      margin: 0 0 6px;
+    }
+
+    span {
+      font-size: 14px;
+    }
+  }
+}
+
+.nabd-feed {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  &__loading {
+    display: flex;
+    justify-content: center;
+    padding: 40px 0;
+  }
+
+  &__spinner {
+    width: 36px;
+    height: 36px;
+    border: 3px solid var(--sard-border);
+    border-top-color: var(--sard-primary);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+
+  &__empty {
+    text-align: center;
+    padding: 60px 0;
+    color: var(--sard-text-light);
+    font-size: 15px;
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
