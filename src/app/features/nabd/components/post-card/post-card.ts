@@ -1,16 +1,16 @@
 import { Component, inject, input, output, signal, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { DatePipe } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { Post, Reply } from '../../../../core/models/nabd/post.model';
 import { TokenService } from '../../../../core/services/tokenService';
 import { NabdService } from '../../../../core/services/nabd';
 import { NabdHubService } from '../../../../core/services/nabd-hub';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-post-card',
   standalone: true,
-  imports: [ReactiveFormsModule, DatePipe],
+  imports: [ReactiveFormsModule, RouterLink],
   templateUrl: './post-card.html',
   styleUrl: './post-card.scss'
 })
@@ -147,6 +147,13 @@ export class PostCardComponent implements OnInit, OnDestroy {
   toggleReplies(): void { this.showReplies.update(v => !v); }
   startReply(): void { this.isReplying.set(true); }
   cancelReply(): void { this.isReplying.set(false); this.replyForm.reset(); }
+
+  /** Used by the single comment button in the engagement row: reveals
+   * existing replies and opens the composer in one tap, Twitter-style. */
+  onCommentButtonClick(): void {
+    this.showReplies.set(true);
+    this.isReplying.set(true);
+  }
 
   submitReply(): void {
     if (this.replyForm.invalid) return;

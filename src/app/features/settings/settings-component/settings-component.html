@@ -16,6 +16,7 @@
     <div class="settings-drawer__body">
 
       <section class="settings-block">
+        <h3 class="settings-block__title">الصورة الشخصية</h3>
         <div class="settings-avatar">
           <div class="settings-avatar__wrap">
             @if (showRealImage()) {
@@ -72,6 +73,18 @@
             <span class="settings-toggle__knob"></span>
           </button>
         </div>
+      </section>
+
+      <section class="settings-block settings-block--danger">
+        <h3 class="settings-block__title">الحساب</h3>
+        <button type="button" class="settings-logout-btn" (click)="logout()">
+          <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+            <path d="M16 17l5-5-5-5" />
+            <path d="M21 12H9" />
+          </svg>
+          تسجيل الخروج
+        </button>
       </section>
 
     </div>

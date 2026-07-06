@@ -1,4 +1,4 @@
-import { Component, inject, signal, OnInit, OnDestroy, HostListener } from '@angular/core';
+import { Component, inject, signal, computed, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { TokenService } from '../../../core/services/tokenService';
@@ -8,12 +8,12 @@ import { NabdHubService } from '../../../core/services/nabd-hub';
 import { NotificationService } from '../../../core/services/notification';
 import { PostCardComponent } from "../components/post-card/post-card";
 import { CreatePostComponent } from "../components/create-post/create-post";
-import { NotificationsPanelComponent } from "../components/notifications-panel/notifications-panel";
+
 
 @Component({
   selector: 'app-nabd-page',
   standalone: true,
-  imports: [PostCardComponent, CreatePostComponent, NotificationsPanelComponent],
+  imports: [PostCardComponent, CreatePostComponent],
   templateUrl: './nabd-page-component.html',
   styleUrl: './nabd-page-component.scss'
 })
@@ -30,6 +30,24 @@ export class NabdPageComponent implements OnInit, OnDestroy {
   isLoading = signal(true);
   showNotifications = signal(false);
 
+  // --- Pagination ---
+  readonly pageSize = 8;
+  currentPage = signal(1);
+
+  totalPages = computed(() =>
+    Math.max(1, Math.ceil(this.posts().length / this.pageSize))
+  );
+
+  pagedPosts = computed(() => {
+    const start = (this.currentPage() - 1) * this.pageSize;
+    return this.posts().slice(start, start + this.pageSize);
+  });
+
+  paginationRange = computed(() => {
+    const total = this.totalPages();
+    return Array.from({ length: total }, (_, i) => i + 1);
+  });
+
   private subs = new Subscription();
 
   ngOnInit(): void {
@@ -41,12 +59,14 @@ export class NabdPageComponent implements OnInit, OnDestroy {
     this.subs.add(
       this.hubService.newPost$.subscribe(post => {
         this.posts.update(list => [post, ...list]);
+        this.currentPage.set(1);
       })
     );
 
     this.subs.add(
       this.hubService.postDeleted$.subscribe(postId => {
         this.posts.update(list => list.filter(p => p.id !== postId));
+        this.clampCurrentPage();
       })
     );
 
@@ -77,11 +97,29 @@ export class NabdPageComponent implements OnInit, OnDestroy {
   }
 
   onPostCreated(post: Post): void {
-    this.posts.update(list => [post, ...list]);
+    this.posts.update(list =>
+      list.some(p => p.id === post.id) ? list : [post, ...list]
+    );
+    this.currentPage.set(1);
   }
 
   onPostDeleted(postId: number): void {
     this.posts.update(list => list.filter(p => p.id !== postId));
+    this.clampCurrentPage();
+  }
+
+  goToPage(page: number): void {
+    if (page < 1 || page > this.totalPages() || page === this.currentPage()) return;
+    this.currentPage.set(page);
+    document.querySelector('.nabd-feed')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  nextPage(): void { this.goToPage(this.currentPage() + 1); }
+  prevPage(): void { this.goToPage(this.currentPage() - 1); }
+
+  private clampCurrentPage(): void {
+    const total = this.totalPages();
+    if (this.currentPage() > total) this.currentPage.set(total);
   }
 
   toggleNotifications(): void {

@@ -44,12 +44,17 @@
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    background: var(--sard-tan);
+    background: linear-gradient(135deg, var(--sard-tan), #e8c4a8);
+    color: var(--sard-maroon);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 18px;
     flex-shrink: 0;
+    border: 2px solid var(--sard-border);
+
+    svg {
+      display: block;
+    }
   }
 
   &__placeholder {
@@ -125,17 +130,6 @@
     padding: 9px 20px;
     border-radius: 999px;
     cursor: pointer;
-
-    &__dropdown-item {
-      &--danger {
-        color: #c0392b; // كويس، لكن الـ hover:
-
-        &:hover {
-          background: #fdf0ee;
-        }
-
-      }
-    }
 
     &:hover {
       background: var(--sard-bg);

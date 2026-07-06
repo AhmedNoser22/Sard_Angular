@@ -136,6 +136,29 @@
 }
 
 .nabd-sidebar {
+  // Keeps the illustration + the "about" and "ideas" cards pinned together
+  // in view while the feed scrolls, instead of drifting off and leaving a
+  // blank gap under the nav.
+  @media (min-width: 1024px) {
+    position: sticky;
+    top: 86px;
+    align-self: start;
+  }
+
+  &__hero {
+    border-radius: 16px;
+    overflow: hidden;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 12px rgba(107, 45, 45, 0.08);
+    line-height: 0;
+
+    img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+  }
+
   &__card {
     background: var(--sard-card);
     border: 1px solid var(--sard-border);
@@ -223,6 +246,66 @@
     padding: 60px 0;
     color: var(--sard-text-light);
     font-size: 15px;
+  }
+}
+
+// Minimal pagination bar, in the same restrained spirit as the feed —
+// rounded pill buttons, no heavy borders, a filled dot for the active page.
+.nabd-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 8px;
+  padding: 8px 0 4px;
+
+  &__page {
+    min-width: 34px;
+    height: 34px;
+    padding: 0 6px;
+    border: none;
+    background: transparent;
+    color: var(--sard-text-light);
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 700;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: background 0.18s, color 0.18s;
+
+    &:hover {
+      background: var(--sard-tan);
+      color: var(--sard-maroon);
+    }
+
+    &.is-active {
+      background: var(--sard-primary);
+      color: #fff;
+    }
+  }
+
+  &__arrow {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    background: transparent;
+    color: var(--sard-text-light);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background 0.18s, color 0.18s;
+
+    &:hover:not(:disabled) {
+      background: var(--sard-tan);
+      color: var(--sard-maroon);
+    }
+
+    &:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
   }
 }
 

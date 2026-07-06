@@ -1,14 +1,13 @@
 import { Component, inject, input, output, signal, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { DatePipe } from '@angular/common';
-import { RouterLink } from '@angular/router';
 import { Highlight } from '../../../core/models/profile/Highlight.model';
 import { ProfileService } from '../../../core/services/profile-service';
 
 @Component({
   selector: 'app-highlights',
   standalone: true,
-  imports: [ReactiveFormsModule, DatePipe, RouterLink],
+  imports: [ReactiveFormsModule, DatePipe],
   templateUrl: './highlights-component.html',
   styleUrl: './highlights-component.scss'
 })

@@ -1,0 +1,225 @@
+:host {
+    --sard-bg: #faf3ec;
+    --sard-card: #fffdfb;
+    --sard-primary: #c0785a;
+    --sard-primary-dark: #a5624a;
+    --sard-maroon: #6b2d2d;
+    --sard-tan: #ddc8b4;
+    --sard-text: #4a3428;
+    --sard-text-light: #8a7264;
+    --sard-border: #ecdfd2;
+    display: block;
+    font-family: 'Amiri', serif;
+    direction: rtl;
+    margin-top: 28px;
+}
+
+:host-context([data-theme='dark']) {
+    --sard-bg: #201812;
+    --sard-card: #2a201a;
+    --sard-primary: #c0785a;
+    --sard-primary-dark: #a5624a;
+    --sard-maroon: #f0d9c8;
+    --sard-tan: #4a382c;
+    --sard-text: #ece1d6;
+    --sard-text-light: #b3a294;
+    --sard-border: #3c2e24;
+}
+
+.fav-novels {
+    &__header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        margin-bottom: 18px;
+    }
+
+    &__title {
+        margin: 0 0 4px;
+        font-size: 22px;
+        font-weight: 700;
+        color: var(--sard-maroon);
+    }
+
+    &__sub {
+        margin: 0;
+        font-size: 14px;
+        color: var(--sard-text-light);
+    }
+
+    &__add-btn {
+        background: var(--sard-primary);
+        color: #fff;
+        border: none;
+        font-family: inherit;
+        font-weight: 700;
+        font-size: 14px;
+        padding: 9px 20px;
+        border-radius: 999px;
+        cursor: pointer;
+
+        &:hover {
+            background: var(--sard-primary-dark);
+        }
+    }
+
+    &__form {
+        background: var(--sard-card);
+        border: 1px solid var(--sard-border);
+        border-radius: 16px;
+        padding: 20px;
+        margin-bottom: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    &__field {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+
+        label {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--sard-maroon);
+        }
+
+        input {
+            font-family: inherit;
+            font-size: 14px;
+            color: var(--sard-text);
+            background: var(--sard-bg);
+            border: 1px solid var(--sard-border);
+            border-radius: 10px;
+            padding: 9px 13px;
+            outline: none;
+
+            &:focus {
+                border-color: var(--sard-primary);
+            }
+        }
+    }
+
+    &__actions {
+        display: flex;
+        gap: 10px;
+    }
+
+    &__save {
+        background: var(--sard-primary);
+        color: #fff;
+        border: none;
+        font-family: inherit;
+        font-weight: 700;
+        font-size: 14px;
+        padding: 9px 22px;
+        border-radius: 999px;
+        cursor: pointer;
+
+        &:hover:not(:disabled) {
+            background: var(--sard-primary-dark);
+        }
+
+        &:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+    }
+
+    &__cancel {
+        background: transparent;
+        border: 1px solid var(--sard-border);
+        color: var(--sard-text-light);
+        font-family: inherit;
+        font-size: 14px;
+        padding: 9px 18px;
+        border-radius: 999px;
+        cursor: pointer;
+    }
+
+    &__grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        gap: 16px;
+    }
+
+    &__empty {
+        text-align: center;
+        color: var(--sard-text-light);
+        font-size: 14px;
+        padding: 20px 0;
+    }
+}
+
+.fav-novel-card {
+    position: relative;
+    background: var(--sard-card);
+    border: 1px solid var(--sard-border);
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(107, 45, 45, 0.05);
+    transition: transform 0.2s;
+
+    &:hover {
+        transform: translateY(-3px);
+
+        .fav-novel-card__delete {
+            opacity: 1;
+        }
+    }
+
+    &__delete {
+        position: absolute;
+        top: 8px;
+        left: 8px;
+        width: 26px;
+        height: 26px;
+        background: rgba(255, 255, 255, 0.9);
+        border: none;
+        border-radius: 50%;
+        color: #c0392b;
+        font-size: 18px;
+        cursor: pointer;
+        opacity: 0;
+        transition: opacity 0.2s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    &__cover {
+        width: 100%;
+        aspect-ratio: 3/4;
+        object-fit: cover;
+
+        &--placeholder {
+            width: 100%;
+            aspect-ratio: 3/4;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--sard-tan), #e8c4a8);
+            color: var(--sard-maroon);
+            font-size: 32px;
+            font-weight: 700;
+        }
+    }
+
+    &__body {
+        padding: 10px 12px;
+    }
+
+    &__title {
+        margin: 0 0 4px;
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--sard-maroon);
+    }
+
+    &__author {
+        margin: 0;
+        font-size: 11px;
+        color: var(--sard-text-light);
+    }
+}

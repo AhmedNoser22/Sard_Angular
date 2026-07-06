@@ -5,12 +5,11 @@ import { ProfileService } from '../../../core/services/profile-service';
 import { NovelSummary } from '../../../core/models/profile/novel-summary.model';
 import { Chapter } from '../../../core/models/novel/chapter.model';
 import { ChapterEditorComponent } from '../components/chapter-editor/chapter-editor';
-import { NavbarComponent } from "../../../shared/components/navbar-component/navbar-component";
 
 @Component({
   selector: 'app-novel',
   standalone: true,
-  imports: [RouterLink, ChapterEditorComponent, NavbarComponent],
+  imports: [RouterLink, ChapterEditorComponent],
   templateUrl: './novel-component.html',
   styleUrl: './novel-component.scss'
 })

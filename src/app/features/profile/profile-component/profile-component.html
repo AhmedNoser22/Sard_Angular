@@ -9,6 +9,7 @@
     <app-profile-stats [profile]="p" />
     <app-highlights [highlights]="p.highlights" [showBackLink]="false" (highlightChanged)="onProfileUpdated()" />
     <app-novels-list [novels]="p.novels" (novelChanged)="onProfileUpdated()" />
+    <app-favorite-novels [favoriteNovels]="p.favoriteNovels" (changed)="onProfileUpdated()" />
   </div>
   }
 </main>

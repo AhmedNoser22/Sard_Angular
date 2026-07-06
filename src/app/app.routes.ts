@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './core/guards/auth-guard';
-import { MainLayout} from './layout/main-layout/main-layout';
+import { MainLayout } from './layout/main-layout/main-layout';
 
 function homeOrProfile(): string {
   const token = localStorage.getItem('access_token');
@@ -60,7 +60,13 @@ export const routes: Routes = [
         path: 'nabd',
         loadComponent: () => import('./features/nabd/nabd-page-component/nabd-page-component')
           .then(m => m.NabdPageComponent)
-      }
+      },
+      {
+        path: 'profile/:userId',
+        canActivate: [authGuard],
+        loadComponent: () => import('./features/profile//public-profile-component/public-profile-component')
+          .then(m => m.PublicProfileComponent)
+      },
     ]
   },
 

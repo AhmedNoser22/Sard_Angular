@@ -8,6 +8,8 @@
   --sard-text: #4a3428;
   --sard-text-light: #8a7264;
   --sard-border: #ecdfd2;
+  --sard-danger: #c0392b;
+  --sard-danger-bg: #fdf0ee;
   display: block;
   font-family: 'Amiri', serif;
   direction: rtl;
@@ -23,13 +25,15 @@
   --sard-text: #ece1d6;
   --sard-text-light: #b3a294;
   --sard-border: #3c2e24;
+  --sard-danger: #e17767;
+  --sard-danger-bg: rgba(192, 57, 43, 0.14);
 }
 
 :host-context([data-theme='dark']) {
 
   .post-card__dropdown-item--danger:hover,
   .reply__dropdown-item--danger:hover {
-    background: rgba(192, 57, 43, 0.18);
+    background: var(--sard-danger-bg);
   }
 }
 
@@ -150,10 +154,10 @@
     }
 
     &--danger {
-      color: #c0392b;
+      color: var(--sard-danger);
 
       &:hover {
-        background: #fdf0ee;
+        background: var(--sard-danger-bg);
       }
     }
   }
@@ -168,14 +172,14 @@
 
   &__footer {
     border-top: 1px solid var(--sard-border);
-    padding-top: 12px;
+    padding-top: 8px;
   }
 
   &__liked-by {
     display: flex;
     align-items: center;
     gap: 8px;
-    margin-bottom: 8px;
+    padding: 6px 2px 10px;
   }
 
   &__liked-avatars {
@@ -208,72 +212,58 @@
     color: var(--sard-text-light);
   }
 
-  &__stats {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    margin-bottom: 10px;
-    font-size: 13px;
-    color: var(--sard-text-light);
-  }
-
-  &__stat {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-
-    &--link {
-      cursor: pointer;
-
-      &:hover {
-        color: var(--sard-primary);
-        text-decoration: underline;
-      }
-    }
-  }
-
-  &__heart-icon {
-    font-size: 14px;
-  }
-
-  &__actions {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    border-top: 1px solid var(--sard-border);
-    padding-top: 10px;
-    margin-top: 4px;
-  }
-
-  &__action {
+  // Unified Twitter/Facebook-style engagement row: icon + count together,
+  // no separate stats line and no divider clutter.
+  &__engagement {
     display: flex;
     align-items: center;
     gap: 6px;
-    flex: 1;
-    justify-content: center;
+  }
+
+  &__eng-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
     background: none;
     border: none;
     font-family: inherit;
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 600;
     color: var(--sard-text-light);
     cursor: pointer;
-    padding: 8px 12px;
-    border-radius: 10px;
-    transition: all 0.2s;
-
-    &:hover {
-      background: var(--sard-bg);
-      color: var(--sard-primary);
-    }
+    padding: 7px 12px;
+    border-radius: 999px;
+    transition: background 0.18s, color 0.18s;
 
     &:disabled {
-      opacity: 0.6;
       cursor: not-allowed;
+      opacity: 0.7;
+    }
+  }
+
+  &__eng-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__eng-count {
+    min-width: 10px;
+  }
+
+  &__eng-btn--comment:hover {
+    color: var(--sard-primary);
+    background: rgba(192, 120, 90, 0.10);
+  }
+
+  &__eng-btn--like {
+    &:hover {
+      color: var(--sard-danger);
+      background: var(--sard-danger-bg);
     }
 
-    &--liked {
-      color: #c0392b !important;
+    &.is-active {
+      color: var(--sard-danger);
     }
   }
 
@@ -470,10 +460,10 @@
     }
 
     &--danger {
-      color: #c0392b;
+      color: var(--sard-danger);
 
       &:hover {
-        background: #fdf0ee;
+        background: var(--sard-danger-bg);
       }
     }
   }
@@ -511,8 +501,15 @@
   direction: rtl;
 
   &__icon {
-    font-size: 36px;
-    margin-bottom: 12px;
+    width: 56px;
+    height: 56px;
+    margin: 0 auto 14px;
+    border-radius: 50%;
+    background: var(--sard-danger-bg);
+    color: var(--sard-danger);
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   &__title {
@@ -535,6 +532,22 @@
     justify-content: center;
   }
 
+  &__avatar-link {
+    text-decoration: none;
+    display: block;
+  }
+
+  &__name {
+    text-decoration: none;
+    color: var(--sard-maroon);
+    font-size: 15px;
+    font-weight: 700;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
   &__cancel {
     flex: 1;
     background: var(--sard-bg);
@@ -553,9 +566,28 @@
     }
   }
 
+  .reply {
+    &__avatar-link {
+      text-decoration: none;
+      display: block;
+      flex-shrink: 0;
+    }
+
+    &__name {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--sard-maroon);
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+
   &__confirm {
     flex: 1;
-    background: #c0392b;
+    background: var(--sard-danger);
     border: none;
     color: #fff;
     font-family: inherit;
@@ -567,6 +599,7 @@
     transition: background 0.2s;
 
     &:hover {
+      background: var(--sard-primary-dark);
       background: #a93226;
     }
   }

@@ -5,9 +5,8 @@ import { ProfileCardComponent } from "../profile-card-component/profile-card-com
 import { HighlightsComponent } from "../highlights-component/highlights-component";
 import { ProfileStatsComponent } from "../profile-stats-component/profile-stats-component";
 import { NovelsListComponent } from "../novels-list-component/novels-list-component";
-import { NavbarComponent } from "../../../shared/components/navbar-component/navbar-component";
-import { ProfileFooterComponent } from "../../../shared/profile-footer-component/profile-footer-component";
 import { SettingsComponent } from '../../settings/settings-component/settings-component';
+import { FavoriteNovelsComponent } from "../components/favorite-novels/favorite-novels";
 
 @Component({
   selector: 'app-profile',
@@ -17,10 +16,9 @@ import { SettingsComponent } from '../../settings/settings-component/settings-co
     HighlightsComponent,
     ProfileStatsComponent,
     NovelsListComponent,
-    NavbarComponent,
-    ProfileFooterComponent,
-    SettingsComponent
-  ],
+    SettingsComponent,
+    FavoriteNovelsComponent
+],
   templateUrl: './profile-component.html',
   styleUrl: './profile-component.scss'
 })

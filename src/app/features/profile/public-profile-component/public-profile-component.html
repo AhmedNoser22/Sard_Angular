@@ -1,0 +1,161 @@
+<div class="pub-page">
+  <a routerLink="/nabd" class="pub-page__back">
+    <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+      <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z" />
+    </svg>
+    رجوع
+  </a>
+
+  @if (isLoading()) {
+  <div class="pub-page__loading">
+    <span class="pub-page__spinner"></span>
+  </div>
+  } @else if (profile(); as p) {
+  <div class="pub-page__inner">
+
+    <div class="pub-hero">
+      <div class="pub-hero__avatar-wrap">
+        @if (p.profileImageUrl) {
+        <img class="pub-hero__avatar" [src]="p.profileImageUrl" [alt]="p.displayName" />
+        } @else {
+        <div class="pub-hero__avatar pub-hero__avatar--placeholder">
+          {{ getInitial(p.displayName) }}
+        </div>
+        }
+      </div>
+
+      <div class="pub-hero__info">
+        <h1 class="pub-hero__name">{{ p.displayName }}</h1>
+        @if (p.bio) {
+        <p class="pub-hero__bio">{{ p.bio }}</p>
+        }
+
+        <div class="pub-hero__stats">
+          @if (isMyProfile()) {
+          <button type="button" class="pub-hero__stat" (click)="showFollowers()">
+            <span class="pub-hero__stat-value">{{ p.followersCount }}</span>
+            <span class="pub-hero__stat-label">متابع</span>
+          </button>
+          <button type="button" class="pub-hero__stat" (click)="showFollowing()">
+            <span class="pub-hero__stat-value">{{ p.followingCount }}</span>
+            <span class="pub-hero__stat-label">يتابع</span>
+          </button>
+          } @else {
+          <div class="pub-hero__stat pub-hero__stat--static">
+            <span class="pub-hero__stat-value">{{ p.followersCount }}</span>
+            <span class="pub-hero__stat-label">متابع</span>
+          </div>
+          <div class="pub-hero__stat pub-hero__stat--static">
+            <span class="pub-hero__stat-value">{{ p.followingCount }}</span>
+            <span class="pub-hero__stat-label">يتابع</span>
+          </div>
+          }
+        </div>
+
+        @if (!isMyProfile()) {
+        <button type="button" class="pub-hero__follow-btn" [class.following]="p.isFollowedByMe"
+          [disabled]="isFollowLoading()" (click)="toggleFollow()">
+          @if (isFollowLoading()) {
+          <span class="pub-hero__btn-spinner"></span>
+          } @else if (p.isFollowedByMe) {
+          إلغاء المتابعة
+          } @else {
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+            <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
+          </svg>
+          متابعة
+          }
+        </button>
+        }
+      </div>
+    </div>
+
+    @if (p.highlights.length) {
+    <section class="pub-section">
+      <h2 class="pub-section__title">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+          <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+        </svg>
+        الأثر
+      </h2>
+      <div class="pub-highlights">
+        @for (h of p.highlights; track h.id) {
+        <div class="pub-highlight">
+          <span class="pub-highlight__mark">"</span>
+          <p class="pub-highlight__text">{{ h.content }}</p>
+          @if (h.novelTitle) {
+          <p class="pub-highlight__novel">— {{ h.novelTitle }}</p>
+          }
+        </div>
+        }
+      </div>
+    </section>
+    }
+
+    @if (p.favoriteNovels.length) {
+    <section class="pub-section">
+      <h2 class="pub-section__title">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+          <path
+            d="M21 5c-1.11-.35-2.33-.5-3.5-.5-1.95 0-4.05.4-5.5 1.5-1.45-1.1-3.55-1.5-5.5-1.5S2.45 4.9 1 6v14.65c0 .25.25.5.5.5.1 0 .15-.05.25-.05C3.1 20.45 5.05 20 6.5 20c1.95 0 4.05.4 5.5 1.5 1.35-.85 3.8-1.5 5.5-1.5 1.65 0 3.35.3 4.75 1.05.1.05.15.05.25.05.25 0 .5-.25.5-.5V6c-.6-.45-1.25-.75-2-1z" />
+        </svg>
+        أفضل الروايات
+      </h2>
+      <div class="pub-novels">
+        @for (novel of p.favoriteNovels; track novel.id) {
+        <div class="pub-novel">
+          @if (novel.coverImageUrl) {
+          <img class="pub-novel__cover" [src]="novel.coverImageUrl" [alt]="novel.title" />
+          } @else {
+          <div class="pub-novel__cover pub-novel__cover--ph">
+            {{ novel.title.charAt(0) }}
+          </div>
+          }
+          <div class="pub-novel__body">
+            <h3 class="pub-novel__title">{{ novel.title }}</h3>
+            @if (novel.authorName) {
+            <p class="pub-novel__author">{{ novel.authorName }}</p>
+            }
+          </div>
+        </div>
+        }
+      </div>
+    </section>
+    }
+
+  </div>
+  }
+  @if (showModal()) {
+  <div class="follow-overlay" (click)="closeModal()">
+    <div class="follow-modal" (click)="$event.stopPropagation()">
+      <div class="follow-modal__header">
+        <h3>{{ modalTitle() }}</h3>
+        <button type="button" class="follow-modal__close" (click)="closeModal()">×</button>
+      </div>
+
+      @if (isModalLoading()) {
+      <div class="follow-modal__loading">
+        <span class="pub-page__spinner"></span>
+      </div>
+      } @else if (modalUsers().length) {
+      <div class="follow-modal__list">
+        @for (user of modalUsers(); track user.id) {
+        <a [routerLink]="['/profile', user.id]" class="follow-user" (click)="closeModal()">
+          <div class="follow-user__avatar">
+            @if (user.profileImageUrl) {
+            <img [src]="user.profileImageUrl" [alt]="user.displayName" />
+            } @else {
+            {{ getInitial(user.displayName) }}
+            }
+          </div>
+          <span class="follow-user__name">{{ user.displayName }}</span>
+        </a>
+        }
+      </div>
+      } @else {
+      <p class="follow-modal__empty">لا يوجد أحد هنا بعد</p>
+      }
+    </div>
+  </div>
+  }
+</div>

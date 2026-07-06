@@ -6,6 +6,8 @@ import { Profile } from '../models/profile/profile.model';
 import { UpdateProfileRequest } from '../models/profile/update-profile.model';
 import { AddHighlightRequest } from '../models/profile/add-highlight.model';
 import { Highlight } from '../models/profile/Highlight.model';
+import { FavoriteNovel, PublicProfile } from '../models/profile/public-profile.model';
+import { FollowUser } from '../models/profile/FollowUser';
 
 @Injectable({ providedIn: 'root' })
 export class ProfileService {
@@ -32,5 +34,27 @@ export class ProfileService {
 
   deleteHighlight(id: number): Observable<string> {
     return this.http.delete<string>(`${this.baseUrl}/highlights/${id}`);
+  }
+  getPublicProfile(userId: string): Observable<PublicProfile> {
+    return this.http.get<PublicProfile>(`${this.baseUrl}/public/${userId}`);
+  }
+
+  toggleFollow(userId: string): Observable<string> {
+    return this.http.post<string>(`${this.baseUrl}/follow/${userId}`, {});
+  }
+
+  addFavoriteNovel(request: { title: string; authorName: string | null; coverImageUrl: string | null }): Observable<FavoriteNovel> {
+    return this.http.post<FavoriteNovel>(`${this.baseUrl}/favorite-novels`, request);
+  }
+
+  deleteFavoriteNovel(novelId: number): Observable<string> {
+    return this.http.delete<string>(`${this.baseUrl}/favorite-novels/${novelId}`);
+  }
+  getFollowers(userId: string): Observable<FollowUser[]> {
+    return this.http.get<FollowUser[]>(`${this.baseUrl}/${userId}/followers`);
+  }
+
+  getFollowing(userId: string): Observable<FollowUser[]> {
+    return this.http.get<FollowUser[]>(`${this.baseUrl}/${userId}/following`);
   }
 }

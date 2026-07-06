@@ -1,6 +1,8 @@
 import { Component, inject, signal, computed, OnInit } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ProfileService } from '../../../core/services/profile-service';
+import { TokenService } from '../../../core/services/tokenService';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-settings-panel',
@@ -11,6 +13,8 @@ import { ProfileService } from '../../../core/services/profile-service';
 })
 export class SettingsComponent implements OnInit {
   private readonly profileService = inject(ProfileService);
+  private readonly tokenService = inject(TokenService);
+  private readonly router = inject(Router);
   private readonly fb = inject(FormBuilder);
 
   isOpen = signal(false);
@@ -25,7 +29,7 @@ export class SettingsComponent implements OnInit {
   displayName = signal('');
   imageLoadError = signal(false);
 
-  // نفس منطق البروفايل بالضبط
+
   initials = computed(() => {
     const name = this.displayName().trim();
     if (!name) return '؟';
@@ -139,5 +143,10 @@ export class SettingsComponent implements OnInit {
         this.isLoading.set(false);
       }
     });
+  }
+  logout(): void {
+    this.tokenService.clear();
+    this.close();
+    this.router.navigate(['/login']);
   }
 }

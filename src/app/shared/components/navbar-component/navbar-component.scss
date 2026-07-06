@@ -166,22 +166,23 @@
 
 .app-nav__badge {
   position: absolute;
-  top: -2px;
-  left: -2px;
-  min-width: 22px;
-  height: 22px;
-  background: #c0392b;
+  top: -4px;
+  right: -4px;
+  min-width: 17px;
+  height: 17px;
+  background: #e0245e;
   color: #fff;
-  font-size: 12.5px;
+  font-size: 10.5px;
   font-weight: 700;
   font-family: 'Amiri', serif;
+  line-height: 1;
   border: 2px solid var(--sard-bg, #faf3ec);
   border-radius: 999px;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0 5px;
-  box-shadow: 0 2px 6px rgba(192, 57, 43, 0.35);
+  padding: 0 4px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
   animation: badge-pop 0.3s ease both;
 }
 
@@ -227,6 +228,7 @@
     opacity: 0;
     transform: translateY(-8px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -238,6 +240,7 @@
     opacity: 0;
     transform: scale(0.5);
   }
+
   to {
     opacity: 1;
     transform: scale(1);
@@ -245,6 +248,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+
   .app-nav,
   .app-nav__badge {
     animation: none !important;

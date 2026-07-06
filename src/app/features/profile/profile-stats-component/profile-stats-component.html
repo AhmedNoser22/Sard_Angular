@@ -1,20 +1,45 @@
 <div class="profile-stats">
-  <div class="profile-stats__item">
-    <span class="profile-stats__value">{{ profile().publishedNovelsCount }}</span>
-    <span class="profile-stats__label">روايات منشورة</span>
-  </div>
-
+  <button type="button" class="profile-stats__item" (click)="showFollowers()">
+    <span class="profile-stats__value">{{ profile().followersCount }}</span>
+    <span class="profile-stats__label">متابع</span>
+  </button>
   <span class="profile-stats__divider"></span>
+  <button type="button" class="profile-stats__item" (click)="showFollowing()">
+    <span class="profile-stats__value">{{ profile().followingCount }}</span>
+    <span class="profile-stats__label">يتابع</span>
+  </button>
+</div>
 
-  <div class="profile-stats__item">
-    <span class="profile-stats__value">{{ profile().novels.length }}</span>
-    <span class="profile-stats__label">إجمالي الروايات</span>
-  </div>
+@if (showModal()) {
+<div class="follow-overlay" (click)="closeModal()">
+  <div class="follow-modal" (click)="$event.stopPropagation()">
+    <div class="follow-modal__header">
+      <h3>{{ modalTitle() }}</h3>
+      <button type="button" class="follow-modal__close" (click)="closeModal()">×</button>
+    </div>
 
-  <span class="profile-stats__divider"></span>
-
-  <div class="profile-stats__item">
-    <span class="profile-stats__value">{{ profile().totalReadsCount }}</span>
-    <span class="profile-stats__label">إجمالي القراءات</span>
+    @if (isModalLoading()) {
+    <div class="follow-modal__loading">
+      <span class="profile-stats__spinner"></span>
+    </div>
+    } @else if (modalUsers().length) {
+    <div class="follow-modal__list">
+      @for (user of modalUsers(); track user.id) {
+      <a [routerLink]="['/profile', user.id]" class="follow-user" (click)="closeModal()">
+        <div class="follow-user__avatar">
+          @if (user.profileImageUrl) {
+          <img [src]="user.profileImageUrl" [alt]="user.displayName" />
+          } @else {
+          {{ getInitial(user.displayName) }}
+          }
+        </div>
+        <span class="follow-user__name">{{ user.displayName }}</span>
+      </a>
+      }
+    </div>
+    } @else {
+    <p class="follow-modal__empty">لا يوجد أحد هنا بعد</p>
+    }
   </div>
 </div>
+}

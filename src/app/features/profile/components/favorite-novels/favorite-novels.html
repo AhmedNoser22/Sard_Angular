@@ -1,0 +1,57 @@
+<section class="fav-novels">
+  <div class="fav-novels__header">
+    <div>
+      <h2 class="fav-novels__title">أفضل الروايات</h2>
+      <p class="fav-novels__sub">روايات أثّرت فيك وتوصي بها</p>
+    </div>
+    @if (!isAdding()) {
+      <button type="button" class="fav-novels__add-btn" (click)="startAdd()">+ إضافة</button>
+    }
+  </div>
+
+  @if (isAdding()) {
+    <form class="fav-novels__form" [formGroup]="form" (ngSubmit)="addNovel()">
+      <div class="fav-novels__field">
+        <label>اسم الرواية</label>
+        <input type="text" formControlName="title" maxlength="200" dir="rtl"/>
+      </div>
+      <div class="fav-novels__field">
+        <label>اسم الكاتب</label>
+        <input type="text" formControlName="authorName" maxlength="100" dir="rtl"/>
+      </div>
+      <div class="fav-novels__field">
+        <label>رابط صورة الغلاف (اختياري)</label>
+        <input type="text" formControlName="coverImageUrl" maxlength="500" dir="ltr"/>
+      </div>
+      <div class="fav-novels__actions">
+        <button type="submit" class="fav-novels__save" [disabled]="isLoading() || form.invalid">
+          @if (isLoading()) { جارٍ... } @else { إضافة }
+        </button>
+        <button type="button" class="fav-novels__cancel" (click)="cancelAdd()">إلغاء</button>
+      </div>
+    </form>
+  }
+
+  @if (localNovels().length) {
+    <div class="fav-novels__grid">
+      @for (novel of localNovels(); track novel.id) {
+        <div class="fav-novel-card">
+          <button type="button" class="fav-novel-card__delete" (click)="deleteNovel(novel.id)">×</button>
+          @if (novel.coverImageUrl) {
+            <img class="fav-novel-card__cover" [src]="novel.coverImageUrl" [alt]="novel.title"/>
+          } @else {
+            <div class="fav-novel-card__cover fav-novel-card__cover--placeholder">{{ novel.title.charAt(0) }}</div>
+          }
+          <div class="fav-novel-card__body">
+            <h3 class="fav-novel-card__title">{{ novel.title }}</h3>
+            @if (novel.authorName) {
+              <p class="fav-novel-card__author">{{ novel.authorName }}</p>
+            }
+          </div>
+        </div>
+      }
+    </div>
+  } @else if (!isAdding()) {
+    <p class="fav-novels__empty">لم تضف أي روايات بعد</p>
+  }
+</section>

@@ -3,6 +3,7 @@
   font-family: 'Amiri', serif;
   direction: rtl;
 }
+
 :host-context([data-theme='dark']) {
   --sard-bg: #201812;
   --sard-card: #2a201a;
@@ -140,6 +141,34 @@
     font-weight: 700;
     color: var(--sard-maroon);
   }
+
+  &--danger {
+    border-color: var(--sard-border);
+  }
+}
+
+.settings-logout-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  background: none;
+  border: 1px solid var(--sard-border);
+  color: var(--sard-maroon);
+  font-family: inherit;
+  font-weight: 700;
+  font-size: 14px;
+  padding: 10px 16px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+
+  &:hover {
+    background: var(--sard-primary);
+    color: #fff;
+    border-color: var(--sard-primary);
+  }
 }
 
 .settings-avatar {
@@ -149,33 +178,44 @@
 
   &__wrap {
     position: relative;
-    width: 64px;
-    height: 64px;
+    width: 44px;
+    height: 44px;
     flex-shrink: 0;
   }
 
   &__img {
-    width: 64px;
-    height: 64px;
+    width: 44px;
+    height: 44px;
     border-radius: 50%;
     object-fit: cover;
-    border: 3px solid var(--sard-tan);
+    border: 2px solid var(--sard-tan);
+    display: block;
+    color: transparent;
+    font-size: 0;
+    text-indent: -9999px;
+    overflow: hidden;
   }
 
   &__edit {
     position: absolute;
-    bottom: -2px;
-    left: -2px;
-    width: 24px;
-    height: 24px;
+    bottom: -1px;
+    left: -1px;
+    width: 16px;
+    height: 16px;
     background: var(--sard-primary);
     color: #fff;
     border-radius: 50%;
-    border: 2px solid var(--sard-card);
+    border: 1.5px solid var(--sard-card);
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
+    z-index: 2;
+
+    svg {
+      width: 8px;
+      height: 8px;
+    }
 
     &:hover {
       background: var(--sard-primary-dark);

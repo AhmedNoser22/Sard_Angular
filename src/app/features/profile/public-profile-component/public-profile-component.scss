@@ -1,0 +1,488 @@
+@import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap');
+
+:host {
+    --sard-bg: #faf3ec;
+    --sard-card: #fffdfb;
+    --sard-primary: #c0785a;
+    --sard-primary-dark: #a5624a;
+    --sard-maroon: #6b2d2d;
+    --sard-tan: #ddc8b4;
+    --sard-text: #4a3428;
+    --sard-text-light: #8a7264;
+    --sard-border: #ecdfd2;
+    display: block;
+    font-family: 'Amiri', serif;
+    direction: rtl;
+    background: var(--sard-bg);
+    min-height: 100vh;
+}
+
+:host-context([data-theme='dark']) {
+    --sard-bg: #201812;
+    --sard-card: #2a201a;
+    --sard-primary: #d98f6c;
+    --sard-primary-dark: #c0785a;
+    --sard-maroon: #f0d9c8;
+    --sard-tan: #4a382c;
+    --sard-text: #ece1d6;
+    --sard-text-light: #b3a294;
+    --sard-border: #3c2e24;
+}
+
+.pub-page {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 24px 20px 60px;
+
+    &__back {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        color: var(--sard-primary);
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 700;
+        margin-bottom: 20px;
+        padding: 6px 12px;
+        border-radius: 999px;
+        transition: background 0.2s;
+
+        &:hover {
+            background: var(--sard-border);
+        }
+    }
+
+    &__loading {
+        display: flex;
+        justify-content: center;
+        padding: 80px 0;
+    }
+
+    &__spinner {
+        width: 36px;
+        height: 36px;
+        border: 3px solid var(--sard-border);
+        border-top-color: var(--sard-primary);
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+    }
+
+    &__inner {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+}
+
+.pub-hero {
+    background: var(--sard-card);
+    border: 1px solid var(--sard-border);
+    border-radius: 24px;
+    padding: 32px;
+    display: flex;
+    gap: 28px;
+    align-items: flex-start;
+    box-shadow: 0 4px 24px rgba(107, 45, 45, 0.07);
+
+    @media (max-width: 560px) {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        padding: 24px 20px;
+    }
+
+    &__avatar-wrap {
+        flex-shrink: 0;
+    }
+
+    &__avatar {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 4px solid var(--sard-tan);
+        box-shadow: 0 4px 16px rgba(107, 45, 45, 0.12);
+
+        &--placeholder {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--sard-tan), #e8c4a8);
+            color: var(--sard-maroon);
+            font-size: 36px;
+            font-weight: 700;
+        }
+    }
+
+    &__info {
+        flex: 1;
+        min-width: 0;
+    }
+
+    &__name {
+        margin: 0 0 8px;
+        font-size: 26px;
+        font-weight: 700;
+        color: var(--sard-maroon);
+    }
+
+    &__bio {
+        margin: 0 0 16px;
+        font-size: 14px;
+        color: var(--sard-text-light);
+        line-height: 1.8;
+    }
+
+    &__stats {
+        display: flex;
+        gap: 20px;
+        margin-bottom: 18px;
+
+        @media (max-width: 560px) {
+            justify-content: center;
+        }
+    }
+
+    &__stat {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 2px;
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 8px 16px;
+        border-radius: 12px;
+        transition: background 0.2s;
+
+        &:hover {
+            background: var(--sard-bg);
+        }
+
+        &--static {
+            cursor: default;
+
+            &:hover {
+                background: none;
+            }
+        }
+    }
+
+    &__stat-value {
+        font-size: 22px;
+        font-weight: 700;
+        color: var(--sard-maroon);
+    }
+
+    &__stat-label {
+        font-size: 12px;
+        color: var(--sard-text-light);
+    }
+
+    &__follow-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: var(--sard-primary);
+        color: #fff;
+        border: none;
+        font-family: inherit;
+        font-size: 14px;
+        font-weight: 700;
+        padding: 10px 28px;
+        border-radius: 999px;
+        cursor: pointer;
+        transition: all 0.2s;
+        min-width: 120px;
+        justify-content: center;
+
+        &:hover:not(:disabled) {
+            background: var(--sard-primary-dark);
+        }
+
+        &:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        &.following {
+            background: transparent;
+            border: 2px solid var(--sard-primary);
+            color: var(--sard-primary);
+
+            &:hover:not(:disabled) {
+                background: #fdf0ee;
+            }
+        }
+    }
+
+    &__btn-spinner {
+        width: 16px;
+        height: 16px;
+        border: 2px solid rgba(255, 255, 255, 0.4);
+        border-top-color: #fff;
+        border-radius: 50%;
+        animation: spin 0.7s linear infinite;
+
+        .following & {
+            border-color: rgba(192, 120, 90, 0.3);
+            border-top-color: var(--sard-primary);
+        }
+    }
+}
+
+.pub-section {
+    background: var(--sard-card);
+    border: 1px solid var(--sard-border);
+    border-radius: 20px;
+    padding: 24px 28px;
+    box-shadow: 0 2px 12px rgba(107, 45, 45, 0.05);
+
+    &__title {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 18px;
+        font-weight: 700;
+        color: var(--sard-maroon);
+        margin: 0 0 18px;
+    }
+}
+
+.pub-highlights {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 14px;
+}
+
+.pub-highlight {
+    background: var(--sard-bg);
+    border-radius: 14px;
+    padding: 18px;
+    border: 1px solid var(--sard-border);
+
+    &__mark {
+        font-size: 32px;
+        color: var(--sard-tan);
+        font-weight: 700;
+        line-height: 0.8;
+        display: block;
+        margin-bottom: 8px;
+    }
+
+    &__text {
+        font-size: 15px;
+        line-height: 1.9;
+        color: var(--sard-text);
+        margin: 0 0 10px;
+    }
+
+    &__novel {
+        font-size: 12px;
+        color: var(--sard-primary-dark);
+        font-weight: 700;
+        margin: 0;
+    }
+}
+
+.pub-novels {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 14px;
+}
+
+.pub-novel {
+    border-radius: 14px;
+    overflow: hidden;
+    border: 1px solid var(--sard-border);
+    background: var(--sard-card);
+    box-shadow: 0 2px 10px rgba(107, 45, 45, 0.05);
+    transition: transform 0.2s;
+
+    &:hover {
+        transform: translateY(-3px);
+    }
+
+    &__cover {
+        width: 100%;
+        aspect-ratio: 3/4;
+        object-fit: cover;
+
+        &--ph {
+            width: 100%;
+            aspect-ratio: 3/4;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--sard-tan), #e8c4a8);
+            color: var(--sard-maroon);
+            font-size: 28px;
+            font-weight: 700;
+        }
+    }
+
+    &__body {
+        padding: 10px 12px;
+    }
+
+    &__title {
+        margin: 0 0 3px;
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--sard-maroon);
+    }
+
+    &__author {
+        margin: 0;
+        font-size: 11px;
+        color: var(--sard-text-light);
+    }
+}
+
+// --- FIX: these were accidentally nested inside .pub-novel before,
+// which meant the modal CSS never matched the actual DOM (the modal
+// is a sibling of .pub-page__inner, not a child of .pub-novel).
+// They are now correctly top-level rules. ---
+
+.follow-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(107, 45, 45, 0.2);
+    backdrop-filter: blur(4px);
+    z-index: 200;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: fadeIn 0.15s ease;
+}
+
+.follow-modal {
+    background: var(--sard-card);
+    border: 1px solid var(--sard-border);
+    border-radius: 20px;
+    width: 360px;
+    max-width: calc(100vw - 32px);
+    max-height: 480px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 20px 60px rgba(107, 45, 45, 0.15);
+    animation: slideUp 0.2s ease;
+    overflow: hidden;
+
+    &__header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 16px 20px;
+        border-bottom: 1px solid var(--sard-border);
+
+        h3 {
+            margin: 0;
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--sard-maroon);
+        }
+    }
+
+    &__close {
+        background: none;
+        border: none;
+        font-size: 22px;
+        color: var(--sard-text-light);
+        cursor: pointer;
+        line-height: 1;
+        padding: 2px 6px;
+        border-radius: 6px;
+
+        &:hover {
+            background: var(--sard-bg);
+            color: var(--sard-maroon);
+        }
+    }
+
+    &__loading {
+        display: flex;
+        justify-content: center;
+        padding: 32px;
+    }
+
+    &__list {
+        overflow-y: auto;
+        padding: 8px 0;
+    }
+
+    &__empty {
+        text-align: center;
+        padding: 32px;
+        color: var(--sard-text-light);
+        font-size: 14px;
+    }
+}
+
+.follow-user {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 20px;
+    text-decoration: none;
+    transition: background 0.15s;
+
+    &:hover {
+        background: var(--sard-bg);
+    }
+
+    &__avatar {
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--sard-tan), #e8c4a8);
+        color: var(--sard-maroon);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 16px;
+        flex-shrink: 0;
+        overflow: hidden;
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    }
+
+    &__name {
+        font-size: 15px;
+        font-weight: 700;
+        color: var(--sard-maroon);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(16px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}

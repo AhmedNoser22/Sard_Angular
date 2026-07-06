@@ -1,5 +1,5 @@
 <div class="nabd-layout">
-  
+
 
   <main class="nabd-main">
     <div class="nabd-feed">
@@ -10,10 +10,34 @@
         <span class="nabd-feed__spinner"></span>
       </div>
       } @else if (posts().length) {
-      @for (post of posts(); track post.id) {
+      @for (post of pagedPosts(); track post.id) {
       <div [id]="'post-' + post.id">
         <app-post-card [post]="post" (postDeleted)="onPostDeleted($event)" />
       </div>
+      }
+
+      @if (totalPages() > 1) {
+      <nav class="nabd-pagination" aria-label="التنقل بين الصفحات">
+        <button type="button" class="nabd-pagination__arrow" (click)="prevPage()" [disabled]="currentPage() === 1">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 6l6 6-6 6" />
+          </svg>
+        </button>
+
+        @for (page of paginationRange(); track page) {
+        <button type="button" class="nabd-pagination__page" [class.is-active]="page === currentPage()"
+          (click)="goToPage(page)">
+          {{ page }}
+        </button>
+        }
+
+        <button type="button" class="nabd-pagination__arrow" (click)="nextPage()"
+          [disabled]="currentPage() === totalPages()">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M15 6l-6 6 6 6" />
+          </svg>
+        </button>
+      </nav>
       }
       } @else {
       <div class="nabd-feed__empty">
@@ -25,8 +49,12 @@
     </div>
 
     <aside class="nabd-sidebar">
+      <div class="nabd-sidebar__hero">
+        <img src="/sard-hero.png" alt="كاتب يجلس على مكتبه محاطاً بأوراقه ودفتر سرد" />
+      </div>
+
       <div class="nabd-sidebar__card">
-        <h3 class="nabd-sidebar__title">عن ساحة الحكاية</h3>
+        <h3 class="nabd-sidebar__title">عن ساحة نبض</h3>
         <p class="nabd-sidebar__text">مساحة للكتّاب والقراء لتبادل الأفكار والاقتباسات والأسئلة حول عالم الروايات.</p>
       </div>
 
