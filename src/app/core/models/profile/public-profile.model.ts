@@ -4,6 +4,7 @@ export interface PublicProfile {
   displayName: string;
   bio: string | null;
   profileImageUrl: string | null;
+  createdAt: string;
   followersCount: number;
   followingCount: number;
   isFollowedByMe: boolean;

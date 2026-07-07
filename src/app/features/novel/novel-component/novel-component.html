@@ -1,47 +1,95 @@
-<div class="novel-page">
-  <aside class="novel-page__sidebar">
-    <a [routerLink]="['/profile']" class="novel-page__back">
-      <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
-        <path d="M14 19l-7-7 7-7v14z" />
-      </svg>
-      رجوع
-    </a>
+@if (!hasNovelId()) {
 
-    @if (novel(); as n) {
-    <h2 class="novel-page__novel-title">{{ n.title }}</h2>
-    }
-
-    <div class="novel-page__chapters">
-      <div class="novel-page__chapters-header">
-        <span>الفصول</span>
-        <button type="button" class="novel-page__new-chapter-btn" (click)="startNewChapter()">+ جديد</button>
-      </div>
-
-      @if (isLoading()) {
-      <p class="novel-page__loading">جارٍ التحميل...</p>
-      } @else if (chapters().length) {
-      @for (ch of chapters(); track ch.id) {
-      <button type="button" class="novel-page__chapter-item" [class.active]="activeChapter()?.id === ch.id"
-        (click)="openChapter(ch)">
-        {{ ch.order }}. {{ ch.title }}
-      </button>
-      }
-      } @else {
-      <p class="novel-page__empty">لا توجد فصول بعد</p>
-      }
-    </div>
-  </aside>
-
-  <main class="novel-page__editor">
-    @if (activeChapter(); as ch) {
-    <app-chapter-editor [chapter]="ch" [novelId]="novelId()" (chapterSaved)="onChapterSaved($event)" />
-    } @else if (isCreatingChapter()) {
-    <app-chapter-editor [novelId]="novelId()" [nextOrder]="chapters().length + 1"
-      (chapterSaved)="onNewChapterSaved($event)" />
+  <main class="novels-page">
+    @if (isLoadingList()) {
+      <div class="novels-page__state">جارٍ التحميل...</div>
     } @else {
-    <div class="novel-page__placeholder">
-      <p>اختر فصلاً من القائمة أو أنشئ فصلاً جديداً</p>
-    </div>
+      <app-novels-list [novels]="allNovels()" (novelChanged)="loadAllNovels()" />
     }
   </main>
-</div>
+
+} @else {
+
+  <div class="novel-page">
+
+    <div class="novel-page__mobile-bar">
+      <button type="button" class="novel-page__sidebar-toggle" (click)="toggleSidebar()">
+        @if (isSidebarOpen()) {
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+          <path d="M18.3 5.71L12 12.01l-6.3-6.3-1.41 1.41 6.3 6.3-6.3 6.3 1.41 1.41 6.3-6.3 6.3 6.3 1.41-1.41-6.3-6.3 6.3-6.3z" />
+        </svg>
+        إغلاق
+        } @else {
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+          <path d="M3 5h18v2H3zm0 6h18v2H3zm0 6h18v2H3z" />
+        </svg>
+        الفصول
+        }
+      </button>
+      @if (novel(); as n) {
+      <span class="novel-page__mobile-title">{{ n.title }}</span>
+      }
+    </div>
+
+    @if (isSidebarOpen()) {
+    <div class="novel-page__backdrop" (click)="toggleSidebar()"></div>
+    }
+
+    <aside class="novel-page__sidebar" [class.open]="isSidebarOpen()">
+
+      <div class="novel-page__panel novel-page__panel--head">
+        <a [routerLink]="['/novel']" class="novel-page__back">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+            <path d="M14 19l-7-7 7-7v14z" />
+          </svg>
+          رجوع
+        </a>
+        @if (novel(); as n) {
+        <h2 class="novel-page__novel-title">{{ n.title }}</h2>
+        }
+      </div>
+
+      <div class="novel-page__panel novel-page__panel--chapters">
+        <div class="novel-page__chapters-header">
+          <span>الفصول</span>
+          <button type="button" class="novel-page__new-chapter-btn" (click)="startNewChapter()">+ جديد</button>
+        </div>
+
+        <div class="novel-page__chapters">
+          @if (isLoading()) {
+          <p class="novel-page__loading">جارٍ التحميل...</p>
+          } @else if (chapters().length) {
+          @for (ch of chapters(); track ch.id) {
+          <button type="button" class="novel-page__chapter-item" [class.active]="activeChapter()?.id === ch.id"
+            (click)="openChapter(ch)">
+            <span class="novel-page__chapter-order">{{ ch.order }}</span>
+            <span class="novel-page__chapter-name">{{ ch.title }}</span>
+          </button>
+          }
+          } @else {
+          <p class="novel-page__empty">لا توجد فصول بعد</p>
+          }
+        </div>
+      </div>
+    </aside>
+
+    <main class="novel-page__editor">
+      <div class="novel-page__editor-card">
+        @if (activeChapter(); as ch) {
+        <app-chapter-editor [chapter]="ch" [novelId]="novelId()" (chapterSaved)="onChapterSaved($event)" />
+        } @else if (isCreatingChapter()) {
+        <app-chapter-editor [novelId]="novelId()" [nextOrder]="chapters().length + 1"
+          (chapterSaved)="onNewChapterSaved($event)" />
+        } @else {
+        <div class="novel-page__placeholder">
+          <svg viewBox="0 0 24 24" width="42" height="42" fill="currentColor" opacity="0.5">
+            <path d="M19 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2zM9 17H7v-7h2zm4 0h-2V7h2zm4 0h-2v-4h2z" />
+          </svg>
+          <p>اختر فصلاً من القائمة أو أنشئ فصلاً جديداً</p>
+        </div>
+        }
+      </div>
+    </main>
+  </div>
+
+}

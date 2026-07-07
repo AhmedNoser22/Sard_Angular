@@ -1,5 +1,23 @@
 <nav class="app-nav">
   <div class="app-nav__side">
+    <details class="app-nav__mobile-menu" #mobileMenu>
+      <summary class="app-nav__icon-btn app-nav__mobile-trigger" title="القائمة">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
+          <path d="M3 5h18v2H3zm0 6h18v2H3zm0 6h18v2H3z" />
+        </svg>
+      </summary>
+      <div class="app-nav__mobile-panel">
+        <a routerLink="/highlights" routerLinkActive="app-nav__mobile-link--active" class="app-nav__mobile-link"
+          (click)="mobileMenu.removeAttribute('open')">الأثر</a>
+        <a routerLink="/nabd" routerLinkActive="app-nav__mobile-link--active" class="app-nav__mobile-link"
+          (click)="mobileMenu.removeAttribute('open')">نبض</a>
+        <a routerLink="/profile" class="app-nav__mobile-link" [class.app-nav__mobile-link--active]="isHomeActive()"
+          (click)="mobileMenu.removeAttribute('open')">الرئيسية</a>
+        <a routerLink="/novel" routerLinkActive="app-nav__mobile-link--active" class="app-nav__mobile-link"
+          (click)="mobileMenu.removeAttribute('open')">رواياتي</a>
+      </div>
+    </details>
+
     <div class="notif-wrapper">
       <button type="button" class="app-nav__icon-btn" (click)="toggleNotifications(); $event.stopPropagation()"
         title="الإشعارات">
@@ -17,7 +35,7 @@
       }
     </div>
 
-    <a routerLink="/profile" class="app-nav__icon-btn" title="مكتبتي">
+    <a routerLink="/novel" class="app-nav__icon-btn" title="مكتبتي">
       <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.7"
         stroke-linecap="round" stroke-linejoin="round">
         <path
@@ -30,14 +48,16 @@
   <div class="app-nav__links">
     <a routerLink="/highlights" routerLinkActive="app-nav__link--active" class="app-nav__link">الأثر</a>
     <a routerLink="/nabd" routerLinkActive="app-nav__link--active" class="app-nav__link">نبض</a>
-    <a routerLink="/profile" routerLinkActive="app-nav__link--active" class="app-nav__link">الرئيسية</a>
+    <a routerLink="/profile" class="app-nav__link" [class.app-nav__link--active]="isHomeActive()">الرئيسية</a>
+    <a routerLink="/novel" routerLinkActive="app-nav__link--active" class="app-nav__link">رواياتي</a>
   </div>
 
   <a routerLink="/profile" class="app-nav__brand">
     <svg class="brand-mark app-nav__brand-star" viewBox="0 0 24 30" xmlns="http://www.w3.org/2000/svg">
-      <path d="M12 2.5l2.47 6.24 6.53.5-5.02 4.4 1.53 6.36L12 16.6l-5.51 3.4 1.53-6.36-5.02-4.4 6.53-.5L12 2.5z"
-        fill="none" stroke="#c0785a" stroke-width="1.3" stroke-linejoin="round" />
-      <circle cx="12" cy="12.2" r="1.6" fill="#c0785a" opacity="0.55" />
+      <path class="brand-mark__outline"
+        d="M12 2.5l2.47 6.24 6.53.5-5.02 4.4 1.53 6.36L12 16.6l-5.51 3.4 1.53-6.36-5.02-4.4 6.53-.5L12 2.5z" fill="none"
+        stroke="#c0785a" stroke-width="1.3" stroke-linejoin="round" pathLength="100" />
+      <circle class="brand-mark__dot" cx="12" cy="12.2" r="1.6" fill="#c0785a" opacity="0.55" />
       <line x1="4" y1="26" x2="20" y2="26" stroke="#c0785a" stroke-width="0.7" opacity="0.45" />
       <circle cx="4" cy="26" r="1" fill="#c0785a" opacity="0.45" />
       <circle cx="20" cy="26" r="1" fill="#c0785a" opacity="0.45" />

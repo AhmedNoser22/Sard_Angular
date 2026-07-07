@@ -1,8 +1,9 @@
 import { Component, inject, signal, OnInit, HostListener } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { Subject } from 'rxjs';
+import { DatePipe } from '@angular/common';
+import { Title } from '@angular/platform-browser';
+import { Subject, of } from 'rxjs';
 import { exhaustMap, catchError, finalize } from 'rxjs/operators';
-import { of } from 'rxjs';
 import { ProfileService } from '../../../core/services/profile-service';
 import { PublicProfile } from '../../../core/models/profile/public-profile.model';
 import { FollowUser } from '../../../core/models/profile/FollowUser';
@@ -11,7 +12,7 @@ import { TokenService } from '../../../core/services/tokenService';
 @Component({
   selector: 'app-public-profile',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink, DatePipe],
   templateUrl: './public-profile-component.html',
   styleUrl: './public-profile-component.scss'
 })
@@ -19,6 +20,7 @@ export class PublicProfileComponent implements OnInit {
   private readonly profileService = inject(ProfileService);
   private readonly route = inject(ActivatedRoute);
   private readonly tokenService = inject(TokenService);
+  private readonly titleService = inject(Title);
 
   profile = signal<PublicProfile | null>(null);
   isLoading = signal(true);
@@ -30,10 +32,6 @@ export class PublicProfileComponent implements OnInit {
   modalUsers = signal<FollowUser[]>([]);
   isModalLoading = signal(false);
 
-  // FIX: all follow-button clicks funnel through this Subject + exhaustMap.
-  // exhaustMap ignores any new click that arrives while a request is still
-  // in flight, so a double-tap / double "click" event firing on mobile can
-  // no longer trigger the toggle twice.
   private readonly followClicks$ = new Subject<string>();
 
   constructor() {
@@ -42,7 +40,6 @@ export class PublicProfileComponent implements OnInit {
         exhaustMap(profileId => {
           this.isFollowLoading.set(true);
 
-          // optimistic update
           this.profile.update(prev => prev ? {
             ...prev,
             isFollowedByMe: !prev.isFollowedByMe,
@@ -51,7 +48,6 @@ export class PublicProfileComponent implements OnInit {
 
           return this.profileService.toggleFollow(profileId).pipe(
             catchError(() => {
-              // rollback on failure
               this.profile.update(prev => prev ? {
                 ...prev,
                 isFollowedByMe: !prev.isFollowedByMe,
@@ -69,7 +65,11 @@ export class PublicProfileComponent implements OnInit {
   ngOnInit(): void {
     const userId = this.route.snapshot.paramMap.get('userId')!;
     this.profileService.getPublicProfile(userId).subscribe({
-      next: p => { this.profile.set(p); this.isLoading.set(false); },
+      next: p => {
+        this.profile.set(p);
+        this.isLoading.set(false);
+        this.titleService.setTitle(`${p.displayName} - سرد`);
+      },
       error: () => this.isLoading.set(false)
     });
   }
@@ -81,9 +81,6 @@ export class PublicProfileComponent implements OnInit {
   }
 
   showFollowers(): void {
-    // FIX: followers/following lists are now only shown to the profile's
-    // owner, matching the Facebook/Insta-style privacy behavior requested.
-    // (Backend must enforce this too — see GetFollowersAsync.)
     const p = this.profile();
     if (!p || !this.isMyProfile()) return;
     this.modalTitle.set('المتابعون');

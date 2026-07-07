@@ -23,20 +23,10 @@
   user-select: none;
   animation: nav-fade-in 0.4s ease both;
 
-  @media (max-width: 900px) {
-    padding: 14px 24px;
-  }
+  @media (max-width: 900px) { padding: 14px 24px; }
+  @media (max-width: 640px) { padding: 12px 16px; }
 
-  @media (max-width: 640px) {
-    padding: 12px 16px;
-  }
-
-  &__side {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    flex-shrink: 0;
-  }
+  &__side { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
 
   &__icon-btn {
     position: relative;
@@ -52,19 +42,10 @@
     cursor: pointer;
     transition: background 0.25s ease, color 0.25s ease, transform 0.25s ease;
 
-    &:hover {
-      background: var(--sard-tan);
-      transform: translateY(-1px);
-    }
+    &:hover { background: var(--sard-tan); transform: translateY(-1px); }
+    &:active { transform: translateY(0) scale(0.94); }
 
-    &:active {
-      transform: translateY(0) scale(0.94);
-    }
-
-    @media (max-width: 640px) {
-      width: 38px;
-      height: 38px;
-    }
+    @media (max-width: 640px) { width: 38px; height: 38px; }
   }
 
   &__brand {
@@ -80,6 +61,8 @@
     &:hover {
       opacity: 0.85;
       transform: translateY(-1px);
+
+      .brand-mark__dot { animation: dot-pulse 0.6s ease; }
     }
   }
 
@@ -89,10 +72,7 @@
     margin-bottom: 3px;
     display: block;
 
-    @media (max-width: 640px) {
-      width: 18px;
-      height: 22px;
-    }
+    @media (max-width: 640px) { width: 18px; height: 22px; }
   }
 
   &__brand-name {
@@ -103,9 +83,7 @@
     line-height: 1.15;
     letter-spacing: 0.5px;
 
-    @media (max-width: 640px) {
-      font-size: 22px;
-    }
+    @media (max-width: 640px) { font-size: 22px; }
   }
 
   &__links {
@@ -116,8 +94,14 @@
     align-items: center;
     gap: 32px;
 
-    @media (max-width: 900px) {
-      display: none;
+    @media (max-width: 900px) { display: none; }
+
+    &:hover .app-nav__link--active::after {
+      width: 0%;
+    }
+
+    &:hover .app-nav__link:hover::after {
+      width: 100%;
     }
   }
 
@@ -142,27 +126,18 @@
       transition: width 0.25s ease;
     }
 
-    &:hover {
-      color: var(--sard-primary);
-
-      &::after {
-        width: 100%;
-      }
-    }
-
-    &--active {
-      color: var(--sard-primary-dark);
-
-      &::after {
-        width: 100%;
-      }
-    }
+    &:hover { color: var(--sard-primary); }
+    &--active { color: var(--sard-primary-dark); &::after { width: 100%; } }
   }
 }
 
-.notif-wrapper {
-  position: relative;
+.brand-mark__outline {
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+  animation: draw-star 1.4s ease forwards, star-glow 3s ease-in-out 1.4s infinite;
 }
+
+.notif-wrapper { position: relative; }
 
 .app-nav__badge {
   position: absolute;
@@ -186,6 +161,59 @@
   animation: badge-pop 0.3s ease both;
 }
 
+.app-nav__mobile-menu {
+  display: none;
+
+  @media (max-width: 900px) {
+    display: block;
+    position: relative;
+  }
+
+  &[open] .app-nav__mobile-trigger {
+    background: var(--sard-tan);
+  }
+}
+
+.app-nav__mobile-trigger {
+  list-style: none;
+  cursor: pointer;
+
+  &::-webkit-details-marker { display: none; }
+  &::marker { content: ''; }
+}
+
+.app-nav__mobile-panel {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  min-width: 160px;
+  background: var(--sard-card);
+  border: 1px solid var(--sard-border);
+  border-radius: 14px;
+  box-shadow: 0 10px 30px rgba(107, 45, 45, 0.15);
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  z-index: 110;
+  animation: panel-drop 0.15s ease;
+}
+
+.app-nav__mobile-link {
+  display: block;
+  padding: 10px 14px;
+  border-radius: 10px;
+  color: var(--sard-text);
+  text-decoration: none;
+  font-size: 14.5px;
+  font-weight: 700;
+  text-align: right;
+  transition: background 0.15s ease;
+
+  &:hover { background: var(--sard-bg); }
+  &--active { color: var(--sard-primary-dark); background: var(--sard-bg); }
+}
+
 .app-settings-fab {
   position: fixed;
   left: 20px;
@@ -204,53 +232,19 @@
   z-index: 100;
   transition: transform 0.2s ease, background 0.2s ease, color 0.2s ease;
 
-  &:hover {
-    transform: rotate(35deg);
-    background: var(--sard-primary);
-    color: #fff;
-  }
+  &:hover { transform: rotate(35deg); background: var(--sard-primary); color: #fff; }
+  &--active { background: var(--sard-primary); color: #fff; }
 
-  &--active {
-    background: var(--sard-primary);
-    color: #fff;
-  }
-
-  @media (max-width: 640px) {
-    left: 14px;
-    bottom: 18px;
-    width: 42px;
-    height: 42px;
-  }
+  @media (max-width: 640px) { left: 14px; bottom: 18px; width: 42px; height: 42px; }
 }
 
-@keyframes nav-fade-in {
-  from {
-    opacity: 0;
-    transform: translateY(-8px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes badge-pop {
-  from {
-    opacity: 0;
-    transform: scale(0.5);
-  }
-
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
+@keyframes nav-fade-in { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes badge-pop { from { opacity: 0; transform: scale(0.5); } to { opacity: 1; transform: scale(1); } }
+@keyframes draw-star { to { stroke-dashoffset: 0; } }
+@keyframes star-glow { 0%, 100% { filter: drop-shadow(0 0 0 rgba(192, 120, 90, 0)); } 50% { filter: drop-shadow(0 0 3px rgba(192, 120, 90, 0.6)); } }
+@keyframes dot-pulse { 0% { transform: scale(1); } 50% { transform: scale(1.6); } 100% { transform: scale(1); } }
+@keyframes panel-drop { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
 
 @media (prefers-reduced-motion: reduce) {
-
-  .app-nav,
-  .app-nav__badge {
-    animation: none !important;
-  }
+  .app-nav, .app-nav__badge, .brand-mark__outline { animation: none !important; }
 }

@@ -14,21 +14,26 @@
   <div class="pub-page__inner">
 
     <div class="pub-hero">
-      <div class="pub-hero__avatar-wrap">
-        @if (p.profileImageUrl) {
-        <img class="pub-hero__avatar" [src]="p.profileImageUrl" [alt]="p.displayName" />
-        } @else {
-        <div class="pub-hero__avatar pub-hero__avatar--placeholder">
-          {{ getInitial(p.displayName) }}
-        </div>
-        }
-      </div>
+      <div class="pub-hero__main">
 
-      <div class="pub-hero__info">
-        <h1 class="pub-hero__name">{{ p.displayName }}</h1>
-        @if (p.bio) {
-        <p class="pub-hero__bio">{{ p.bio }}</p>
-        }
+        <div class="pub-hero__top">
+          <div class="pub-hero__avatar-wrap">
+            @if (p.profileImageUrl) {
+            <img class="pub-hero__avatar" [src]="p.profileImageUrl" [alt]="p.displayName" />
+            } @else {
+            <div class="pub-hero__avatar pub-hero__avatar--placeholder">
+              {{ getInitial(p.displayName) }}
+            </div>
+            }
+          </div>
+
+          <div class="pub-hero__identity">
+            <h1 class="pub-hero__name">{{ p.displayName }}</h1>
+            @if (p.bio) {
+            <p class="pub-hero__bio">{{ p.bio }}</p>
+            }
+          </div>
+        </div>
 
         <div class="pub-hero__stats">
           @if (isMyProfile()) {
@@ -67,6 +72,32 @@
           }
         </button>
         }
+      </div>
+
+      <div class="pub-hero__illustration">
+        <svg viewBox="0 0 220 220" class="pub-hero__book-svg" xmlns="http://www.w3.org/2000/svg">
+          <path class="pub-hero__book-shape" d="M20 45 Q110 22 200 45 L200 165 Q110 142 20 165 Z"
+            fill="var(--sard-card)" stroke="var(--sard-primary)" stroke-width="2" />
+          <path d="M110 32 L110 155" stroke="var(--sard-tan)" stroke-width="2" />
+          <path d="M30 55 Q100 40 105 50" stroke="var(--sard-border)" stroke-width="1.4" fill="none" />
+          <path d="M30 75 Q100 60 105 70" stroke="var(--sard-border)" stroke-width="1.4" fill="none" />
+          <path d="M30 95 Q100 80 105 90" stroke="var(--sard-border)" stroke-width="1.4" fill="none" />
+          <path d="M115 50 Q190 40 200 55" stroke="var(--sard-border)" stroke-width="1.4" fill="none" />
+          <path d="M115 70 Q190 60 200 75" stroke="var(--sard-border)" stroke-width="1.4" fill="none" />
+          <path d="M115 90 Q190 80 200 95" stroke="var(--sard-border)" stroke-width="1.4" fill="none" />
+
+          <g class="pub-hero__feather">
+            <path d="M150 25 Q172 12 188 -8" stroke="var(--sard-maroon)" stroke-width="2" fill="none"
+              stroke-linecap="round" />
+            <path d="M150 25 Q160 36 154 50" stroke="var(--sard-maroon)" stroke-width="1.4" fill="none" />
+          </g>
+
+          <text x="110" y="192" text-anchor="middle" class="pub-hero__book-word"
+            font-family="Amiri, serif" font-size="28" font-weight="700" fill="var(--sard-maroon)">سرد</text>
+
+          <circle cx="55" cy="192" r="2" fill="var(--sard-primary)" opacity="0.5" />
+          <circle cx="165" cy="192" r="2" fill="var(--sard-primary)" opacity="0.5" />
+        </svg>
       </div>
     </div>
 

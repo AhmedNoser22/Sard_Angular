@@ -45,6 +45,10 @@ export const routes: Routes = [
           .then(m => m.HighlightsComponent)
       },
       {
+        path: 'novel',
+        loadComponent: () => import('./features/novel/novel-component/novel-component').then(m => m.NovelComponent)
+      },
+      {
         path: 'novel/:novelId',
         loadComponent: () => import('./features/novel/novel-component/novel-component').then(m => m.NovelComponent)
       },
@@ -64,7 +68,7 @@ export const routes: Routes = [
       {
         path: 'profile/:userId',
         canActivate: [authGuard],
-        loadComponent: () => import('./features/profile//public-profile-component/public-profile-component')
+        loadComponent: () => import('./features/profile/public-profile-component/public-profile-component')
           .then(m => m.PublicProfileComponent)
       },
     ]
