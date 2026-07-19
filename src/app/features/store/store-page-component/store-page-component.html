@@ -1,0 +1,60 @@
+<div class="store">
+  <header class="store__header">
+    <h1 class="store__title">مكتبة سرد</h1>
+    <p class="store__sub">اكتشف روايات كتبها مبدعون من حولك</p>
+  </header>
+
+  @if (isLoading()) {
+    <div class="store__loading">
+      <span class="store__spinner"></span>
+    </div>
+  } @else if (novels().length) {
+    <div class="store__grid">
+      @for (novel of novels(); track novel.id) {
+        <article class="store-card">
+          <div class="store-card__cover-wrap">
+            @if (novel.coverImageUrl) {
+              <img class="store-card__cover" [src]="novel.coverImageUrl" [alt]="novel.title"/>
+            } @else {
+              <div class="store-card__cover store-card__cover--ph">
+                {{ novel.title.charAt(0) }}
+              </div>
+            }
+            <div class="store-card__price-badge">
+              {{ novel.price > 0 ? (novel.price + ' ج.م') : 'مجانية' }}
+            </div>
+          </div>
+
+          <div class="store-card__body">
+            <h3 class="store-card__title">{{ novel.title }}</h3>
+
+            <a [routerLink]="['/profile', novel.authorId]" class="store-card__author">
+              <div class="store-card__author-avatar">
+                @if (novel.authorImageUrl) {
+                  <img [src]="novel.authorImageUrl" [alt]="novel.authorName"/>
+                } @else {
+                  {{ getInitial(novel.authorName) }}
+                }
+              </div>
+              <span>{{ novel.authorName }}</span>
+            </a>
+
+            @if (novel.description) {
+              <p class="store-card__desc">{{ novel.description }}</p>
+            }
+
+            <div class="store-card__meta">
+              <span>{{ novel.chaptersCount }} فصل</span>
+              <span>{{ novel.readCount }} قراءة</span>
+            </div>
+          </div>
+        </article>
+      }
+    </div>
+  } @else {
+    <div class="store__empty">
+      <div class="store__empty-icon">📚</div>
+      <p>لا توجد روايات منشورة بعد</p>
+    </div>
+  }
+</div>

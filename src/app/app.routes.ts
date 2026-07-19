@@ -71,6 +71,21 @@ export const routes: Routes = [
         loadComponent: () => import('./features/profile/public-profile-component/public-profile-component')
           .then(m => m.PublicProfileComponent)
       },
+      {
+        path: 'store',
+        loadComponent: () => import('./features/store/store-page-component/store-page-component')
+          .then(m => m.StorePageComponent)
+      },
+      {
+        path: 'payment-success',
+        loadComponent: () => import('./features/store/payment-success/payment-success')
+          .then(m => m.PaymentSuccessComponent)
+      },
+      {
+        path: 'payment-failed',
+        loadComponent: () => import('./features/store/payment-failed/payment-failed')
+          .then(m => m.PaymentFailedComponent)
+      }
     ]
   },
 

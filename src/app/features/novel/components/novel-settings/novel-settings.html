@@ -1,0 +1,59 @@
+<div class="novel-settings">
+  <h3 class="novel-settings__title">إعدادات الرواية</h3>
+
+  <form [formGroup]="form" (ngSubmit)="save()" class="novel-settings__form">
+
+    <div class="novel-settings__cover">
+      <label class="novel-settings__cover-label" for="coverInput">
+        @if (coverPreview()) {
+          <img [src]="coverPreview()!" alt="غلاف الرواية"/>
+        } @else {
+          <div class="novel-settings__cover-ph">
+            <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor">
+              <path d="M19 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2zM5 19l4-5 3 3.5L16 12l3 7H5z"/>
+            </svg>
+            <span>غلاف الرواية</span>
+          </div>
+        }
+      </label>
+      <input id="coverInput" type="file" accept="image/*" class="novel-settings__cover-input" (change)="onCoverSelected($event)"/>
+    </div>
+
+    <div class="novel-settings__field">
+      <label>عنوان الرواية</label>
+      <input type="text" formControlName="title" maxlength="200" dir="rtl"/>
+    </div>
+
+    <div class="novel-settings__field">
+      <label>وصف مختصر</label>
+      <textarea formControlName="description" maxlength="1000" rows="3" dir="rtl"></textarea>
+    </div>
+
+    <div class="novel-settings__field">
+      <label>السعر (ج.م) — 0 للمجاني</label>
+      <input type="number" formControlName="price" min="0" step="0.5"/>
+    </div>
+
+    @if (errorMessage()) {
+      <p class="novel-settings__error">{{ errorMessage() }}</p>
+    }
+
+    @if (isSaved()) {
+      <p class="novel-settings__success">تم الحفظ ✅</p>
+    }
+
+    <div class="novel-settings__actions">
+      <button type="submit" class="novel-settings__save" [disabled]="isLoading() || form.invalid">
+        @if (isLoading()) { جارٍ الحفظ... } @else { حفظ }
+      </button>
+
+      @if (novel().status !== 'Published') {
+        <button type="button" class="novel-settings__publish" [disabled]="isPublishing()" (click)="initiatePublish()">
+          @if (isPublishing()) { جارٍ التجهيز... } @else { نشر الرواية 🚀 }
+        </button>
+      } @else {
+        <span class="novel-settings__published-badge">✅ منشورة</span>
+      }
+    </div>
+  </form>
+</div>

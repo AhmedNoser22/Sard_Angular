@@ -30,7 +30,7 @@
 
       <div class="chapter-editor__status">
         @if (isLoading()) { <span>جارٍ الحفظ...</span> }
-        @else if (isSaved()) { <span class="saved">تم الحفظ ✅</span> }
+        @else if (isSaved()) { <span class="saved">تم الحفظ </span> }
       </div>
 
       <button type="button" class="chapter-editor__save-btn" (click)="save()" [disabled]="isLoading() || form.invalid">

@@ -6,11 +6,12 @@ import { NovelSummary } from '../../../core/models/profile/novel-summary.model';
 import { Chapter } from '../../../core/models/novel/chapter.model';
 import { ChapterEditorComponent } from '../components/chapter-editor/chapter-editor';
 import { NovelsListComponent } from '../../profile/novels-list-component/novels-list-component';
+import { NovelSettingsComponent } from "../components/novel-settings/novel-settings";
 
 @Component({
   selector: 'app-novel',
   standalone: true,
-  imports: [RouterLink, ChapterEditorComponent, NovelsListComponent],
+  imports: [RouterLink, ChapterEditorComponent, NovelsListComponent, NovelSettingsComponent],
   templateUrl: './novel-component.html',
   styleUrl: './novel-component.scss'
 })
@@ -109,5 +110,8 @@ export class NovelComponent implements OnInit {
 
   toggleSidebar(): void {
     this.isSidebarOpen.update(v => !v);
+  }
+  onNovelUpdated(updated: NovelSummary): void {
+    this.novel.set(updated);
   }
 }
