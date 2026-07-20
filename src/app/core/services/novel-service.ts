@@ -57,4 +57,20 @@ export class NovelService {
     return this.http.post<{ iframeUrl: string }>(
       `${this.baseUrl}/${novelId}/initiate-publish`, {});
   }
+  purchaseNovel(novelId: number): Observable<{ checkoutUrl: string }> {
+    return this.http.post<{ checkoutUrl: string }>(`${this.baseUrl}/${novelId}/purchase`, {});
+  }
+
+  hasPurchased(novelId: number): Observable<{ hasPurchased: boolean }> {
+    return this.http.get<{ hasPurchased: boolean }>(`${this.baseUrl}/${novelId}/has-purchased`);
+  }
+  getPurchasedNovels(): Observable<PublishedNovel[]> {
+    return this.http.get<PublishedNovel[]>(`${this.baseUrl}/purchased`);
+  }
+
+  downloadNovelPdf(novelId: number): Observable<Blob> {
+    return this.http.get(`${this.baseUrl}/${novelId}/download/pdf`, {
+      responseType: 'blob'
+    });
+  }
 }

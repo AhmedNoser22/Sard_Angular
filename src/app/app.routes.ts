@@ -85,7 +85,18 @@ export const routes: Routes = [
         path: 'payment-failed',
         loadComponent: () => import('./features/store/payment-failed/payment-failed')
           .then(m => m.PaymentFailedComponent)
-      }
+      },
+      {
+        path: 'store/:novelId',
+        loadComponent: () => import('./features/store/novel-detail-component/novel-detail-component')
+          .then(m => m.NovelDetailComponent)
+      },
+      {
+        path: 'my-novels',
+        canActivate: [authGuard],
+        loadComponent: () => import('./features/my-novels/my-novels-page-component/my-novels-page-component')
+          .then(m => m.MyNovelsPageComponent)
+      },
     ]
   },
 

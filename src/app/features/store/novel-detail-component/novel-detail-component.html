@@ -1,0 +1,86 @@
+<div class="novel-detail">
+  <a routerLink="/store" class="novel-detail__back">
+    <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+      <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+    </svg>
+    رجوع للمكتبة
+  </a>
+
+  @if (isLoading()) {
+    <div class="novel-detail__loading">
+      <span class="novel-detail__spinner"></span>
+    </div>
+  } @else if (novel(); as n) {
+    <div class="novel-detail__inner">
+
+      <div class="novel-detail__cover-wrap">
+        @if (n.coverImageUrl) {
+          <img class="novel-detail__cover" [src]="n.coverImageUrl" [alt]="n.title"/>
+        } @else {
+          <div class="novel-detail__cover novel-detail__cover--ph">{{ n.title.charAt(0) }}</div>
+        }
+        <div class="novel-detail__sard-stamp">سرد</div>
+      </div>
+
+      <div class="novel-detail__info">
+        <h1 class="novel-detail__title">{{ n.title }}</h1>
+
+        <a [routerLink]="['/profile', n.authorId]" class="novel-detail__author">
+          <div class="novel-detail__author-avatar">
+            @if (n.authorImageUrl) {
+              <img [src]="n.authorImageUrl" [alt]="n.authorName"/>
+            } @else {
+              {{ getInitial(n.authorName) }}
+            }
+          </div>
+          <span>{{ n.authorName }}</span>
+        </a>
+
+        @if (n.description) {
+          <p class="novel-detail__desc">{{ n.description }}</p>
+        }
+
+        <div class="novel-detail__meta">
+          <span>{{ n.chaptersCount }} فصل</span>
+          <span>{{ n.readCount }} قراءة</span>
+        </div>
+
+        <div class="novel-detail__price-wrap">
+          <span class="novel-detail__price">
+            {{ n.price > 0 ? (n.price + ' ج.م') : 'مجانية' }}
+          </span>
+        </div>
+
+        @if (errorMessage()) {
+          <p class="novel-detail__error">{{ errorMessage() }}</p>
+        }
+
+        @if (hasPurchased() || n.price === 0) {
+          <button type="button" class="novel-detail__download-btn"
+            [disabled]="isDownloading()" (click)="downloadPdf()">
+            @if (isDownloading()) {
+              <span class="novel-detail__spinner novel-detail__spinner--sm"></span>
+              جارٍ التحميل...
+            } @else {
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
+              </svg>
+              تحميل الرواية PDF
+            }
+          </button>
+        } @else {
+          <button type="button" class="novel-detail__buy-btn"
+            [disabled]="isPurchasing()" (click)="purchase()">
+            @if (isPurchasing()) {
+              <span class="novel-detail__spinner novel-detail__spinner--sm"></span>
+              جارٍ التجهيز...
+            } @else {
+              اشترِ الآن — {{ n.price }} ج.م
+            }
+          </button>
+        }
+      </div>
+
+    </div>
+  }
+</div>

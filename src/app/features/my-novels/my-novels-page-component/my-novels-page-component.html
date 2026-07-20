@@ -1,0 +1,80 @@
+<div class="my-novels">
+  <div class="my-novels__header">
+    <h1 class="my-novels__title">روايات اشتريتها</h1>
+    <p class="my-novels__sub">مكتبتك الخاصة من روايات سرد</p>
+  </div>
+
+  @if (justPurchasedId()) {
+    <div class="my-novels__success-banner">
+      🎉 تم الشراء بنجاح! يمكنك الآن تحميل الرواية
+    </div>
+  }
+
+  @if (isLoading()) {
+    <div class="my-novels__loading">
+      <span class="my-novels__spinner"></span>
+    </div>
+  } @else if (novels().length) {
+    <div class="my-novels__grid">
+      @for (novel of novels(); track novel.id) {
+        <article class="my-novel-card" [class.my-novel-card--new]="justPurchasedId() === novel.id">
+          <div class="my-novel-card__cover-wrap">
+            @if (novel.coverImageUrl) {
+              <img class="my-novel-card__cover" [src]="novel.coverImageUrl" [alt]="novel.title"/>
+            } @else {
+              <div class="my-novel-card__cover my-novel-card__cover--ph">
+                {{ novel.title.charAt(0) }}
+              </div>
+            }
+            <div class="my-novel-card__stamp">سرد</div>
+          </div>
+
+          <div class="my-novel-card__body">
+            <h3 class="my-novel-card__title">{{ novel.title }}</h3>
+
+            <a [routerLink]="['/profile', novel.authorId]" class="my-novel-card__author">
+              <div class="my-novel-card__author-avatar">
+                @if (novel.authorImageUrl) {
+                  <img [src]="novel.authorImageUrl" [alt]="novel.authorName"/>
+                } @else {
+                  {{ getInitial(novel.authorName) }}
+                }
+              </div>
+              <span>{{ novel.authorName }}</span>
+            </a>
+
+            @if (novel.description) {
+              <p class="my-novel-card__desc">{{ novel.description }}</p>
+            }
+
+            <div class="my-novel-card__meta">
+              <span>{{ novel.chaptersCount }} فصل</span>
+            </div>
+
+            <button
+              type="button"
+              class="my-novel-card__download"
+              [disabled]="isDownloading() === novel.id"
+              (click)="downloadPdf(novel)">
+              @if (isDownloading() === novel.id) {
+                <span class="my-novel-card__spinner"></span>
+                جارٍ التحميل...
+              } @else {
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                  <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
+                </svg>
+                تحميل PDF
+              }
+            </button>
+          </div>
+        </article>
+      }
+    </div>
+  } @else {
+    <div class="my-novels__empty">
+      <div class="my-novels__empty-icon">📚</div>
+      <p>لم تشترِ أي رواية بعد</p>
+      <a routerLink="/store" class="my-novels__browse-btn">تصفح المكتبة</a>
+    </div>
+  }
+</div>
