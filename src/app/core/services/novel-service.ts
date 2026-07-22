@@ -73,4 +73,7 @@ export class NovelService {
       responseType: 'blob'
     });
   }
+  confirmPurchase(novelId: number, sessionId: string): Observable<any> {
+    return this.http.post(`${this.baseUrl}/${novelId}/confirm-purchase`, { sessionId });
+  }
 }

@@ -17,9 +17,9 @@
         @if (n.coverImageUrl) {
           <img class="novel-detail__cover" [src]="n.coverImageUrl" [alt]="n.title"/>
         } @else {
-          <div class="novel-detail__cover novel-detail__cover--ph">{{ n.title.charAt(0) }}</div>
+          <div class="novel-detail__cover novel-detail__cover--ph">{{ n.title }}</div>
         }
-        <div class="novel-detail__sard-stamp">سرد</div>
+        <span class="novel-detail__price-badge">{{ n.price > 0 ? (n.price + ' ج.م') : 'مجانية' }}</span>
       </div>
 
       <div class="novel-detail__info">
@@ -43,12 +43,6 @@
         <div class="novel-detail__meta">
           <span>{{ n.chaptersCount }} فصل</span>
           <span>{{ n.readCount }} قراءة</span>
-        </div>
-
-        <div class="novel-detail__price-wrap">
-          <span class="novel-detail__price">
-            {{ n.price > 0 ? (n.price + ' ج.م') : 'مجانية' }}
-          </span>
         </div>
 
         @if (errorMessage()) {
@@ -75,7 +69,7 @@
               <span class="novel-detail__spinner novel-detail__spinner--sm"></span>
               جارٍ التجهيز...
             } @else {
-              اشترِ الآن — {{ n.price }} ج.م
+              إضافة إلى مكتبتي — {{ n.price }} ج.م
             }
           </button>
         }

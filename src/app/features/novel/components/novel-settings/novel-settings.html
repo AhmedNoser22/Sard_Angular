@@ -39,20 +39,20 @@
     }
 
     @if (isSaved()) {
-      <p class="novel-settings__success">تم الحفظ ✅</p>
+      <p class="novel-settings__success">تم الحفظ </p>
     }
 
     <div class="novel-settings__actions">
       <button type="submit" class="novel-settings__save" [disabled]="isLoading() || form.invalid">
-        @if (isLoading()) { جارٍ الحفظ... } @else { حفظ }
+        @if (isLoading()) { جاري الحفظ... } @else { حفظ }
       </button>
 
       @if (novel().status !== 'Published') {
         <button type="button" class="novel-settings__publish" [disabled]="isPublishing()" (click)="initiatePublish()">
-          @if (isPublishing()) { جارٍ التجهيز... } @else { نشر الرواية 🚀 }
+          @if (isPublishing()) { جارٍ التجهيز... } @else { نشر الرواية  }
         </button>
       } @else {
-        <span class="novel-settings__published-badge">✅ منشورة</span>
+        <span class="novel-settings__published-badge"> منشورة</span>
       }
     </div>
   </form>

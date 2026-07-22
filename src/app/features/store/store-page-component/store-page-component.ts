@@ -1,5 +1,5 @@
-import { Component, inject, signal, OnInit } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Component, inject, signal, computed, OnInit } from '@angular/core';
+import { Router, RouterLink } from '@angular/router';
 import { NovelService } from '../../../core/services/novel-service';
 import { PublishedNovel } from '../../../core/models/novel/PublishedNovel';
 
@@ -12,9 +12,21 @@ import { PublishedNovel } from '../../../core/models/novel/PublishedNovel';
 })
 export class StorePageComponent implements OnInit {
   private readonly novelService = inject(NovelService);
+  private readonly router = inject(Router);
 
   novels = signal<PublishedNovel[]>([]);
   isLoading = signal(true);
+  searchTerm = signal('');
+
+  filteredNovels = computed(() => {
+    const term = this.searchTerm().trim().toLowerCase();
+    if (!term) return this.novels();
+
+    return this.novels().filter(novel =>
+      novel.title.toLowerCase().includes(term) ||
+      novel.authorName.toLowerCase().includes(term)
+    );
+  });
 
   ngOnInit(): void {
     this.novelService.getPublishedNovels().subscribe({
@@ -23,5 +35,16 @@ export class StorePageComponent implements OnInit {
     });
   }
 
-  getInitial(name: string): string { return name ? name.charAt(0) : '؟'; }
+  onSearch(event: Event): void {
+    const value = (event.target as HTMLInputElement).value;
+    this.searchTerm.set(value);
+  }
+
+  addToLibrary(novel: PublishedNovel): void {
+    this.router.navigate(['/store', novel.id]);
+  }
+
+  getInitial(name: string): string {
+    return name ? name.charAt(0) : '؟';
+  }
 }

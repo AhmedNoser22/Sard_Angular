@@ -1,34 +1,60 @@
+<section class="store__hero">
+  <div class="store__hero-inner">
+    <h1 class="store__hero-title">مكتبة سرد</h1>
+    <p class="store__hero-sub">حيث تتحول الكلمات إلى عوالم</p>
+    <div class="store__search">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+        <path d="M21 21l-4.35-4.35M11 19a8 8 0 100-16 8 8 0 000 16z" fill="none" stroke="currentColor"
+          stroke-width="2" />
+      </svg>
+      <input type="text" placeholder="ابحث عن رواية أو كاتب..." [value]="searchTerm()" (input)="onSearch($event)" />
+    </div>
+  </div>
+</section>
+
 <div class="store">
-  <header class="store__header">
-    <h1 class="store__title">مكتبة سرد</h1>
-    <p class="store__sub">اكتشف روايات كتبها مبدعون من حولك</p>
-  </header>
+
+  <div class="store__section-head">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
+      <path d="M12 2l2.4 7.2H22l-6 4.6L18.4 21 12 16.4 5.6 21 8 13.8 2 9.2h7.6z" />
+    </svg>
+    <h2>روايات مميزة</h2>
+  </div>
 
   @if (isLoading()) {
   <div class="store__loading">
     <span class="store__spinner"></span>
   </div>
-  } @else if (novels().length) {
+  } @else if (filteredNovels().length) {
   <div class="store__grid">
-    @for (novel of novels(); track novel.id) {
-    <article class="store-card" [routerLink]="['/store', novel.id]" style="cursor:pointer">
-      <div class="store-card__cover-wrap">
+    @for (novel of filteredNovels(); track novel.id) {
+    <article class="store-card" [routerLink]="['/store', novel.id]">
+      <div class="store-card__cover">
         @if (novel.coverImageUrl) {
-        <img class="store-card__cover" [src]="novel.coverImageUrl" [alt]="novel.title" />
+        <img [src]="novel.coverImageUrl" [alt]="novel.title" class="store-card__cover-img" />
         } @else {
-        <div class="store-card__cover store-card__cover--ph">
-          {{ novel.title.charAt(0) }}
+        <div class="store-card__cover-placeholder">
+          <svg class="store-card__cover-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3">
+            <path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v17H6.5A2.5 2.5 0 0 0 4 21.5V4.5z" />
+            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+          </svg>
+          <span class="store-card__cover-title">{{ novel.title }}</span>
         </div>
         }
-        <div class="store-card__price-badge">
-          {{ novel.price > 0 ? (novel.price + ' ج.م') : 'مجانية' }}
-        </div>
+        <span class="store-card__price">
+          <svg class="store-card__price-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <circle cx="12" cy="12" r="9" />
+            <path
+              d="M12 7v10M9 9.5c0-1.4 1.3-2.5 3-2.5s3 1.1 3 2.5-1.3 2-3 2.5-3 1.1-3 2.5 1.3 2.5 3 2.5 3-1.1 3-2.5" />
+          </svg>
+          <span class="store-card__price-value">{{ novel.price }} ج.م</span>
+        </span>
       </div>
 
       <div class="store-card__body">
         <h3 class="store-card__title">{{ novel.title }}</h3>
 
-        <a [routerLink]="['/profile', novel.authorId]" class="store-card__author">
+        <a [routerLink]="['/profile', novel.authorId]" class="store-card__author" (click)="$event.stopPropagation()">
           <div class="store-card__author-avatar">
             @if (novel.authorImageUrl) {
             <img [src]="novel.authorImageUrl" [alt]="novel.authorName" />
@@ -39,21 +65,24 @@
           <span>{{ novel.authorName }}</span>
         </a>
 
-        @if (novel.description) {
-        <p class="store-card__desc">{{ novel.description }}</p>
-        }
-
-        <div class="store-card__meta">
+        <div class="store-card__stats">
           <span>{{ novel.chaptersCount }} فصل</span>
           <span>{{ novel.readCount }} قراءة</span>
         </div>
+
+        <button type="button" class="store-card__cta" (click)="addToLibrary(novel); $event.stopPropagation()">
+          إضافة إلى مكتبتي
+        </button>
       </div>
     </article>
     }
   </div>
   } @else {
   <div class="store__empty">
-    <div class="store__empty-icon">📚</div>
+    <svg viewBox="0 0 24 24" width="44" height="44" fill="none" stroke="currentColor" stroke-width="1.4">
+      <path d="M3 5h7a3 3 0 0 1 3 3v11a2.5 2.5 0 0 0-2.5-2.5H3z" />
+      <path d="M21 5h-7a3 3 0 0 0-3 3v11a2.5 2.5 0 0 1 2.5-2.5H21z" />
+    </svg>
     <p>لا توجد روايات منشورة بعد</p>
   </div>
   }
