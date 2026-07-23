@@ -1,10 +1,12 @@
+import { inject } from '@angular/core';
 import { Routes } from '@angular/router';
 import { authGuard } from './core/guards/auth-guard';
 import { MainLayout } from './layout/main-layout/main-layout';
+import { TokenService } from './core/services/tokenService';
 
 function homeOrProfile(): string {
-  const token = localStorage.getItem('access_token');
-  return token ? '/profile' : '/home';
+  const tokenService = inject(TokenService);
+  return tokenService.isLoggedIn() ? '/profile' : '/home';
 }
 
 export const routes: Routes = [

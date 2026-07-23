@@ -21,7 +21,6 @@ export class NabdPageComponent implements OnInit, OnDestroy {
   private readonly nabdService = inject(NabdService);
   private readonly hubService = inject(NabdHubService);
   private readonly notificationService = inject(NotificationService);
-  private readonly tokenService = inject(TokenService);
   private readonly route = inject(ActivatedRoute);
 
   readonly notifService = this.notificationService;
@@ -51,28 +50,17 @@ export class NabdPageComponent implements OnInit, OnDestroy {
   private subs = new Subscription();
 
   ngOnInit(): void {
-    const token = this.tokenService.getToken();
-    if (token) this.hubService.connect(token);
-
     this.loadPosts();
 
     this.subs.add(
       this.hubService.newPost$.subscribe(post => {
         this.posts.update(list => [post, ...list]);
-        this.currentPage.set(1);
       })
     );
 
     this.subs.add(
       this.hubService.postDeleted$.subscribe(postId => {
         this.posts.update(list => list.filter(p => p.id !== postId));
-        this.clampCurrentPage();
-      })
-    );
-
-    this.subs.add(
-      this.hubService.notification$.subscribe(n => {
-        this.notificationService.add(n);
       })
     );
 
