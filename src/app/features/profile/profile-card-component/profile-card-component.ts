@@ -24,8 +24,10 @@ export class ProfileCardComponent {
 
   imageLoadError = signal(false);
 
+  displayNameClean = computed(() => this.sanitizeName(this.profile()?.displayName ?? ''));
+
   initials = computed(() => {
-    const name = this.profile()?.displayName?.trim() ?? '';
+    const name = this.displayNameClean();
     if (!name) return '؟';
     const parts = name.split(/\s+/).filter(Boolean);
     if (parts.length === 1) return parts[0].charAt(0);
@@ -33,7 +35,7 @@ export class ProfileCardComponent {
   });
 
   avatarColor = computed(() => {
-    const name = this.profile()?.displayName ?? '';
+    const name = this.displayNameClean();
     const palette = [
       '#c0785a', '#6b2d2d', '#4a7c6f', '#3d5a80',
       '#8e5572', '#b56576', '#7a6c5d', '#5e6472'
@@ -53,9 +55,17 @@ export class ProfileCardComponent {
     bio: ['', Validators.maxLength(500)]
   });
 
+  private sanitizeName(value: string): string {
+    return value
+      .replace(/[\u200B-\u200F\u202A-\u202E\u2066-\u2069\uFEFF]/g, '')
+      .replace(/\u00A0/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim();
+  }
+
   startEdit(): void {
     this.form.patchValue({
-      displayName: this.profile().displayName,
+      displayName: this.sanitizeName(this.profile().displayName),
       bio: this.profile().bio ?? ''
     });
     this.isEditing.set(true);
@@ -71,7 +81,7 @@ export class ProfileCardComponent {
 
     this.isLoading.set(true);
     this.profileService.updateProfile({
-      displayName: this.form.value.displayName!,
+      displayName: this.sanitizeName(this.form.value.displayName!),
       bio: this.form.value.bio ?? null
     }).subscribe({
       next: () => {
@@ -94,7 +104,7 @@ export class ProfileCardComponent {
     const file = (event.target as HTMLInputElement).files?.[0];
     if (!file) return;
 
-    this.imageLoadError.set(false); 
+    this.imageLoadError.set(false);
 
     this.profileService.updateProfileImage(file).subscribe({
       next: () => this.profileUpdated.emit(),

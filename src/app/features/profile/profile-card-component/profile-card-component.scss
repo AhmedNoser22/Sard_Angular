@@ -115,7 +115,13 @@
     font-weight: 700;
     color: var(--sard-maroon);
   }
-
+.profile-card__name {
+  font-family: Arial, sans-serif;
+}
+.profile-card__name {
+  display: inline-block;
+  transform: skewX(-8deg);
+}
   &__bio {
     margin: 0 0 8px;
     font-size: 15px;

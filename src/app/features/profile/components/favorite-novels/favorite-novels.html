@@ -5,53 +5,70 @@
       <p class="fav-novels__sub">روايات أثّرت فيك وتوصي بها</p>
     </div>
     @if (!isAdding()) {
-      <button type="button" class="fav-novels__add-btn" (click)="startAdd()">+ إضافة</button>
+    <button type="button" class="fav-novels__add-btn" (click)="startAdd()">+ إضافة</button>
     }
   </div>
 
   @if (isAdding()) {
-    <form class="fav-novels__form" [formGroup]="form" (ngSubmit)="addNovel()">
-      <div class="fav-novels__field">
-        <label>اسم الرواية</label>
-        <input type="text" formControlName="title" maxlength="200" dir="rtl"/>
+  <form class="fav-novels__form" [formGroup]="form" (ngSubmit)="addNovel()">
+
+    <label class="fav-novels__cover-label" (click)="fileInput.click()">
+      @if (coverPreview()) {
+      <img [src]="coverPreview()!" class="fav-novels__cover-preview" alt="غلاف" />
+      <span class="fav-novels__cover-change">تغيير الصورة</span>
+      } @else {
+      <div class="fav-novels__cover-ph">
+        <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor">
+          <path
+            d="M19 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2zM5 19l4-5 3 3.5L16 12l3 7H5z" />
+        </svg>
+        <span>إضافة غلاف (اختياري)</span>
       </div>
-      <div class="fav-novels__field">
-        <label>اسم الكاتب</label>
-        <input type="text" formControlName="authorName" maxlength="100" dir="rtl"/>
-      </div>
-      <div class="fav-novels__field">
-        <label>رابط صورة الغلاف (اختياري)</label>
-        <input type="text" formControlName="coverImageUrl" maxlength="500" dir="ltr"/>
-      </div>
-      <div class="fav-novels__actions">
-        <button type="submit" class="fav-novels__save" [disabled]="isLoading() || form.invalid">
-          @if (isLoading()) { جارٍ... } @else { إضافة }
-        </button>
-        <button type="button" class="fav-novels__cancel" (click)="cancelAdd()">إلغاء</button>
-      </div>
-    </form>
+      }
+    </label>
+    <input #fileInput type="file" accept="image/*" class="fav-novels__cover-input" (change)="onCoverSelected($event)" />
+
+    <div class="fav-novels__field">
+      <label>اسم الرواية *</label>
+      <input type="text" formControlName="title" maxlength="200" dir="rtl" placeholder="أدخل اسم الرواية" />
+    </div>
+
+    <div class="fav-novels__field">
+      <label>اسم الكاتب (اختياري)</label>
+      <input type="text" formControlName="authorName" maxlength="100" dir="rtl" placeholder="أدخل اسم الكاتب" />
+    </div>
+
+    <div class="fav-novels__actions">
+      <button type="submit" class="fav-novels__save" [disabled]="isLoading() || form.invalid">
+        @if (isLoading()) { جاري... } @else { إضافة }
+      </button>
+      <button type="button" class="fav-novels__cancel" (click)="cancelAdd()">إلغاء</button>
+    </div>
+  </form>
   }
 
   @if (localNovels().length) {
-    <div class="fav-novels__grid">
-      @for (novel of localNovels(); track novel.id) {
-        <div class="fav-novel-card">
-          <button type="button" class="fav-novel-card__delete" (click)="deleteNovel(novel.id)">×</button>
-          @if (novel.coverImageUrl) {
-            <img class="fav-novel-card__cover" [src]="novel.coverImageUrl" [alt]="novel.title"/>
-          } @else {
-            <div class="fav-novel-card__cover fav-novel-card__cover--placeholder">{{ novel.title.charAt(0) }}</div>
-          }
-          <div class="fav-novel-card__body">
-            <h3 class="fav-novel-card__title">{{ novel.title }}</h3>
-            @if (novel.authorName) {
-              <p class="fav-novel-card__author">{{ novel.authorName }}</p>
-            }
-          </div>
-        </div>
+  <div class="fav-novels__grid">
+    @for (novel of localNovels(); track novel.id) {
+    <div class="fav-novel-card">
+      <button type="button" class="fav-novel-card__delete" (click)="deleteNovel(novel.id)">×</button>
+      @if (novel.coverImageUrl) {
+      <img class="fav-novel-card__cover" [src]="novel.coverImageUrl" [alt]="novel.title" />
+      } @else {
+      <div class="fav-novel-card__cover fav-novel-card__cover--placeholder">
+        {{ novel.title.charAt(0) }}
+      </div>
       }
+      <div class="fav-novel-card__body">
+        <h3 class="fav-novel-card__title">{{ novel.title }}</h3>
+        @if (novel.authorName) {
+        <p class="fav-novel-card__author">{{ novel.authorName }}</p>
+        }
+      </div>
     </div>
+    }
+  </div>
   } @else if (!isAdding()) {
-    <p class="fav-novels__empty">لم تضف أي روايات بعد</p>
+  <p class="fav-novels__empty">لم تضف أي روايات بعد</p>
   }
 </section>

@@ -20,11 +20,12 @@ export class FavoriteNovelsComponent implements OnChanges {
   localNovels = signal<FavoriteNovel[]>([]);
   isAdding = signal(false);
   isLoading = signal(false);
+  coverPreview = signal<string | null>(null);
+  private coverFile: File | null = null;
 
   form = this.fb.group({
     title: ['', [Validators.required, Validators.maxLength(200)]],
-    authorName: ['', Validators.maxLength(100)],
-    coverImageUrl: ['', Validators.maxLength(500)]
+    authorName: ['', Validators.maxLength(100)]
   });
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -34,22 +35,39 @@ export class FavoriteNovelsComponent implements OnChanges {
   }
 
   startAdd(): void { this.isAdding.set(true); }
-  cancelAdd(): void { this.isAdding.set(false); this.form.reset(); }
+
+  cancelAdd(): void {
+    this.isAdding.set(false);
+    this.form.reset();
+    this.coverPreview.set(null);
+    this.coverFile = null;
+  }
+
+  onCoverSelected(event: Event): void {
+    const file = (event.target as HTMLInputElement).files?.[0];
+    if (!file) return;
+    this.coverFile = file;
+    const reader = new FileReader();
+    reader.onload = e => this.coverPreview.set(e.target?.result as string);
+    reader.readAsDataURL(file);
+  }
 
   addNovel(): void {
     if (this.form.invalid) return;
     this.isLoading.set(true);
 
-    this.profileService.addFavoriteNovel({
-      title: this.form.value.title!,
-      authorName: this.form.value.authorName ?? null,
-      coverImageUrl: this.form.value.coverImageUrl ?? null
-    }).subscribe({
+    this.profileService.addFavoriteNovel(
+      this.form.value.title!,
+      this.form.value.authorName ?? null,
+      this.coverFile
+    ).subscribe({
       next: novel => {
         this.localNovels.update(list => [novel, ...list]);
         this.isAdding.set(false);
         this.isLoading.set(false);
         this.form.reset();
+        this.coverPreview.set(null);
+        this.coverFile = null;
       },
       error: () => this.isLoading.set(false)
     });

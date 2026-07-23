@@ -43,8 +43,12 @@ export class ProfileService {
     return this.http.post<string>(`${this.baseUrl}/follow/${userId}`, {});
   }
 
-  addFavoriteNovel(request: { title: string; authorName: string | null; coverImageUrl: string | null }): Observable<FavoriteNovel> {
-    return this.http.post<FavoriteNovel>(`${this.baseUrl}/favorite-novels`, request);
+  addFavoriteNovel(title: string, authorName: string | null, cover: File | null): Observable<FavoriteNovel> {
+    const formData = new FormData();
+    formData.append('title', title);
+    if (authorName) formData.append('authorName', authorName);
+    if (cover) formData.append('cover', cover);
+    return this.http.post<FavoriteNovel>(`${this.baseUrl}/favorite-novels`, formData);
   }
 
   deleteFavoriteNovel(novelId: number): Observable<string> {
