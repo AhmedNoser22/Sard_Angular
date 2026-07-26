@@ -3,10 +3,25 @@ import { Routes } from '@angular/router';
 import { authGuard } from './core/guards/auth-guard';
 import { MainLayout } from './layout/main-layout/main-layout';
 import { TokenService } from './core/services/tokenService';
+import { adminGuard } from './core/guards/admin.guard';
+import { userOnlyGuard } from './core/guards/userOnlyGuar';
+import { jwtDecode } from 'jwt-decode';
 
 function homeOrProfile(): string {
   const tokenService = inject(TokenService);
-  return tokenService.isLoggedIn() ? '/profile' : '/home';
+
+  if (!tokenService.isLoggedIn()) return '/home';
+
+  const token = tokenService.getToken();
+
+  try {
+    const decoded: any = jwtDecode(token as string);
+    const role = decoded['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
+
+    if (role === 'Admin') return '/admin';
+  } catch { }
+
+  return '/profile';
 }
 
 export const routes: Routes = [
@@ -16,6 +31,39 @@ export const routes: Routes = [
   {
     path: 'home',
     loadComponent: () => import('./features/home/home/home-component').then(m => m.HomeComponent)
+  },
+  {
+    path: 'admin',
+    canActivate: [adminGuard],
+    loadComponent: () => import('./features/admin/admin-layout-component/admin-layout-component')
+      .then(m => m.AdminLayoutComponent),
+    children: [
+      {
+        path: '',
+        loadComponent: () => import('./features/admin/pages/admin-dashboard/admin-dashboard')
+          .then(m => m.AdminDashboardComponent)
+      },
+      {
+        path: 'users',
+        loadComponent: () => import('./features/admin/pages/admin-users/admin-users')
+          .then(m => m.AdminUsersComponent)
+      },
+      {
+        path: 'users/:userId',
+        loadComponent: () => import('./features/admin/pages/admin-user-detail/admin-user-detail')
+          .then(m => m.AdminUserDetailComponent)
+      },
+      {
+        path: 'posts',
+        loadComponent: () => import('./features/admin/pages/admin-posts/admin-posts')
+          .then(m => m.AdminPostsComponent)
+      },
+      {
+        path: 'novels',
+        loadComponent: () => import('./features/admin/pages/admin-novels/admin-novels')
+          .then(m => m.AdminNovelsComponent)
+      }
+    ]
   },
   {
     path: 'auth',
@@ -35,7 +83,7 @@ export const routes: Routes = [
   {
     path: '',
     component: MainLayout,
-    canActivate: [authGuard],
+    canActivate: [authGuard, userOnlyGuard],
     children: [
       {
         path: 'profile',

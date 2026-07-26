@@ -1,0 +1,117 @@
+<div class="ad-page">
+  <h1 class="ad-page__title">المنشورات</h1>
+
+  @if (isLoading()) {
+  <div class="ad-loading">
+    <span class="ad-spinner"></span>
+  </div>
+  } @else {
+  <div class="ad-posts">
+    @for (post of posts(); track post.id) {
+    <div class="ad-post-card" [id]="'post-' + post.id">
+
+      <div class="ad-post-card__header">
+        <div class="ad-post-card__author">
+          <div class="ad-post-card__avatar">
+            @if (post.authorImageUrl) {
+            <img [src]="post.authorImageUrl" [alt]="post.authorName" />
+            } @else {
+            {{ getInitial(post.authorName) }}
+            }
+          </div>
+          <div>
+            <p class="ad-post-card__name">{{ post.authorName }}</p>
+            <p class="ad-post-card__date">{{ formatDate(post.createdAt) }}</p>
+          </div>
+        </div>
+        <button type="button" class="ad-icon-btn ad-icon-btn--danger" title="حذف المنشور"
+          (click)="confirmDelete('post', post.id)">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+            <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z" />
+          </svg>
+        </button>
+      </div>
+
+      <p class="ad-post-card__content">{{ post.content }}</p>
+
+      <div class="ad-post-card__footer">
+        @if (post.likedByNames.length > 0) {
+        <div class="ad-post-card__liked">
+          <span class="ad-post-card__liked-avatars">
+            @for (name of post.likedByNames.slice(0, 3); track name) {
+            <span class="ad-post-card__liked-avatar" [title]="name">{{ name.charAt(0) }}</span>
+            }
+          </span>
+          <span class="ad-post-card__liked-text">
+            @if (post.likedByNames.length === 1) {
+            أعجب {{ post.likedByNames[0] }}
+            } @else {
+            أعجب {{ post.likedByNames[0] }} و{{ post.likedByNames.length - 1 }} آخرين
+            }
+          </span>
+        </div>
+        }
+
+        <div class="ad-post-card__stats">
+          <span>❤️ {{ post.likesCount }}</span>
+          @if (post.commentsCount > 0) {
+          <button type="button" class="ad-post-card__toggle-replies" (click)="toggleExpand(post.id)">
+            💬 {{ post.commentsCount }} تعليق
+            {{ expandedPost() === post.id ? '▲' : '▼' }}
+          </button>
+          }
+        </div>
+      </div>
+
+      @if (expandedPost() === post.id && post.replies.length) {
+      <div class="ad-replies">
+        @for (reply of post.replies; track reply.id) {
+        <div class="ad-reply">
+          <div class="ad-reply__avatar">
+            @if (reply.authorImageUrl) {
+            <img [src]="reply.authorImageUrl" [alt]="reply.authorName" />
+            } @else {
+            {{ getInitial(reply.authorName) }}
+            }
+          </div>
+          <div class="ad-reply__body">
+            <div class="ad-reply__header">
+              <span class="ad-reply__name">{{ reply.authorName }}</span>
+              <span class="ad-reply__date">{{ formatDate(reply.createdAt) }}</span>
+            </div>
+            <p class="ad-reply__content">{{ reply.content }}</p>
+          </div>
+          <button type="button" class="ad-icon-btn ad-icon-btn--danger ad-icon-btn--sm" title="حذف التعليق"
+            (click)="confirmDelete('reply', reply.id)">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
+              <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z" />
+            </svg>
+          </button>
+        </div>
+        }
+      </div>
+      }
+
+    </div>
+    }
+  </div>
+  }
+</div>
+
+@if (deleteConfirm()) {
+<div class="ad-confirm-overlay" (click)="cancelDelete()">
+  <div class="ad-confirm-dialog" (click)="$event.stopPropagation()">
+    <div class="ad-confirm-dialog__icon">
+      <svg viewBox="0 0 24 24" width="32" height="32" fill="#c0392b">
+        <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z" />
+      </svg>
+    </div>
+    <h3>تأكيد الحذف</h3>
+    <p>هل أنت متأكد من حذف هذا {{ deleteConfirm()?.type === 'post' ? 'المنشور' : 'التعليق' }}؟ لا يمكن التراجع.</p>
+    <div class="ad-confirm-dialog__actions">
+      <button type="button" class="ad-confirm-dialog__cancel" (click)="cancelDelete()">إلغاء</button>
+      <button type="button" class="ad-confirm-dialog__confirm" (click)="executeDelete()">حذف</button>
+    </div>
+  </div>
+</div>
+}

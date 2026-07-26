@@ -1,0 +1,25 @@
+<div class="ad-page">
+  <h1 class="ad-page__title">الروايات المنشورة</h1>
+
+  @if (isLoading()) {
+    <div class="ad-loading">جارٍ التحميل...</div>
+  } @else {
+    <div class="ad-novels-grid">
+      @for (novel of novels(); track novel.id) {
+        <div class="ad-novel-card">
+          @if (novel.coverImageUrl) {
+            <img class="ad-novel-card__cover" [src]="novel.coverImageUrl" [alt]="novel.title"/>
+          } @else {
+            <div class="ad-novel-card__cover ad-novel-card__cover--ph">{{ novel.title.charAt(0) }}</div>
+          }
+          <div class="ad-novel-card__body">
+            <h3 class="ad-novel-card__title">{{ novel.title }}</h3>
+            <p class="ad-novel-card__author">{{ novel.authorName }}</p>
+            <p class="ad-novel-card__meta">{{ novel.chaptersCount }} فصل · {{ novel.readCount }} قراءة</p>
+            <p class="ad-novel-card__price">{{ novel.price > 0 ? novel.price + ' ج.م' : 'مجانية' }}</p>
+          </div>
+        </div>
+      }
+    </div>
+  }
+</div>

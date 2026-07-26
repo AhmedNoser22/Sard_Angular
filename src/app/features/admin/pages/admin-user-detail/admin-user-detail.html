@@ -1,0 +1,124 @@
+<div class="ad-detail">
+  <a routerLink="/admin/users" class="ad-detail__back">
+    <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+      <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z" />
+    </svg>
+    رجوع
+  </a>
+
+  @if (isLoading()) {
+    <div class="ad-loading">جاري التحميل...</div>
+  } @else if (user(); as u) {
+  <div class="ad-detail__hero">
+    <div class="ad-detail__avatar">
+      @if (u.profileImageUrl) {
+      <img [src]="u.profileImageUrl" [alt]="u.displayName" />
+      } @else {
+      {{ getInitial(u.displayName) }}
+      }
+    </div>
+    <div class="ad-detail__info">
+      <h1 class="ad-detail__name">{{ u.displayName }}</h1>
+      <p class="ad-detail__email">{{ u.email }}</p>
+      @if (u.bio) { <p class="ad-detail__bio">{{ u.bio }}</p> }
+      <div class="ad-detail__stats">
+        <div class="ad-detail__stat" (click)="activeTab.set('followers')">
+          <span>{{ u.followersCount }}</span>
+          <span>متابع</span>
+        </div>
+        <div class="ad-detail__stat" (click)="activeTab.set('following')">
+          <span>{{ u.followingCount }}</span>
+          <span>يتابع</span>
+        </div>
+        <div class="ad-detail__stat" (click)="activeTab.set('novels')">
+          <span>{{ u.publishedNovelsCount }}</span>
+          <span>رواية</span>
+        </div>
+        <div class="ad-detail__stat" (click)="activeTab.set('posts')">
+          <span>{{ u.postsCount }}</span>
+          <span>منشور</span>
+        </div>
+      </div>
+    </div>
+    <button type="button" class="ad-detail__lock-btn" [class.ad-detail__lock-btn--locked]="u.isLocked"
+      [disabled]="isLockLoading()" (click)="toggleLock()">
+      @if (isLockLoading()) {
+      <span class="ad-detail__lock-spinner"></span>
+      جارٍ...
+      } @else if (u.isLocked) {
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+        <path
+          d="M12 1C8.676 1 6 3.676 6 7v1H4v15h16V8h-2V7c0-3.324-2.676-6-6-6zm0 2c2.276 0 4 1.724 4 4v1H8V7c0-2.276 1.724-4 4-4zm0 9a2 2 0 1 1 0 4 2 2 0 0 1 0-4z" />
+      </svg>
+      فتح الحساب
+      } @else {
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+        <path
+          d="M18 1c-2.21 0-4 1.79-4 4v2H4v14h16V7h-2V5c0-1.1.9-2 2-2s2 .9 2 2v2h2V5c0-2.21-1.79-4-4-4zM12 14a2 2 0 1 1 0 4 2 2 0 0 1 0-4z" />
+      </svg>
+      قفل الحساب
+      }
+    </button>
+  </div>
+
+  <div class="ad-detail__tabs">
+    <button type="button" [class.active]="activeTab() === 'posts'" (click)="activeTab.set('posts')">المنشورات</button>
+    <button type="button" [class.active]="activeTab() === 'novels'" (click)="activeTab.set('novels')">الروايات</button>
+    <button type="button" [class.active]="activeTab() === 'followers'"
+      (click)="activeTab.set('followers')">المتابعون</button>
+    <button type="button" [class.active]="activeTab() === 'following'"
+      (click)="activeTab.set('following')">يتابع</button>
+  </div>
+
+  @if (activeTab() === 'posts') {
+  <div class="ad-list">
+    @for (post of u.recentPosts; track post.id) {
+    <div class="ad-list__item">
+      <p class="ad-list__text">{{ post.content }}</p>
+      <div class="ad-list__meta">
+        <span>❤️ {{ post.likesCount }}</span>
+        <span>💬 {{ post.commentsCount }}</span>
+        <span>{{ post.createdAt | slice:0:10 }}</span>
+      </div>
+    </div>
+    }
+  </div>
+  }
+
+  @if (activeTab() === 'novels') {
+  <div class="ad-novels">
+    @for (novel of u.publishedNovels; track novel.id) {
+    <div class="ad-novel-item">
+      @if (novel.coverImageUrl) {
+      <img [src]="novel.coverImageUrl" [alt]="novel.title" class="ad-novel-item__cover" />
+      } @else {
+      <div class="ad-novel-item__cover ad-novel-item__cover--ph">{{ novel.title.charAt(0) }}</div>
+      }
+      <div class="ad-novel-item__body">
+        <p class="ad-novel-item__title">{{ novel.title }}</p>
+        <p class="ad-novel-item__meta">{{ novel.chaptersCount }} فصل · {{ novel.readCount }} قراءة · {{ novel.price > 0
+          ? novel.price + ' ج.م' : 'مجانية' }}</p>
+      </div>
+    </div>
+    }
+  </div>
+  }
+
+  @if (activeTab() === 'followers' || activeTab() === 'following') {
+  <div class="ad-follow-list">
+    @for (fu of (activeTab() === 'followers' ? u.followers : u.following); track fu.id) {
+    <a [routerLink]="['/admin/users', fu.id]" class="ad-follow-item">
+      <div class="ad-follow-item__avatar">
+        @if (fu.profileImageUrl) {
+        <img [src]="fu.profileImageUrl" [alt]="fu.displayName" />
+        } @else {
+        {{ getInitial(fu.displayName) }}
+        }
+      </div>
+      <span class="ad-follow-item__name">{{ fu.displayName }}</span>
+    </a>
+    }
+  </div>
+  }
+  }
+</div>

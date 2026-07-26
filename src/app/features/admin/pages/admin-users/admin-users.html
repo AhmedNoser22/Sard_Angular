@@ -1,0 +1,79 @@
+<div class="ad-page">
+  <div class="ad-page__header">
+    <h1 class="ad-page__title">المستخدمون</h1>
+    <div class="ad-search">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+        <path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+      </svg>
+      <input type="text" [(ngModel)]="search" (ngModelChange)="loadUsers()" placeholder="ابحث عن مستخدم..."/>
+    </div>
+  </div>
+
+  @if (isLoading()) {
+    <div class="ad-loading"><span class="ad-spinner"></span></div>
+  } @else {
+    <div class="ad-users-grid">
+      @for (user of users(); track user.id) {
+        <div class="ad-user-card" [class.ad-user-card--locked]="user.isLocked">
+
+          <a [routerLink]="['/admin/users', user.id]" class="ad-user-card__link">
+            <div class="ad-user-card__avatar-wrap">
+              <div class="ad-user-card__avatar">
+                @if (user.profileImageUrl) {
+                  <img [src]="user.profileImageUrl" [alt]="user.displayName"/>
+                } @else {
+                  {{ getInitial(user.displayName) }}
+                }
+              </div>
+              @if (user.isLocked) {
+                <div class="ad-user-card__lock-badge">
+                  <svg viewBox="0 0 24 24" width="10" height="10" fill="currentColor">
+                    <path d="M12 1C8.676 1 6 3.676 6 7v1H4v15h16V8h-2V7c0-3.324-2.676-6-6-6zm0 9a2 2 0 1 1 0 4 2 2 0 0 1 0-4z"/>
+                  </svg>
+                </div>
+              }
+            </div>
+
+            <h3 class="ad-user-card__name">{{ user.displayName }}</h3>
+            <p class="ad-user-card__email">{{ user.email }}</p>
+
+            @if (user.bio) {
+              <p class="ad-user-card__bio">{{ user.bio }}</p>
+            }
+
+            <div class="ad-user-card__stats">
+              <div class="ad-user-card__stat">
+                <span>{{ user.followersCount }}</span>
+                <span>متابع</span>
+              </div>
+              <div class="ad-user-card__stat">
+                <span>{{ user.publishedNovelsCount }}</span>
+                <span>رواية</span>
+              </div>
+              <div class="ad-user-card__stat">
+                <span>{{ user.postsCount }}</span>
+                <span>منشور</span>
+              </div>
+            </div>
+          </a>
+
+          <button type="button" class="ad-user-card__lock-btn"
+            [class.ad-user-card__lock-btn--locked]="user.isLocked"
+            (click)="toggleLock(user.id)">
+            @if (user.isLocked) {
+              <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor">
+                <path d="M12 1C8.676 1 6 3.676 6 7v1H4v15h16V8h-2V7c0-3.324-2.676-6-6-6zm0 9a2 2 0 1 1 0 4 2 2 0 0 1 0-4z"/>
+              </svg>
+              فتح الحساب
+            } @else {
+              <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor">
+                <path d="M18 1c-2.21 0-4 1.79-4 4v2H4v14h16V7h-2V5c0-1.1.9-2 2-2s2 .9 2 2v2h2V5c0-2.21-1.79-4-4-4zM12 14a2 2 0 1 1 0 4 2 2 0 0 1 0-4z"/>
+              </svg>
+              قفل الحساب
+            }
+          </button>
+        </div>
+      }
+    </div>
+  }
+</div>

@@ -20,11 +20,19 @@ export class LoginComponent implements AfterViewInit {
   isLoading = signal(false);
   errorMessage = signal('');
   showPassword = signal(false);
+  lockedMessage = signal('');
 
   form = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
     password: ['', Validators.required]
   });
+
+  ngOnInit(): void {
+    const state = history.state;
+    if (state?.message) {
+      this.lockedMessage.set(state.message);
+    }
+  }
 
   togglePassword = () => this.showPassword.update(v => !v);
 
