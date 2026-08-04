@@ -1,5 +1,5 @@
 import { Component, inject, signal, computed, OnInit, OnDestroy, HostListener } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { TokenService } from '../../../core/services/tokenService';
 import { Post } from '../../../core/models/nabd/post.model';
@@ -13,7 +13,7 @@ import { CreatePostComponent } from "../components/create-post/create-post";
 @Component({
   selector: 'app-nabd-page',
   standalone: true,
-  imports: [PostCardComponent, CreatePostComponent],
+  imports: [PostCardComponent, CreatePostComponent,RouterLink],
   templateUrl: './nabd-page-component.html',
   styleUrl: './nabd-page-component.scss'
 })

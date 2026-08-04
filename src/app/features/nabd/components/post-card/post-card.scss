@@ -10,6 +10,8 @@
   --sard-border: #ecdfd2;
   --sard-danger: #c0392b;
   --sard-danger-bg: #fdf0ee;
+  --sard-shared: #4a7cc0;
+  --sard-shared-bg: rgba(74, 124, 192, 0.12);
   display: block;
   font-family: 'Amiri', serif;
   direction: rtl;
@@ -27,6 +29,8 @@
   --sard-border: #3c2e24;
   --sard-danger: #e17767;
   --sard-danger-bg: rgba(192, 57, 43, 0.14);
+  --sard-shared: #7ea6e0;
+  --sard-shared-bg: rgba(126, 166, 224, 0.16);
 }
 
 :host-context([data-theme='dark']) {
@@ -62,6 +66,11 @@
     gap: 12px;
   }
 
+  &__avatar-link {
+    text-decoration: none;
+    display: block;
+  }
+
   &__avatar {
     width: 46px;
     height: 46px;
@@ -94,11 +103,55 @@
     font-size: 15px;
     font-weight: 700;
     color: var(--sard-maroon);
+    text-decoration: none;
   }
 
   &__time {
     font-size: 11px;
     color: var(--sard-text-light);
+  }
+
+  // Wraps the save/share button + the owner-only dots menu together
+  // on the right side of the header.
+  &__header-actions {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+  }
+
+  // Icon-only save/share button (adds the post to رَمَق). Circular,
+  // same footprint as the dots button so the header stays aligned.
+  &__action {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border: none;
+    background: transparent;
+    color: var(--sard-text-light);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+
+    &:hover:not(:disabled) {
+      background: var(--sard-tan);
+      color: var(--sard-maroon);
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    &--shared {
+      color: var(--sard-shared) !important;
+
+      &:hover:not(:disabled) {
+        background: var(--sard-shared-bg);
+        color: var(--sard-shared) !important;
+      }
+    }
   }
 
   &__menu-wrap {
@@ -212,8 +265,6 @@
     color: var(--sard-text-light);
   }
 
-  // Unified Twitter/Facebook-style engagement row: icon + count together,
-  // no separate stats line and no divider clutter.
   &__engagement {
     display: flex;
     align-items: center;
@@ -363,6 +414,12 @@
   gap: 10px;
   align-items: flex-start;
 
+  &__avatar-link {
+    text-decoration: none;
+    display: block;
+    flex-shrink: 0;
+  }
+
   &__avatar {
     width: 34px;
     height: 34px;
@@ -375,6 +432,14 @@
     font-weight: 700;
     font-size: 13px;
     flex-shrink: 0;
+    overflow: hidden;
+    border: 2px solid var(--sard-border);
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
   }
 
   &__body {
@@ -395,6 +460,7 @@
     font-size: 13px;
     font-weight: 700;
     color: var(--sard-maroon);
+    text-decoration: none;
   }
 
   &__time {
@@ -532,22 +598,6 @@
     justify-content: center;
   }
 
-  &__avatar-link {
-    text-decoration: none;
-    display: block;
-  }
-
-  &__name {
-    text-decoration: none;
-    color: var(--sard-maroon);
-    font-size: 15px;
-    font-weight: 700;
-
-    &:hover {
-      text-decoration: underline;
-    }
-  }
-
   &__cancel {
     flex: 1;
     background: var(--sard-bg);
@@ -563,25 +613,6 @@
 
     &:hover {
       background: var(--sard-border);
-    }
-  }
-
-  .reply {
-    &__avatar-link {
-      text-decoration: none;
-      display: block;
-      flex-shrink: 0;
-    }
-
-    &__name {
-      font-size: 13px;
-      font-weight: 700;
-      color: var(--sard-maroon);
-      text-decoration: none;
-
-      &:hover {
-        text-decoration: underline;
-      }
     }
   }
 

@@ -18,32 +18,44 @@
       </div>
     </div>
 
-    @if (isPostOwner()) {
-    <div class="post-card__menu-wrap">
-      <button type="button" class="post-card__dots" (click)="toggleMenu(); $event.stopPropagation()">
-        <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
-          <circle cx="12" cy="5" r="1.5" />
-          <circle cx="12" cy="12" r="1.5" />
-          <circle cx="12" cy="19" r="1.5" />
+    <div class="post-card__header-actions">
+      <button type="button" class="post-card__action" [class.post-card__action--shared]="isShared()"
+        [disabled]="isShareLoading()" (click)="toggleShare()"
+        [attr.aria-label]="isShared() ? 'إلغاء الحفظ في رَمَق' : 'حفظ في رَمَق'"
+        [attr.title]="isShared() ? 'إلغاء الحفظ في رَمَق' : 'حفظ في رَمَق'">
+        <svg viewBox="0 0 24 24" width="18" height="18" [attr.fill]="isShared() ? 'currentColor' : 'none'"
+          stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M6 4a2 2 0 0 0-2 2v14l8-5 8 5V6a2 2 0 0 0-2-2H6z" />
         </svg>
       </button>
-      @if (showMenu()) {
-      <div class="post-card__dropdown">
-        <button type="button" class="post-card__dropdown-item post-card__dropdown-item--danger"
-          (click)="confirmDeletePost()">
-          <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8"
-            stroke-linecap="round" stroke-linejoin="round">
-            <path d="M4 6h16" />
-            <path d="M9 6V4.5A1.5 1.5 0 0 1 10.5 3h3A1.5 1.5 0 0 1 15 4.5V6" />
-            <path d="M6 6l1 14a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-14" />
-            <path d="M10 11v6M14 11v6" />
+
+      @if (isPostOwner()) {
+      <div class="post-card__menu-wrap">
+        <button type="button" class="post-card__dots" (click)="toggleMenu(); $event.stopPropagation()">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+            <circle cx="12" cy="5" r="1.5" />
+            <circle cx="12" cy="12" r="1.5" />
+            <circle cx="12" cy="19" r="1.5" />
           </svg>
-          حذف المنشور
         </button>
+        @if (showMenu()) {
+        <div class="post-card__dropdown">
+          <button type="button" class="post-card__dropdown-item post-card__dropdown-item--danger"
+            (click)="confirmDeletePost()">
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 6h16" />
+              <path d="M9 6V4.5A1.5 1.5 0 0 1 10.5 3h3A1.5 1.5 0 0 1 15 4.5V6" />
+              <path d="M6 6l1 14a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-14" />
+              <path d="M10 11v6M14 11v6" />
+            </svg>
+            حذف المنشور
+          </button>
+        </div>
+        }
       </div>
       }
     </div>
-    }
   </div>
 
   <p class="post-card__content">{{ p.content }}</p>
@@ -56,15 +68,7 @@
         <span class="post-card__liked-avatar" [title]="name">{{ name.charAt(0) }}</span>
         }
       </span>
-      <span class="post-card__liked-text">
-        @if (p.likedByNames.length === 1) {
-        أعجب {{ p.likedByNames[0] }}
-        } @else if (p.likedByNames.length === 2) {
-        أعجب {{ p.likedByNames[0] }} و {{ p.likedByNames[1] }}
-        } @else {
-        أعجب {{ p.likedByNames[0] }} و{{ p.likedByNames.length - 1 }} آخرين
-        }
-      </span>
+      <span class="post-card__liked-text">{{ getLikedByText(p) }}</span>
     </div>
     }
 
@@ -123,7 +127,13 @@
     @for (reply of p.replies; track reply.id) {
     <div class="reply">
       <a [routerLink]="['/profile', reply.authorId]" class="reply__avatar-link">
-        <div class="reply__avatar">{{ getInitial(reply.authorName) }}</div>
+        <div class="reply__avatar">
+          @if (reply.authorImageUrl) {
+          <img [src]="reply.authorImageUrl" [alt]="reply.authorName" />
+          } @else {
+          <span>{{ getInitial(reply.authorName) }}</span>
+          }
+        </div>
       </a>
       <div class="reply__body">
         <div class="reply__header">

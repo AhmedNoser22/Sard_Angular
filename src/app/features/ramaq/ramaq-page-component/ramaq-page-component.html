@@ -1,0 +1,68 @@
+<div class="ramaq">
+  <div class="ramaq__header">
+    <a routerLink="/nabd" class="ramaq__back">
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+        <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+      </svg>
+      رجوع لنبض
+    </a>
+    <div class="ramaq__title-wrap">
+      <h1 class="ramaq__title">رَمَق</h1>
+      <p class="ramaq__sub">المنشورات التي أبقت فيها جذوة اهتمامك</p>
+    </div>
+  </div>
+
+  @if (isLoading()) {
+    <div class="ramaq__loading">
+      <span class="ramaq__spinner"></span>
+    </div>
+  } @else if (shares().length) {
+    <div class="ramaq__feed">
+      @for (share of shares(); track share.shareId) {
+        <article class="ramaq-card">
+          <div class="ramaq-card__shared-badge">
+            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/>
+              <polyline points="16 6 12 2 8 6"/>
+              <line x1="12" y1="2" x2="12" y2="15"/>
+            </svg>
+            شاركت هذا المنشور · {{ formatDate(share.sharedAt) }}
+
+            <button type="button" class="ramaq-card__remove" (click)="removeShare(share.shareId)" title="إزالة من رمق">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
+                <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
+              </svg>
+            </button>
+          </div>
+
+          <div class="ramaq-card__author">
+            <div class="ramaq-card__avatar">{{ getInitial(share.authorName) }}</div>
+            <div>
+              <p class="ramaq-card__name">{{ share.authorName }}</p>
+              <p class="ramaq-card__date">{{ formatDate(share.originalCreatedAt) }}</p>
+            </div>
+          </div>
+
+          <p class="ramaq-card__content">{{ share.content }}</p>
+
+          <div class="ramaq-card__stats">
+            <span>❤️ {{ share.likesCount }}</span>
+            <span>💬 {{ share.commentsCount }}</span>
+          </div>
+        </article>
+      }
+    </div>
+  } @else {
+    <div class="ramaq__empty">
+      <div class="ramaq__empty-icon">
+        <svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="#ddc8b4" stroke-width="1.5">
+          <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/>
+          <polyline points="16 6 12 2 8 6"/>
+          <line x1="12" y1="2" x2="12" y2="15"/>
+        </svg>
+      </div>
+      <p>لم تشارك أي منشور بعد</p>
+      <a routerLink="/nabd" class="ramaq__browse-btn">اذهب لساحة الحكاية</a>
+    </div>
+  }
+</div>

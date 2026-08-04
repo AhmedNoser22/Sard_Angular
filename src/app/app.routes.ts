@@ -62,7 +62,7 @@ export const routes: Routes = [
         path: 'novels',
         loadComponent: () => import('./features/admin/pages/admin-novels/admin-novels')
           .then(m => m.AdminNovelsComponent)
-      }
+      },
     ]
   },
   {
@@ -114,6 +114,11 @@ export const routes: Routes = [
         path: 'nabd',
         loadComponent: () => import('./features/nabd/nabd-page-component/nabd-page-component')
           .then(m => m.NabdPageComponent)
+      },
+      {
+        path: 'ramaq',
+        loadComponent: () => import('./features/ramaq/ramaq-page-component/ramaq-page-component')
+          .then(m => m.RamaqPageComponent)
       },
       {
         path: 'profile/:userId',

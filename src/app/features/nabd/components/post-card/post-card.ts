@@ -33,6 +33,9 @@ export class PostCardComponent implements OnInit, OnDestroy {
   showMenu = signal(false);
   showReplyMenu = signal<number | null>(null);
 
+  isShared = signal(false);
+  isShareLoading = signal(false);
+
   showDeletePostConfirm = signal(false);
   showDeleteReplyConfirm = signal<number | null>(null);
 
@@ -75,6 +78,37 @@ export class PostCardComponent implements OnInit, OnDestroy {
   executeDeleteReply(replyId: number): void {
     this.showDeleteReplyConfirm.set(null);
     this.deleteReply(replyId);
+  }
+
+  toggleShare(): void {
+    if (this.isShareLoading()) return;
+    this.isShareLoading.set(true);
+
+    this.nabdService.sharePost(this.post().id).subscribe({
+      next: res => {
+        this.isShared.update(v => !v);
+        this.isShareLoading.set(false);
+      },
+      error: () => this.isShareLoading.set(false)
+    });
+  }
+  getLikedByText(p: Post): string {
+    const names = p.likedByNames;
+    const currentUser = this.tokenService.getUser();
+    const myName = currentUser?.displayName ?? '';
+
+    const isMe = p.isLikedByMe;
+    const others = names.filter(n => n !== myName);
+
+    if (isMe) {
+      if (others.length === 0) return 'أعجبك هذا';
+      if (others.length === 1) return `أعجبك وأعجب ${others[0]}`;
+      return `أعجبك وأعجب ${others[0]} و${others.length - 1} آخرين`;
+    } else {
+      if (names.length === 1) return `أعجب ${names[0]}`;
+      if (names.length === 2) return `أعجب ${names[0]} و${names[1]}`;
+      return `أعجب ${names[0]} و${names.length - 1} آخرين`;
+    }
   }
   ngOnInit(): void {
     this.localPost.set({ ...this.post(), replies: [...this.post().replies] });
@@ -148,11 +182,16 @@ export class PostCardComponent implements OnInit, OnDestroy {
   startReply(): void { this.isReplying.set(true); }
   cancelReply(): void { this.isReplying.set(false); this.replyForm.reset(); }
 
-  /** Used by the single comment button in the engagement row: reveals
-   * existing replies and opens the composer in one tap, Twitter-style. */
+  /** Toggle behavior: clicking the comment icon while the composer is open
+   * closes it; clicking while it's closed opens it and reveals replies. */
   onCommentButtonClick(): void {
-    this.showReplies.set(true);
-    this.isReplying.set(true);
+    if (this.isReplying()) {
+      this.isReplying.set(false);
+      this.replyForm.reset();
+    } else {
+      this.isReplying.set(true);
+      this.showReplies.set(true);
+    }
   }
 
   submitReply(): void {

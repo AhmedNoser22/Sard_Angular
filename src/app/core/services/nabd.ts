@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment.development';
 import { Post, CreatePostRequest, CreateReplyRequest, Reply } from '../models/nabd/post.model';
+import { SharedPost } from '../models/nabd/SharedPost';
 
 @Injectable({ providedIn: 'root' })
 export class NabdService {
@@ -30,5 +31,12 @@ export class NabdService {
   }
   deleteReply(postId: number, replyId: number): Observable<string> {
     return this.http.delete<string>(`${this.baseUrl}/${postId}/reply/${replyId}`);
+  }
+  sharePost(postId: number): Observable<{ action: string }> {
+    return this.http.post<{ action: string }>(`${this.baseUrl}/${postId}/share`, {});
+  }
+
+  getMyShares(): Observable<SharedPost[]> {
+    return this.http.get<SharedPost[]>(`${this.baseUrl}/my-shares`);
   }
 }

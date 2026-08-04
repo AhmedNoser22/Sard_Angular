@@ -16,6 +16,7 @@
   background: var(--sard-bg);
   min-height: 100vh;
 }
+
 :host-context([data-theme='dark']) {
   --sard-bg: #201812;
   --sard-card: #2a201a;
@@ -28,12 +29,13 @@
   --sard-border: #3c2e24;
 }
 
+
 .nabd-nav {
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 14px 32px;
-   background: linear-gradient(180deg, var(--sard-card), var(--sard-bg));
+  background: linear-gradient(180deg, var(--sard-card), var(--sard-bg));
   backdrop-filter: blur(6px);
   border-bottom: 1px solid var(--sard-border);
   position: sticky;
@@ -129,6 +131,40 @@
   }
 }
 
+// Sticky mobile/tablet bar showing "رَمَق" at the very top of the page,
+// above create-post, so it's never buried under the posts feed.
+// Only shown below the desktop breakpoint — the sidebar card takes over
+// on desktop instead (see .nabd-sidebar__card--ramaq below).
+.nabd-ramaq-mobile {
+  display: block;
+  margin-bottom: 16px;
+
+  @media (min-width: 1024px) {
+    display: none;
+  }
+
+  &__btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    color: var(--sard-maroon);
+    font-size: 14px;
+    font-weight: 700;
+    padding: 12px 16px;
+    border-radius: 14px;
+    background: var(--sard-card);
+    border: 1px solid var(--sard-border);
+    box-shadow: 0 2px 8px rgba(107, 45, 45, 0.06);
+    transition: all 0.2s;
+
+    &:hover {
+      background: var(--sard-tan);
+      border-color: var(--sard-tan);
+    }
+  }
+}
+
 .nabd-feed {
   display: flex;
   flex-direction: column;
@@ -136,6 +172,39 @@
 }
 
 .nabd-sidebar {
+  .nabd-sidebar {
+    // The sidebar's own رَمَق card — desktop only, since mobile/tablet
+    // gets the sticky bar above (.nabd-ramaq-mobile) instead. Hiding it
+    // here avoids a duplicate button when the aside stacks under the feed.
+    &__card--ramaq {
+      display: none;
+
+      @media (min-width: 1024px) {
+        display: block;
+      }
+    }
+
+    &__ramaq-btn {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--sard-maroon);
+      font-size: 14px;
+      font-weight: 700;
+      padding: 10px 14px;
+      border-radius: 12px;
+      background: var(--sard-bg);
+      border: 1px solid var(--sard-border);
+      transition: all 0.2s;
+
+      &:hover {
+        background: var(--sard-tan);
+        border-color: var(--sard-tan);
+      }
+    }
+  }
+
   // Keeps the illustration + the "about" and "ideas" cards pinned together
   // in view while the feed scrolls, instead of drifting off and leaving a
   // blank gap under the nav.

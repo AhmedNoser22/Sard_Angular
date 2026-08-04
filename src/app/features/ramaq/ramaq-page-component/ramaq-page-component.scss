@@ -1,0 +1,171 @@
+@import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap');
+
+:host {
+  --sard-bg: #faf3ec;
+  --sard-card: #fffdfb;
+  --sard-primary: #c0785a;
+  --sard-primary-dark: #a5624a;
+  --sard-maroon: #6b2d2d;
+  --sard-tan: #ddc8b4;
+  --sard-text: #4a3428;
+  --sard-text-light: #8a7264;
+  --sard-border: #ecdfd2;
+  display: block;
+  font-family: 'Amiri', serif;
+  direction: rtl;
+  background: var(--sard-bg);
+  min-height: 100vh;
+}
+
+.ramaq {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 28px 20px 60px;
+
+  &__header {
+    margin-bottom: 32px;
+  }
+
+  &__back {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--sard-primary);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 700;
+    padding: 6px 12px;
+    border-radius: 999px;
+    transition: background 0.2s;
+    margin-bottom: 16px;
+    &:hover { background: var(--sard-border); }
+  }
+
+  &__title-wrap { text-align: center; }
+
+  &__title {
+    margin: 0 0 6px;
+    font-size: 36px;
+    font-weight: 700;
+    color: var(--sard-maroon);
+    letter-spacing: 3px;
+  }
+
+  &__sub { margin: 0; font-size: 14px; color: var(--sard-text-light); }
+
+  &__loading { display: flex; justify-content: center; padding: 80px 0; }
+
+  &__spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid var(--sard-border);
+    border-top-color: var(--sard-primary);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+
+  &__feed { display: flex; flex-direction: column; gap: 16px; }
+
+  &__empty {
+    text-align: center;
+    padding: 80px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+
+    &-icon { color: var(--sard-tan); }
+
+    p { font-size: 16px; color: var(--sard-text-light); margin: 0; }
+  }
+
+  &__browse-btn {
+    display: inline-block;
+    background: var(--sard-primary);
+    color: #fff;
+    text-decoration: none;
+    padding: 10px 24px;
+    border-radius: 999px;
+    font-weight: 700;
+    font-size: 14px;
+  }
+}
+
+.ramaq-card {
+  background: var(--sard-card);
+  border: 1px solid var(--sard-border);
+  border-radius: 18px;
+  padding: 18px 20px;
+  box-shadow: 0 2px 12px rgba(107,45,45,0.05);
+
+  &__shared-badge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    color: #4a7cc0;
+    margin-bottom: 14px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--sard-border);
+
+    // الـ remove button في آخر السطر
+    .ramaq-card__remove {
+      margin-right: auto;
+      background: none;
+      border: none;
+      color: #b89a8a;
+      cursor: pointer;
+      padding: 3px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      transition: all 0.2s;
+      opacity: 0;
+      &:hover { color: #c0392b; background: #fdf0ee; }
+    }
+  }
+
+  &:hover .ramaq-card__remove { opacity: 1; }
+
+  &__author {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+
+  &__avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--sard-tan), #e8c4a8);
+    color: var(--sard-maroon);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+
+  &__name { margin: 0 0 2px; font-size: 14px; font-weight: 700; color: var(--sard-maroon); }
+  &__date { margin: 0; font-size: 11px; color: var(--sard-text-light); }
+
+  &__content {
+    margin: 0 0 14px;
+    font-size: 15px;
+    line-height: 1.9;
+    color: var(--sard-text);
+  }
+
+  &__stats {
+    display: flex;
+    gap: 14px;
+    font-size: 13px;
+    color: var(--sard-text-light);
+    padding-top: 10px;
+    border-top: 1px solid var(--sard-border);
+  }
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
