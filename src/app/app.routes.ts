@@ -44,6 +44,11 @@ export const routes: Routes = [
           .then(m => m.AdminDashboardComponent)
       },
       {
+        path: 'jobs',
+        loadComponent: () => import('./features/admin/pages/admin-jobs-component/admin-jobs-component')
+          .then(m => m.AdminJobsComponent)
+      },
+      {
         path: 'users',
         loadComponent: () => import('./features/admin/pages/admin-users/admin-users')
           .then(m => m.AdminUsersComponent)
