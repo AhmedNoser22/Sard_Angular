@@ -1,15 +1,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap');
 
 :host {
-  --sard-bg: #faf3ec;
-  --sard-card: #fffdfb;
-  --sard-primary: #c0785a;
-  --sard-primary-dark: #a5624a;
-  --sard-maroon: #6b2d2d;
-  --sard-tan: #ddc8b4;
-  --sard-text: #4a3428;
-  --sard-text-light: #8a7264;
-  --sard-border: #ecdfd2;
+  --sard-bg: #f9eeec;
+  --sard-card: #fffbfa;
+  --sard-primary: #7a2e32;
+  --sard-primary-dark: #5e2226;
+  --sard-maroon: #4e1d20;
+  --sard-tan: #e0bfbc;
+  --sard-text: #3a1f1f;
+  --sard-text-light: #8a6a68;
+  --sard-border: #eddad7;
   display: block;
   font-family: 'Amiri', serif;
   direction: rtl;
@@ -18,15 +18,15 @@
 }
 
 :host-context([data-theme='dark']) {
-  --sard-bg: #201812;
-  --sard-card: #2a201a;
-  --sard-primary: #d98f6c;
-  --sard-primary-dark: #c0785a;
-  --sard-maroon: #f0d9c8;
-  --sard-tan: #4a382c;
-  --sard-text: #ece1d6;
-  --sard-text-light: #b3a294;
-  --sard-border: #3c2e24;
+  --sard-bg: #1e1112;
+  --sard-card: #2a1a1c;
+  --sard-primary: #c77e80;
+  --sard-primary-dark: #b56668;
+  --sard-maroon: #f0d9d8;
+  --sard-tan: #4e1d20;
+  --sard-text: #ece0df;
+  --sard-text-light: #c9a8a6;
+  --sard-border: #3c2224;
 }
 
 .pub-page {
@@ -86,7 +86,7 @@
   align-items: center;
   gap: 28px;
   flex-wrap: wrap;
-  box-shadow: 0 4px 24px rgba(107, 45, 45, 0.07);
+  box-shadow: 0 4px 24px rgba(78, 29, 32, 0.07);
 
   @media (max-width: 480px) {
     padding: 20px 18px;
@@ -123,7 +123,7 @@
     border-radius: 50%;
     object-fit: cover;
     border: 4px solid var(--sard-tan);
-    box-shadow: 0 4px 16px rgba(107, 45, 45, 0.12);
+    box-shadow: 0 4px 16px rgba(78, 29, 32, 0.12);
 
     &--placeholder {
       display: flex;
@@ -270,7 +270,7 @@
     animation: spin 0.7s linear infinite;
 
     .following & {
-      border-color: rgba(192, 120, 90, 0.3);
+      border-color: rgba(122, 46, 50, 0.3);
       border-top-color: var(--sard-primary);
     }
   }
@@ -301,7 +301,7 @@
   border: 1px solid var(--sard-border);
   border-radius: 20px;
   padding: 24px 28px;
-  box-shadow: 0 2px 12px rgba(107, 45, 45, 0.05);
+  box-shadow: 0 2px 12px rgba(78, 29, 32, 0.05);
 
   &__title {
     display: flex;
@@ -361,7 +361,7 @@
   overflow: hidden;
   border: 1px solid var(--sard-border);
   background: var(--sard-card);
-  box-shadow: 0 2px 10px rgba(107, 45, 45, 0.05);
+  box-shadow: 0 2px 10px rgba(78, 29, 32, 0.05);
   transition: transform 0.2s;
 
   &:hover {
@@ -407,7 +407,7 @@
 .follow-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(107, 45, 45, 0.2);
+  background: rgba(78, 29, 32, 0.2);
   backdrop-filter: blur(4px);
   z-index: 200;
   display: flex;
@@ -425,7 +425,7 @@
   max-height: 480px;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 20px 60px rgba(107, 45, 45, 0.15);
+  box-shadow: 0 20px 60px rgba(78, 29, 32, 0.15);
   animation: slideUp 0.2s ease;
   overflow: hidden;
 

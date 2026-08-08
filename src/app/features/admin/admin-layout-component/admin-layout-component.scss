@@ -1,19 +1,31 @@
 @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap');
 
 :host {
-  --ad-bg: #faf3ec;
-  --ad-card: #fffdfb;
-  --ad-primary: #c0785a;
-  --ad-primary-dark: #a5624a;
-  --ad-maroon: #6b2d2d;
-  --ad-tan: #ddc8b4;
-  --ad-text: #4a3428;
-  --ad-text-light: #8a7264;
-  --ad-border: #ecdfd2;
+  --ad-bg: #f9eeec;
+  --ad-card: #fffbfa;
+  --ad-primary: #7a2e32;
+  --ad-primary-dark: #5e2226;
+  --ad-maroon: #4e1d20;
+  --ad-tan: #e0bfbc;
+  --ad-text: #3a1f1f;
+  --ad-text-light: #8a6a68;
+  --ad-border: #eddad7;
   --ad-sidebar-w: 240px;
   display: block;
   font-family: 'Amiri', serif;
   direction: rtl;
+}
+
+:host-context([data-theme='dark']) {
+  --sard-bg: #1e1112;
+  --sard-card: #2a1a1c;
+  --sard-primary: #c77e80;
+  --sard-primary-dark: #b56668;
+  --sard-maroon: #f0d9d8;
+  --sard-tan: #4e1d20;
+  --sard-text: #ece0df;
+  --sard-text-light: #c9a8a6;
+  --sard-border: #3c2224;
 }
 
 .admin-shell {

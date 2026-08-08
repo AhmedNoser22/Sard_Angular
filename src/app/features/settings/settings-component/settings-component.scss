@@ -1,19 +1,28 @@
 :host {
+  --sard-bg: #f9eeec;
+  --sard-card: #fffbfa;
+  --sard-primary: #7a2e32;
+  --sard-primary-dark: #5e2226;
+  --sard-maroon: #4e1d20;
+  --sard-tan: #e0bfbc;
+  --sard-text: #3a1f1f;
+  --sard-text-light: #8a6a68;
+  --sard-border: #eddad7;
   display: block;
   font-family: 'Amiri', serif;
   direction: rtl;
 }
 
 :host-context([data-theme='dark']) {
-  --sard-bg: #201812;
-  --sard-card: #2a201a;
-  --sard-primary: #d98f6c;
-  --sard-primary-dark: #c0785a;
-  --sard-maroon: #f0d9c8;
-  --sard-tan: #4a382c;
-  --sard-text: #ece1d6;
-  --sard-text-light: #b3a294;
-  --sard-border: #3c2e24;
+  --sard-bg: #1e1112;
+  --sard-card: #2a1a1c;
+  --sard-primary: #c77e80;
+  --sard-primary-dark: #b56668;
+  --sard-maroon: #f0d9d8;
+  --sard-tan: #4e1d20;
+  --sard-text: #ece0df;
+  --sard-text-light: #c9a8a6;
+  --sard-border: #3c2224;
 }
 
 .settings-fab {

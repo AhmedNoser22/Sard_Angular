@@ -3,13 +3,7 @@
   <!-- ===== NAVBAR ===== -->
   <nav class="navbar">
     <div class="navbar-inner">
-      <div class="nav-links">
-        <a href="#" class="nav-link" (click)="scrollToExplore($event)">استكشف</a>
-        <a class="nav-link" (click)="goToLogin()">
-          لنبدأ
-        </a>
-        <a href="#" class="nav-link" (click)="scrollToAI($event)">اكتب فكرتك</a>
-      </div>
+
       <a href="#" class="nav-logo" (click)="scrollToTop($event)">
         <svg class="nav-logo-ornament" viewBox="0 0 60 40" xmlns="http://www.w3.org/2000/svg">
           <path d="M30 2 L34 10 L42 10 L36 16 L38 24 L30 20 L22 24 L24 16 L18 10 L26 10 Z" fill="none" stroke="#c0785a"
@@ -22,6 +16,13 @@
         </svg>
         <span class="nav-logo-text">سرد</span>
       </a>
+
+      <div class="nav-links">
+        <a href="#" class="nav-link" (click)="scrollToExplore($event)">استكشف</a>
+        <a class="nav-link nav-link--cta" (click)="goToLogin()">لنبدأ</a>
+        <a href="#" class="nav-link" (click)="scrollToAI($event)">اكتب فكرتك</a>
+      </div>
+
       <div class="nav-actions">
         <button class="nav-icon-btn" (click)="goToLogin()">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="20" height="20">
@@ -36,6 +37,7 @@
           </svg>
         </button>
       </div>
+
     </div>
   </nav>
 

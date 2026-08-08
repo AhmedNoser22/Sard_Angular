@@ -19,30 +19,30 @@ import { inject } from '@angular/core';
     </div>
   `,
   styles: [`
-    :host { display: block; font-family: 'Amiri', serif; direction: rtl; }
+  :host { display: block; font-family: 'Amiri', serif; direction: rtl; }
 
-    .jobs-page {
-      &__title {
-        font-size: 22px;
-        font-weight: 700;
-        color: #6b2d2d;
-        margin: 0 0 20px;
-      }
+.jobs-page {
+  &__title {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--ad-maroon);
+    margin: 0 0 20px;
+  }
 
-      &__frame-wrap {
-        border-radius: 16px;
-        overflow: hidden;
-        border: 1px solid #ecdfd2;
-        box-shadow: 0 4px 20px rgba(107,45,45,0.08);
-        height: calc(100vh - 140px);
-      }
+  &__frame-wrap {
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid var(--ad-border);
+    box-shadow: 0 4px 20px rgba(107,45,45,0.08);
+    height: calc(100vh - 140px);
+  }
 
-      &__frame {
-        width: 100%;
-        height: 100%;
-        border: none;
-      }
-    }
+  &__frame {
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+}
   `]
 })
 export class AdminJobsComponent {

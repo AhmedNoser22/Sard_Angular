@@ -1,0 +1,26 @@
+.result {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  font-family: 'Amiri', serif;
+  direction: rtl;
+  background: #f9eeec;
+  gap: 16px;
+  text-align: center;
+  padding: 24px;
+}
+.result__icon { font-size: 64px; }
+.result__title { font-size: 28px; font-weight: 700; color: #4e1d20; margin: 0; }
+.result__text { font-size: 16px; color: #8a6a68; margin: 0; }
+.result__btn {
+  background: #7a2e32;
+  color: #fff;
+  text-decoration: none;
+  padding: 12px 32px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 15px;
+  margin-top: 8px;
+}

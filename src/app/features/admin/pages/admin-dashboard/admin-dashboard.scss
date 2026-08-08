@@ -2,7 +2,7 @@
   &__title {
     font-size: 24px;
     font-weight: 700;
-    color: #6b2d2d;
+    color: var(--ad-maroon);
     margin: 0 0 24px;
     font-family: 'Amiri', serif;
   }
@@ -15,8 +15,8 @@
 }
 
 .ad-stat-card {
-  background: #fffdfb;
-  border: 1px solid #ecdfd2;
+  background: var(--ad-card);
+  border: 1px solid var(--ad-border);
   border-radius: 18px;
   padding: 24px;
   display: flex;
@@ -33,7 +33,7 @@
     justify-content: center;
     flex-shrink: 0;
 
-    &--users { background: #fdf0ee; color: #c0785a; }
+    &--users { background: #fdf0ee; color: var(--ad-primary); }
     &--posts { background: #eef4fd; color: #4a7cc0; }
     &--novels { background: #f0faf0; color: #3a7a3a; }
     &--revenue { background: #fdf9ee; color: #c0a05a; }
@@ -44,9 +44,9 @@
   &__value {
     font-size: 24px;
     font-weight: 700;
-    color: #6b2d2d;
+    color: var(--ad-maroon);
     font-family: 'Amiri', serif;
   }
 
-  &__label { font-size: 13px; color: #8a7264; font-family: 'Amiri', serif; }
+  &__label { font-size: 13px; color: var(--ad-text-light); font-family: 'Amiri', serif; }
 }

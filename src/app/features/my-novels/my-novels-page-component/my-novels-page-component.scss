@@ -1,15 +1,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap');
 
 :host {
-  --sard-bg: #faf3ec;
-  --sard-card: #fffdfb;
-  --sard-primary: #c0785a;
-  --sard-primary-dark: #a5624a;
-  --sard-maroon: #6b2d2d;
-  --sard-tan: #ddc8b4;
-  --sard-text: #4a3428;
-  --sard-text-light: #8a7264;
-  --sard-border: #ecdfd2;
+  --sard-bg: #f9eeec;
+  --sard-card: #fffbfa;
+  --sard-primary: #7a2e32;
+  --sard-primary-dark: #5e2226;
+  --sard-maroon: #4e1d20;
+  --sard-tan: #e0bfbc;
+  --sard-text: #3a1f1f;
+  --sard-text-light: #8a6a68;
+  --sard-border: #eddad7;
   display: block;
   font-family: 'Amiri', serif;
   direction: rtl;
@@ -18,15 +18,15 @@
 }
 
 :host-context([data-theme='dark']) {
-  --sard-bg: #201812;
-  --sard-card: #2a201a;
-  --sard-primary: #d98f6c;
-  --sard-primary-dark: #c0785a;
-  --sard-maroon: #f0d9c8;
-  --sard-tan: #4a382c;
-  --sard-text: #ece1d6;
-  --sard-text-light: #b3a294;
-  --sard-border: #3c2e24;
+  --sard-bg: #1e1112;
+  --sard-card: #2a1a1c;
+  --sard-primary: #c77e80;
+  --sard-primary-dark: #b56668;
+  --sard-maroon: #f0d9d8;
+  --sard-tan: #4e1d20;
+  --sard-text: #ece0df;
+  --sard-text-light: #c9a8a6;
+  --sard-border: #3c2224;
 }
 
 .my-novels {
@@ -34,7 +34,9 @@
   margin: 0 auto;
   padding: 32px 24px 60px;
 
-  &__header { margin-bottom: 24px; }
+  &__header {
+    margin-bottom: 24px;
+  }
 
   &__title {
     margin: 0 0 6px;
@@ -43,7 +45,11 @@
     color: var(--sard-maroon);
   }
 
-  &__sub { margin: 0; font-size: 14px; color: var(--sard-text-light); }
+  &__sub {
+    margin: 0;
+    font-size: 14px;
+    color: var(--sard-text-light);
+  }
 
   &__success-banner {
     background: color-mix(in srgb, var(--sard-primary) 12%, var(--sard-card));
@@ -84,9 +90,24 @@
     border: 1px dashed var(--sard-border);
     border-radius: 20px;
 
-    svg { color: var(--sard-text-light); margin-bottom: 12px; }
-    p { font-size: 16px; font-weight: 700; color: var(--sard-maroon); margin: 0 0 4px; }
-    span { font-size: 13px; color: var(--sard-text-light); display: block; margin-bottom: 18px; }
+    svg {
+      color: var(--sard-text-light);
+      margin-bottom: 12px;
+    }
+
+    p {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--sard-maroon);
+      margin: 0 0 4px;
+    }
+
+    span {
+      font-size: 13px;
+      color: var(--sard-text-light);
+      display: block;
+      margin-bottom: 18px;
+    }
   }
 
   &__browse-btn {
@@ -141,7 +162,12 @@
     }
   }
 
-  &__body { padding: 14px 15px 16px; display: flex; flex-direction: column; gap: 9px; }
+  &__body {
+    padding: 14px 15px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+  }
 
   &__title {
     margin: 0;
@@ -169,17 +195,28 @@
     font-weight: 700;
     font-size: 11px;
     overflow: hidden;
-    img { width: 100%; height: 100%; object-fit: cover; }
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
   }
 
   &__author span {
     font-size: 12px;
     font-weight: 700;
     color: var(--sard-text-light);
-    &:hover { color: var(--sard-primary); }
+
+    &:hover {
+      color: var(--sard-primary);
+    }
   }
 
-  &__meta { font-size: 11px; color: var(--sard-text-light); }
+  &__meta {
+    font-size: 11px;
+    color: var(--sard-text-light);
+  }
 
   &__download {
     display: flex;
@@ -196,8 +233,15 @@
     border-radius: 10px;
     cursor: pointer;
     transition: background 0.2s;
-    &:hover:not(:disabled) { background: var(--sard-primary-dark); }
-    &:disabled { opacity: 0.6; cursor: not-allowed; }
+
+    &:hover:not(:disabled) {
+      background: var(--sard-primary-dark);
+    }
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
   }
 
   &__spinner {
@@ -210,8 +254,20 @@
   }
 }
 
-@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 @keyframes glow {
-  0%, 100% { box-shadow: 0 4px 16px rgba(107, 45, 45, 0.06); }
-  50% { box-shadow: 0 4px 26px rgba(192, 120, 90, 0.35); }
+
+  0%,
+  100% {
+    box-shadow: 0 4px 16px rgba(107, 45, 45, 0.06);
+  }
+
+  50% {
+    box-shadow: 0 4px 26px rgba(192, 120, 90, 0.35);
+  }
 }

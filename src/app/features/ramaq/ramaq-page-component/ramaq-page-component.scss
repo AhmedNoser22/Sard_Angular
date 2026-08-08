@@ -1,20 +1,32 @@
 @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap');
 
 :host {
-  --sard-bg: #faf3ec;
-  --sard-card: #fffdfb;
-  --sard-primary: #c0785a;
-  --sard-primary-dark: #a5624a;
-  --sard-maroon: #6b2d2d;
-  --sard-tan: #ddc8b4;
-  --sard-text: #4a3428;
-  --sard-text-light: #8a7264;
-  --sard-border: #ecdfd2;
+  --sard-bg: #f9eeec;
+  --sard-card: #fffbfa;
+  --sard-primary: #7a2e32;
+  --sard-primary-dark: #5e2226;
+  --sard-maroon: #4e1d20;
+  --sard-tan: #e0bfbc;
+  --sard-text: #3a1f1f;
+  --sard-text-light: #8a6a68;
+  --sard-border: #eddad7;
   display: block;
   font-family: 'Amiri', serif;
   direction: rtl;
   background: var(--sard-bg);
   min-height: 100vh;
+}
+
+:host-context([data-theme='dark']) {
+  --sard-bg: #1e1112;
+  --sard-card: #2a1a1c;
+  --sard-primary: #c77e80;
+  --sard-primary-dark: #b56668;
+  --sard-maroon: #f0d9d8;
+  --sard-tan: #4e1d20;
+  --sard-text: #ece0df;
+  --sard-text-light: #c9a8a6;
+  --sard-border: #3c2224;
 }
 
 .ramaq {
@@ -38,10 +50,15 @@
     border-radius: 999px;
     transition: background 0.2s;
     margin-bottom: 16px;
-    &:hover { background: var(--sard-border); }
+
+    &:hover {
+      background: var(--sard-border);
+    }
   }
 
-  &__title-wrap { text-align: center; }
+  &__title-wrap {
+    text-align: center;
+  }
 
   &__title {
     margin: 0 0 6px;
@@ -51,9 +68,17 @@
     letter-spacing: 3px;
   }
 
-  &__sub { margin: 0; font-size: 14px; color: var(--sard-text-light); }
+  &__sub {
+    margin: 0;
+    font-size: 14px;
+    color: var(--sard-text-light);
+  }
 
-  &__loading { display: flex; justify-content: center; padding: 80px 0; }
+  &__loading {
+    display: flex;
+    justify-content: center;
+    padding: 80px 0;
+  }
 
   &__spinner {
     width: 40px;
@@ -64,7 +89,11 @@
     animation: spin 0.8s linear infinite;
   }
 
-  &__feed { display: flex; flex-direction: column; gap: 16px; }
+  &__feed {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
 
   &__empty {
     text-align: center;
@@ -74,9 +103,15 @@
     align-items: center;
     gap: 14px;
 
-    &-icon { color: var(--sard-tan); }
+    &-icon {
+      color: var(--sard-tan);
+    }
 
-    p { font-size: 16px; color: var(--sard-text-light); margin: 0; }
+    p {
+      font-size: 16px;
+      color: var(--sard-text-light);
+      margin: 0;
+    }
   }
 
   &__browse-btn {
@@ -96,7 +131,7 @@
   border: 1px solid var(--sard-border);
   border-radius: 18px;
   padding: 18px 20px;
-  box-shadow: 0 2px 12px rgba(107,45,45,0.05);
+  box-shadow: 0 2px 12px rgba(107, 45, 45, 0.05);
 
   &__shared-badge {
     display: flex;
@@ -121,11 +156,17 @@
       align-items: center;
       transition: all 0.2s;
       opacity: 0;
-      &:hover { color: #c0392b; background: #fdf0ee; }
+
+      &:hover {
+        color: #c0392b;
+        background: #fdf0ee;
+      }
     }
   }
 
-  &:hover .ramaq-card__remove { opacity: 1; }
+  &:hover .ramaq-card__remove {
+    opacity: 1;
+  }
 
   &__author {
     display: flex;
@@ -148,8 +189,18 @@
     flex-shrink: 0;
   }
 
-  &__name { margin: 0 0 2px; font-size: 14px; font-weight: 700; color: var(--sard-maroon); }
-  &__date { margin: 0; font-size: 11px; color: var(--sard-text-light); }
+  &__name {
+    margin: 0 0 2px;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--sard-maroon);
+  }
+
+  &__date {
+    margin: 0;
+    font-size: 11px;
+    color: var(--sard-text-light);
+  }
 
   &__content {
     margin: 0 0 14px;
@@ -168,4 +219,8 @@
   }
 }
 
-@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

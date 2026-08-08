@@ -1,15 +1,27 @@
 :host {
-  --sard-card: #fffdfb;
-  --sard-primary: #c0785a;
-  --sard-maroon: #6b2d2d;
-  --sard-tan: #ddc8b4;
-  --sard-text: #4a3428;
-  --sard-text-light: #8a7264;
-  --sard-border: #ecdfd2;
-  --sard-bg: #faf3ec;
+  --sard-card: #fffbfa;
+  --sard-primary: #7a2e32;
+  --sard-maroon: #4e1d20;
+  --sard-tan: #e0bfbc;
+  --sard-text: #3a1f1f;
+  --sard-text-light: #8a6a68;
+  --sard-border: #eddad7;
+  --sard-bg: #f9eeec;
   display: block;
   font-family: 'Amiri', serif;
   direction: rtl;
+}
+
+:host-context([data-theme='dark']) {
+  --sard-bg: #1e1112;
+  --sard-card: #2a1a1c;
+  --sard-primary: #c77e80;
+  --sard-primary-dark: #b56668;
+  --sard-maroon: #f0d9d8;
+  --sard-tan: #4e1d20;
+  --sard-text: #ece0df;
+  --sard-text-light: #c9a8a6;
+  --sard-border: #3c2224;
 }
 
 .notif-panel {
@@ -20,7 +32,7 @@
   background: var(--sard-card);
   border: 1px solid var(--sard-border);
   border-radius: 16px;
-  box-shadow: 0 12px 32px rgba(107,45,45,0.12);
+  box-shadow: 0 12px 32px rgba(107, 45, 45, 0.12);
   z-index: 200;
   overflow: hidden;
 
@@ -31,7 +43,12 @@
     padding: 14px 16px;
     border-bottom: 1px solid var(--sard-border);
 
-    h3 { margin: 0; font-size: 16px; font-weight: 700; color: var(--sard-maroon); }
+    h3 {
+      margin: 0;
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--sard-maroon);
+    }
 
     button {
       background: none;
@@ -40,7 +57,10 @@
       font-size: 12px;
       color: var(--sard-primary);
       cursor: pointer;
-      &:hover { text-decoration: underline; }
+
+      &:hover {
+        text-decoration: underline;
+      }
     }
   }
 
@@ -61,12 +81,22 @@
   transition: background 0.15s;
   border-bottom: 1px solid var(--sard-border);
 
-  &:hover { background: var(--sard-bg); }
-  &.unread { background: #fdf3ee; }
+  &:hover {
+    background: var(--sard-bg);
+  }
 
-  &__icon { font-size: 18px; flex-shrink: 0; }
+  &.unread {
+    background: #fdf3ee;
+  }
 
-  &__body { flex: 1; }
+  &__icon {
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+
+  &__body {
+    flex: 1;
+  }
 
   &__text {
     margin: 0 0 3px;
@@ -75,5 +105,8 @@
     line-height: 1.5;
   }
 
-  &__time { font-size: 11px; color: var(--sard-text-light); }
+  &__time {
+    font-size: 11px;
+    color: var(--sard-text-light);
+  }
 }
