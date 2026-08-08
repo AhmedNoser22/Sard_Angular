@@ -8,6 +8,7 @@ import { Group, GroupMessage } from '../models/group/group.model';
 export class GroupHubService {
   private connection: signalR.HubConnection | null = null;
   private connectPromise: Promise<void> | null = null;
+  private joinedGroupIds = new Set<number>();
 
   private readonly ngZone = inject(NgZone);
 
@@ -17,16 +18,11 @@ export class GroupHubService {
   readonly groupUpdated$ = new Subject<Group>();
 
   async connect(token: string): Promise<void> {
-
     if (
       this.connection &&
-      (
-        this.connection.state === signalR.HubConnectionState.Connected ||
-        this.connection.state === signalR.HubConnectionState.Connecting ||
-        this.connection.state === signalR.HubConnectionState.Reconnecting
-      )
+      this.connection.state === signalR.HubConnectionState.Connected
     ) {
-      return this.connectPromise ?? Promise.resolve();
+      return;
     }
 
     if (this.connectPromise) {
@@ -58,17 +54,32 @@ export class GroupHubService {
       this.ngZone.run(() => this.groupUpdated$.next(group));
     });
 
+    connection.onreconnected(async () => {
+      const ids = Array.from(this.joinedGroupIds);
+      for (const id of ids) {
+        try {
+          await connection.invoke('JoinGroup', id);
+        } catch {
+          // تجاهل: هيحاول تاني في المرة الجاية لو لسه محتاج
+        }
+      }
+    });
+
+    connection.onclose(() => {
+      if (this.connection === connection) {
+        this.connection = null;
+      }
+    });
+
     this.connectPromise = connection.start();
 
     try {
       await this.connectPromise;
     } catch (err) {
       console.error('GroupHub error:', err);
-
       if (this.connection === connection) {
         this.connection = null;
       }
-
       throw err;
     } finally {
       this.connectPromise = null;
@@ -76,23 +87,28 @@ export class GroupHubService {
   }
 
   async joinGroup(groupId: number): Promise<void> {
+    if (this.connectPromise) {
+      try {
+        await this.connectPromise;
+      } catch {
+        return;
+      }
+    }
+
     const connection = this.connection;
-
-    if (!connection) return;
-
-    if (connection.state !== signalR.HubConnectionState.Connected) {
+    if (!connection || connection.state !== signalR.HubConnectionState.Connected) {
       return;
     }
 
     await connection.invoke('JoinGroup', groupId);
+    this.joinedGroupIds.add(groupId);
   }
 
   async leaveGroup(groupId: number): Promise<void> {
+    this.joinedGroupIds.delete(groupId);
+
     const connection = this.connection;
-
-    if (!connection) return;
-
-    if (connection.state !== signalR.HubConnectionState.Connected) {
+    if (!connection || connection.state !== signalR.HubConnectionState.Connected) {
       return;
     }
 
@@ -101,9 +117,9 @@ export class GroupHubService {
 
   async disconnect(): Promise<void> {
     const connection = this.connection;
-
     this.connection = null;
     this.connectPromise = null;
+    this.joinedGroupIds.clear();
 
     if (connection) {
       await connection.stop();

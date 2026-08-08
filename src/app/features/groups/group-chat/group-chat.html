@@ -183,8 +183,10 @@
         <div class="chat-bubble__avatar">{{ getInitial(msg.senderName) }}</div>
         }
         <div class="chat-bubble-col">
-          <div class="chat-bubble" [class.chat-bubble--mine]="isMyMessage(msg)"
-            [class.chat-bubble--deleted]="msg.isDeleted"
+          <div class="chat-bubble"
+                [class.chat-bubble--mine]="isMyMessage(msg)"
+                [class.chat-bubble--deleted]="msg.isDeleted"
+                [class.chat-bubble--entering]="isRecentlyAdded(msg.id)"
             (mousedown)="!msg.isDeleted && onBubblePressStart(msg.id, $event)" (mouseup)="onBubblePressEnd()"
             (mouseleave)="onBubblePressEnd()" (touchstart)="!msg.isDeleted && onBubblePressStart(msg.id, $event)"
             (touchend)="onBubblePressEnd()" (touchmove)="onBubblePressEnd()">
@@ -240,7 +242,7 @@
           <div class="chat-bubble__reactions" [class.chat-bubble__reactions--mine]="isMyMessage(msg)">
             @for (r of msg.reactions; track r.emoji) {
             <button type="button" class="reaction-chip" [class.reaction-chip--mine]="r.reactedByMe"
-              (click)="openReactorsModal(msg.reactions, r.emoji, $event)">
+              [title]="r.reactedByMe ? 'إلغاء تفاعلك' : 'عرض من تفاعل'" (click)="onReactionChipClick(msg, r, $event)">
               {{ r.emoji }} <span>{{ r.count }}</span>
             </button>
             }
@@ -279,8 +281,9 @@
       } @else {
       <form [formGroup]="form" (ngSubmit)="sendMessage()" class="chat-input-form">
         <div class="chat-input-form__row">
-          <input type="text" formControlName="content" placeholder="اكتب رسالتك..." class="chat-input-form__input"
-            dir="rtl" (keydown.enter)="$event.preventDefault(); sendMessage()" />
+          <input #messageInput type="text" formControlName="content" placeholder="اكتب رسالتك..."
+            class="chat-input-form__input" dir="rtl" (focus)="onInputFocus()"
+            (keydown.enter)="$event.preventDefault(); sendMessage()" />
           <button type="submit" class="chat-input-form__send" [disabled]="form.invalid || isSending()">
             <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
               <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />

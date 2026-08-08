@@ -1,4 +1,4 @@
-import { Component, inject, signal, OnInit, OnDestroy, ViewChild, ElementRef, HostListener } from '@angular/core';
+import { Component, inject, signal, OnInit, OnDestroy, ViewChild, ElementRef, HostListener, afterNextRender, Injector } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
@@ -36,16 +36,17 @@ const NEAR_BOTTOM_THRESHOLD = 90;
 export class GroupChatComponent implements OnInit, OnDestroy {
   @ViewChild('messagesEnd') messagesEnd!: ElementRef<HTMLDivElement>;
   @ViewChild('messagesContainer') messagesContainer!: ElementRef<HTMLDivElement>;
+  @ViewChild('messageInput') messageInput!: ElementRef<HTMLInputElement>;
 
   private readonly groupService = inject(GroupService);
   private readonly hubService = inject(GroupHubService);
   private readonly tokenService = inject(TokenService);
   private readonly route = inject(ActivatedRoute);
   private readonly fb = inject(FormBuilder);
+  private readonly injector = inject(Injector);
   private subs = new Subscription();
   private toastIdCounter = 0;
   private longPressTimer: any = null;
-  private longPressTriggered = false;
 
   group = signal<Group | null>(null);
   messages = signal<GroupMessage[]>([]);
@@ -61,9 +62,13 @@ export class GroupChatComponent implements OnInit, OnDestroy {
   confirmDialog = signal<ConfirmState | null>(null);
   isNearBottom = signal(true);
   newMessagesCount = signal(0);
+  recentlyAddedIds = new Set<number>();
 
   private pendingReactionMessageId: number | null = null;
   pendingReactionSignal = signal<number | null>(null);
+
+  private readonly REACTION_COOLDOWN_MS = 500;
+  private lastReactionAt = new Map<number, number>();
 
   reactionEmojis = ['❤️', '😂', '👍', '😮', '😢', '😡'];
 
@@ -75,18 +80,13 @@ export class GroupChatComponent implements OnInit, OnDestroy {
   });
 
   async ngOnInit(): Promise<void> {
-    this.groupId = Number(
-      this.route.snapshot.paramMap.get('groupId')
-    );
+    this.groupId = Number(this.route.snapshot.paramMap.get('groupId'));
 
     const token = this.tokenService.getToken();
-
     if (token) {
       await this.hubService.connect(token);
-      await this.hubService.joinGroup(this.groupId);
     }
-
-    this.hubService.joinGroup(this.groupId);
+    await this.hubService.joinGroup(this.groupId);
 
     this.groupService.getGroup(this.groupId).subscribe({
       next: group => {
@@ -103,17 +103,18 @@ export class GroupChatComponent implements OnInit, OnDestroy {
     this.groupService.getMessages(this.groupId).subscribe({
       next: messages => {
         this.messages.set(messages);
-        this.scrollToBottom(false);
+        this.runAfterRender(() => this.scrollToBottomInstant());
       }
     });
 
     this.subs.add(this.hubService.newMessage$.subscribe(msg => {
       if (msg.groupId !== this.groupId) return;
       const isMine = msg.senderId === this.currentUserId;
-      this.appendOrUpdateMessage(msg);
+      this.markAsRecentlyAdded(msg.id);
+      this.messages.update(list => [...list, msg]);
 
       if (isMine || this.isNearBottom()) {
-        this.scrollToBottom(true);
+        this.runAfterRender(() => this.scrollToBottomSmooth());
         this.newMessagesCount.set(0);
       } else {
         this.newMessagesCount.update(n => n + 1);
@@ -121,11 +122,11 @@ export class GroupChatComponent implements OnInit, OnDestroy {
     }));
 
     this.subs.add(this.hubService.messageReacted$.subscribe(msg => {
-      if (msg.groupId === this.groupId) this.appendOrUpdateMessage(msg);
+      if (msg.groupId === this.groupId) this.applyMessageMutation(msg);
     }));
 
     this.subs.add(this.hubService.messageDeleted$.subscribe(msg => {
-      if (msg.groupId === this.groupId) this.appendOrUpdateMessage(msg);
+      if (msg.groupId === this.groupId) this.applyMessageMutation(msg);
     }));
 
     this.subs.add(this.hubService.groupUpdated$.subscribe(g => {
@@ -160,28 +161,41 @@ export class GroupChatComponent implements OnInit, OnDestroy {
     if (nearBottom) this.newMessagesCount.set(0);
   }
 
+  onInputFocus(): void {
+    if (this.isNearBottom()) {
+      this.runAfterRender(() => this.scrollToBottomSmooth());
+    }
+  }
+
   jumpToBottom(): void {
-    this.scrollToBottom(true);
+    this.runAfterRender(() => this.scrollToBottomSmooth());
     this.newMessagesCount.set(0);
   }
 
   sendMessage(): void {
     if (this.form.invalid || this.isSending()) return;
     this.isSending.set(true);
+    const content = this.form.value.content!;
+    this.form.reset();
 
-    this.groupService.sendMessage(this.groupId, {
-      content: this.form.value.content!
-    }).subscribe({
+    this.groupService.sendMessage(this.groupId, { content }).subscribe({
       next: msg => {
-        this.appendOrUpdateMessage(msg);
-        this.form.reset();
+        this.markAsRecentlyAdded(msg.id);
+        this.messages.update(list => {
+          const idx = list.findIndex(m => m.id === msg.id);
+          if (idx === -1) return [...list, msg];
+          const copy = [...list];
+          copy[idx] = msg;
+          return copy;
+        });
         this.isSending.set(false);
-        this.scrollToBottom(true);
         this.newMessagesCount.set(0);
+        this.runAfterRender(() => this.scrollToBottomSmooth());
       },
       error: err => {
         this.toastError(this.getErrorMessage(err));
         this.isSending.set(false);
+        this.form.patchValue({ content });
       }
     });
   }
@@ -261,10 +275,11 @@ export class GroupChatComponent implements OnInit, OnDestroy {
 
   onBubblePressStart(messageId: number, event: TouchEvent | MouseEvent): void {
     if (event.type === 'mousedown' && (event as MouseEvent).button !== 0) return;
-    this.longPressTriggered = false;
+    const target = event.target as HTMLElement;
+    if (target.closest('button')) return;
+
     this.clearLongPressTimer();
     this.longPressTimer = setTimeout(() => {
-      this.longPressTriggered = true;
       this.activeReactionPicker.set(messageId);
       if (navigator.vibrate) navigator.vibrate(15);
     }, LONG_PRESS_MS);
@@ -282,39 +297,44 @@ export class GroupChatComponent implements OnInit, OnDestroy {
   }
 
   isReactionPending(messageId: number): boolean {
-    return this.pendingReactionMessageId === messageId;
+    return this.pendingReactionSignal() === messageId;
   }
 
   reactToMessage(messageId: number, emoji: string, event: Event): void {
     event.preventDefault();
     event.stopPropagation();
 
+    const now = Date.now();
+    const lastAt = this.lastReactionAt.get(messageId) ?? 0;
+    if (now - lastAt < this.REACTION_COOLDOWN_MS) return;
+    this.lastReactionAt.set(messageId, now);
 
-    if (this.pendingReactionMessageId !== null) {
-      return;
-    }
-
+    if (this.pendingReactionMessageId !== null) return;
     this.pendingReactionMessageId = messageId;
     this.pendingReactionSignal.set(messageId);
     this.activeReactionPicker.set(null);
 
-    this.groupService
-      .reactToMessage(this.groupId, messageId, emoji)
-      .subscribe({
-        next: (updatedMessage: GroupMessage) => {
-
-
-          this.appendOrUpdateMessage(updatedMessage);
-
-          this.clearPendingReaction();
-        },
-
-        error: err => {
-          this.clearPendingReaction();
-          this.toastError(this.getErrorMessage(err));
-        }
-      });
+    this.groupService.reactToMessage(this.groupId, messageId, emoji).subscribe({
+      next: dto => {
+        this.applyMessageMutation(dto);
+        this.clearPendingReaction();
+      },
+      error: err => {
+        this.toastError(this.getErrorMessage(err));
+        this.clearPendingReaction();
+      }
+    });
   }
+
+  onReactionChipClick(msg: GroupMessage, reaction: MessageReaction, event: Event): void {
+    event.stopPropagation();
+    if (reaction.reactedByMe) {
+      this.reactToMessage(msg.id, reaction.emoji, event);
+    } else {
+      this.openReactorsModal(msg.reactions, reaction.emoji, event);
+    }
+  }
+
   openReactorsModal(reactions: MessageReaction[], emoji: string, event: Event): void {
     event.stopPropagation();
     this.reactorsModal.set({ reactions, activeEmoji: emoji });
@@ -335,7 +355,7 @@ export class GroupChatComponent implements OnInit, OnDestroy {
   deleteMessage(messageId: number): void {
     this.openConfirm('هل تريد حذف هذه الرسالة؟', () => {
       this.groupService.deleteMessage(this.groupId, messageId).subscribe({
-        next: dto => this.appendOrUpdateMessage(dto),
+        next: dto => this.applyMessageMutation(dto),
         error: err => this.toastError(this.getErrorMessage(err))
       });
     });
@@ -369,6 +389,10 @@ export class GroupChatComponent implements OnInit, OnDestroy {
     return this.isAdmin() && !this.isOwnerOf(member) && member.userId !== this.currentUserId;
   }
 
+  isRecentlyAdded(messageId: number): boolean {
+    return this.recentlyAddedIds.has(messageId);
+  }
+
   getInitial(name: string): string { return name ? name.charAt(0) : '؟'; }
 
   formatTime(dateStr: string): string {
@@ -399,6 +423,11 @@ export class GroupChatComponent implements OnInit, OnDestroy {
     this.toasts.update(list => list.filter(t => t.id !== id));
   }
 
+  private markAsRecentlyAdded(id: number): void {
+    this.recentlyAddedIds.add(id);
+    setTimeout(() => this.recentlyAddedIds.delete(id), 400);
+  }
+
   private clearPendingReaction(): void {
     this.pendingReactionMessageId = null;
     this.pendingReactionSignal.set(null);
@@ -426,29 +455,44 @@ export class GroupChatComponent implements OnInit, OnDestroy {
     return 'حدث خطأ غير متوقع، حاول مرة أخرى';
   }
 
-  appendOrUpdateMessage(msg: GroupMessage): void {
+  // تحديث على رسالة موجودة بالفعل (ريأكت أو حذف) — بيقفل السكرول تمامًا
+  // في مكانه قبل وبعد التحديث، بحيث المستخدم يفضل بالظبط في نفس النقطة
+  // اللي كان فيها، مهما المتصفح حاول "يعوّض" الفرق في الارتفاع لوحده.
+  private applyMessageMutation(msg: GroupMessage): void {
+    const el = this.messagesContainer?.nativeElement;
+    const scrollTopBefore = el?.scrollTop;
+
     this.messages.update(list => {
-      const index = list.findIndex(x => x.id === msg.id);
-
-      if (index === -1) {
-        return [...list, msg];
-      }
-
+      const idx = list.findIndex(m => m.id === msg.id);
+      if (idx === -1) return list;
       const copy = [...list];
-      copy[index] = msg;
-
+      copy[idx] = msg;
       return copy;
     });
+
+    if (el && scrollTopBefore !== undefined) {
+      el.scrollTop = scrollTopBefore;
+      this.runAfterRender(() => {
+        el.scrollTop = scrollTopBefore;
+      });
+    }
   }
 
-  private scrollToBottom(smooth: boolean): void {
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        this.messagesEnd?.nativeElement?.scrollIntoView({
-          behavior: smooth ? 'smooth' : 'auto',
-          block: 'end'
-        });
-      });
-    });
+  private runAfterRender(fn: () => void): void {
+    afterNextRender(fn, { injector: this.injector });
+  }
+
+  private scrollToBottomInstant(): void {
+    const el = this.messagesContainer?.nativeElement;
+    if (!el) return;
+    el.style.scrollBehavior = 'auto';
+    el.scrollTop = el.scrollHeight;
+  }
+
+  private scrollToBottomSmooth(): void {
+    const el = this.messagesContainer?.nativeElement;
+    if (!el) return;
+    el.style.scrollBehavior = 'smooth';
+    el.scrollTop = el.scrollHeight;
   }
 }

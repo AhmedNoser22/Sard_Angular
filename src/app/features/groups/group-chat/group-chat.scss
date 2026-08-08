@@ -454,6 +454,7 @@
   &__emoji {
     background: none; border: none; font-size: 19px; cursor: pointer;
     padding: 3px 4px; border-radius: 50%; transition: transform 0.15s, background 0.15s;
+    touch-action: manipulation;
     &:hover:not(:disabled) { transform: scale(1.35) translateY(-2px); }
     &:disabled { opacity: 0.4; cursor: not-allowed; }
     &--active { background: #fdf0ee; }
@@ -472,6 +473,7 @@
   background: var(--sard-card); border: 1px solid var(--sard-border);
   border-radius: 999px; padding: 2px 8px; font-size: 11px; cursor: pointer;
   color: var(--sard-text); transition: all 0.2s;
+  touch-action: manipulation;
   span { font-weight: 700; }
   &:hover { border-color: var(--sard-tan); transform: translateY(-1px); }
   &--mine { background: #fdf0ee; border-color: var(--sard-primary); color: var(--sard-primary-dark); }
@@ -509,7 +511,6 @@
   }
 }
 
-// Toast
 .toast-stack {
   position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
   display: flex; flex-direction: column; gap: 8px; z-index: 1000; width: min(360px, 90vw);
@@ -530,7 +531,6 @@
 
 @keyframes toast-in { from { opacity: 0; transform: translateY(-12px); } to { opacity: 1; transform: translateY(0); } }
 
-// Confirm modal
 .confirm-overlay {
   position: fixed; inset: 0; background: rgba(74, 52, 40, 0.45);
   display: flex; align-items: center; justify-content: center; z-index: 1001; animation: fade-in 0.15s ease-out;
@@ -617,6 +617,5 @@
   .reaction-picker { bottom: -42px; padding: 5px 6px; }
   .reaction-picker__emoji { font-size: 16px; }
   .toast-stack { top: 12px; width: 94vw; }
-
   .chat-bubble__toolbar { opacity: 1; pointer-events: auto; top: -14px; }
 }
