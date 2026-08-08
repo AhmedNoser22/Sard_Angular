@@ -157,6 +157,18 @@ export const routes: Routes = [
         loadComponent: () => import('./features/my-novels/my-novels-page-component/my-novels-page-component')
           .then(m => m.MyNovelsPageComponent)
       },
+      {
+        path: 'groups',
+        canActivate: [authGuard],
+        loadComponent: () => import('./features/groups/groups-page-component/groups-page-component')
+          .then(m => m.GroupsPageComponent)
+      },
+      {
+        path: 'groups/:groupId',
+        canActivate: [authGuard],
+        loadComponent: () => import('./features/groups/group-chat/group-chat')
+          .then(m => m.GroupChatComponent)
+      },
     ]
   },
 

@@ -1,0 +1,95 @@
+
+<div class="groups-page">
+  <div class="groups-page__header">
+    <div>
+      <h1 class="groups-page__title">الجروبات</h1>
+      <p class="groups-page__sub">تواصل مع الروائيين في مساحة خاصة</p>
+    </div>
+    @if (!isCreating()) {
+      <button type="button" class="groups-page__create-btn" (click)="startCreate()">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+          <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
+        </svg>
+        جروب جديد
+      </button>
+    }
+  </div>
+
+  @if (isCreating()) {
+    <div class="groups-page__create-form">
+      <form [formGroup]="form" (ngSubmit)="createGroup()">
+        <h3>إنشاء جروب جديد</h3>
+        <div class="groups-page__field">
+          <label>اسم الجروب *</label>
+          <input type="text" formControlName="name" maxlength="100" dir="rtl" placeholder="اسم الجروب"/>
+        </div>
+        <div class="groups-page__field">
+          <label>وصف (اختياري)</label>
+          <textarea formControlName="description" maxlength="500" rows="3" dir="rtl" placeholder="وصف مختصر للجروب"></textarea>
+        </div>
+        <div class="groups-page__form-actions">
+          <button type="submit" class="groups-page__submit" [disabled]="form.invalid || isSubmitting()">
+            @if (isSubmitting()) { جارٍ الإنشاء... } @else { إنشاء }
+          </button>
+          <button type="button" class="groups-page__cancel" (click)="cancelCreate()">إلغاء</button>
+        </div>
+      </form>
+    </div>
+  }
+
+  @if (isLoading()) {
+    <div class="groups-page__loading"><span class="groups-page__spinner"></span></div>
+  } @else if (groups().length) {
+    <div class="groups-page__grid">
+      @for (group of groups(); track group.id) {
+        <article class="group-card" (click)="openGroup(group.id)">
+          <div class="group-card__avatar">
+            @if (group.imageUrl) {
+              <img [src]="group.imageUrl" [alt]="group.name"/>
+            } @else {
+              {{ getInitial(group.name) }}
+            }
+          </div>
+
+          <div class="group-card__body">
+            <div class="group-card__header">
+              <h3 class="group-card__name">{{ group.name }}</h3>
+              @if (group.isLocked) {
+                <span class="group-card__locked">
+                  <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor">
+                    <path d="M12 1C8.676 1 6 3.676 6 7v1H4v15h16V8h-2V7c0-3.324-2.676-6-6-6zm0 9a2 2 0 1 1 0 4 2 2 0 0 1 0-4z"/>
+                  </svg>
+                </span>
+              }
+            </div>
+            @if (group.description) {
+              <p class="group-card__desc">{{ group.description }}</p>
+            }
+            <div class="group-card__footer">
+              <span class="group-card__members">
+                <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor">
+                  <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
+                </svg>
+                {{ group.membersCount }} عضو
+              </span>
+              @if (group.myMembership?.role === 'Admin') {
+                <span class="group-card__role">أدمن</span>
+              }
+            </div>
+          </div>
+        </article>
+      }
+    </div>
+  } @else {
+    <div class="groups-page__empty">
+      <svg viewBox="0 0 24 24" width="52" height="52" fill="none" stroke="#ddc8b4" stroke-width="1.5">
+        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+        <circle cx="9" cy="7" r="4"/>
+        <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+        <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+      </svg>
+      <p>لا توجد جروبات بعد</p>
+      <span>أنشئ جروبك الأول وابدأ المحادثة</span>
+    </div>
+  }
+</div>
