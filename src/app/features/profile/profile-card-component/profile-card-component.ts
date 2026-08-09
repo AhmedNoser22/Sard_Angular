@@ -3,6 +3,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Profile } from '../../../core/models/profile/profile.model';
 import { ProfileService } from '../../../core/services/profile-service';
 import { DatePipe } from '@angular/common';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-profile-card',
@@ -15,6 +16,8 @@ export class ProfileCardComponent {
   private readonly profileService = inject(ProfileService);
   private readonly fb = inject(FormBuilder);
 
+  private title = inject(Title);
+
   profile = input.required<Profile>();
   profileUpdated = output<void>();
 
@@ -22,10 +25,13 @@ export class ProfileCardComponent {
   isLoading = signal(false);
   errorMessage = signal('');
 
+  
   imageLoadError = signal(false);
 
   displayNameClean = computed(() => this.sanitizeName(this.profile()?.displayName ?? ''));
-
+  ngOnDestroy(): void {
+    this.title.setTitle('سرد');
+  }
   initials = computed(() => {
     const name = this.displayNameClean();
     if (!name) return '؟';
@@ -104,11 +110,15 @@ export class ProfileCardComponent {
     const file = (event.target as HTMLInputElement).files?.[0];
     if (!file) return;
 
-    this.imageLoadError.set(false);
+    const url = URL.createObjectURL(file);
+
 
     this.profileService.updateProfileImage(file).subscribe({
       next: () => this.profileUpdated.emit(),
       error: () => this.errorMessage.set('حدث خطأ في رفع الصورة')
     });
+
+    const img = document.querySelector('.profile-card__photo') as HTMLImageElement;
+    if (img) img.src = url;
   }
 }

@@ -75,9 +75,7 @@
           </button>
         </div>
         }
-        } @else {
-        <p class="chat-sidebar__mutuals-empty">مفيش حد متاح للإضافة دلوقتي</p>
-        }
+        } 
       </div>
       }
 
@@ -96,7 +94,7 @@
             <div class="member-row__info">
               <span class="member-row__name">{{ member.displayName }}</span>
               @if (isOwnerOf(member)) {
-              <span class="member-row__badge member-row__badge--owner">المؤسس</span>
+              <span class="member-row__badge member-row__badge--owner">المالك</span>
               } @else if (member.role === 'Admin') {
               <span class="member-row__badge member-row__badge--admin">أدمن</span>
               }
