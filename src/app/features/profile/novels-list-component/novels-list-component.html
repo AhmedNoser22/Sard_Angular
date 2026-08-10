@@ -8,105 +8,130 @@
   </div>
 
   @if (novels().length) {
-    <div class="novels-list__grid">
-      @for (novel of novels(); track novel.id) {
-        <article class="novel-card" (click)="openNovel(novel)">
-          <div class="novel-card__cover-wrap">
-            @if (novel.coverImageUrl) {
-              <img class="novel-card__cover" [src]="novel.coverImageUrl" [alt]="novel.title" />
-            } @else {
-              <div class="novel-card__cover novel-card__cover--placeholder">
-                <span>{{ novel.title.charAt(0) }}</span>
-              </div>
-            }
-            <span class="novel-card__status novel-card__status--{{ novel.status }}">
-              {{ getStatusLabel(novel.status) }}
-            </span>
+  <div class="novels-list__grid">
+    @for (novel of novels(); track novel.id) {
+    <article class="novel-card" (click)="openNovel(novel)">
+      <div class="novel-card__cover-wrap">
+        @if (novel.coverImageUrl) {
+        <img class="novel-card__cover" [src]="novel.coverImageUrl" [alt]="novel.title" />
+        } @else {
+        <div class="novel-card__cover novel-card__cover--placeholder">
+          <span>{{ novel.title.charAt(0) }}</span>
+        </div>
+        }
+
+        <span class="novel-card__status novel-card__status--{{ novel.status }}">
+          {{ getStatusLabel(novel.status) }}
+        </span>
+
+        @if (confirmingDeleteId() === novel.id) {
+        <div class="novel-card__confirm-delete" (click)="$event.stopPropagation()">
+          <p>تأكيد الحذف؟</p>
+          <div class="novel-card__confirm-actions">
+            <button type="button" (click)="confirmDelete($event, novel.id)" [disabled]="deletingNovelId() === novel.id">
+              @if (deletingNovelId() === novel.id) { جارٍ الحذف... } @else { حذف }
+            </button>
+            <button type="button" (click)="cancelDelete($event)">إلغاء</button>
           </div>
+        </div>
+        } @else {
+        <button type="button" class="novel-card__delete-btn" (click)="askDelete($event, novel.id)"
+          aria-label="حذف الرواية">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
+            <path
+              d="M18.3 5.71L12 12l6.3 6.29-1.41 1.42L10.59 13.4 4.3 19.71 2.88 18.3 9.17 12 2.88 5.71 4.3 4.29l6.29 6.3 6.3-6.3z" />
+          </svg>
+        </button>
+        }
+      </div>
 
-          <div class="novel-card__body">
-            <h3 class="novel-card__title">{{ novel.title }}</h3>
+      <div class="novel-card__body">
+        <h3 class="novel-card__title">{{ novel.title }}</h3>
 
-            @if (novel.description) {
-              <p class="novel-card__desc">{{ novel.description }}</p>
-            }
+        @if (novel.description) {
+        <p class="novel-card__desc">{{ novel.description }}</p>
+        }
 
-            <div class="novel-card__meta">
-              <span>{{ novel.chaptersCount }} فصل</span>
-              @if (novel.status === 'Published') {
-                <span class="novel-card__price">{{ novel.price > 0 ? (novel.price + ' ج.م') : 'مجانية' }}</span>
-              }
-            </div>
+        <div class="novel-card__meta">
+          <span>{{ novel.chaptersCount }} فصل</span>
+          @if (novel.status === 'Published') {
+          <span class="novel-card__price">{{ novel.price > 0 ? (novel.price + ' ج.م') : 'مجانية' }}</span>
+          }
+        </div>
 
-            @if (novel.lastReadChapterId) {
-              <span class="novel-card__continue">تابع القراءة من حيث توقفت</span>
-            }
-          </div>
-        </article>
-      }
-    </div>
+        @if (novel.lastReadChapterId) {
+        <span class="novel-card__continue">تابع القراءة من حيث توقفت</span>
+        }
+      </div>
+    </article>
+    }
+  </div>
   } @else {
-    <div class="novels-list__empty">
-      <p>لا توجد روايات بعد. ابدأ بكتابة روايتك الأولى.</p>
-    </div>
+  <div class="novels-list__empty">
+    <p>لا توجد روايات بعد. ابدأ بكتابة روايتك الأولى.</p>
+  </div>
   }
 </section>
 
 @if (isCreating()) {
-  <div class="novel-modal-overlay" (click)="cancelCreate()">
-    <div class="novel-modal" (click)="$event.stopPropagation()">
-      <div class="novel-modal__header">
-        <h3>رواية جديدة</h3>
-        <button type="button" class="novel-modal__close" (click)="cancelCreate()">
-          <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
-            <path d="M18.3 5.71L12 12l6.3 6.29-1.41 1.42L10.59 13.4 4.3 19.71 2.88 18.3 9.17 12 2.88 5.71 4.3 4.29l6.29 6.3 6.3-6.3z"/>
-          </svg>
-        </button>
+<div class="novel-modal-overlay" (click)="cancelCreate()">
+  <div class="novel-modal" (click)="$event.stopPropagation()">
+    <div class="novel-modal__header">
+      <h3>رواية جديدة</h3>
+      <button type="button" class="novel-modal__close" (click)="cancelCreate()">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+          <path
+            d="M18.3 5.71L12 12l6.3 6.29-1.41 1.42L10.59 13.4 4.3 19.71 2.88 18.3 9.17 12 2.88 5.71 4.3 4.29l6.29 6.3 6.3-6.3z" />
+        </svg>
+      </button>
+    </div>
+
+    <form class="novel-modal__form" [formGroup]="form" (ngSubmit)="createNovel()">
+      <div class="novel-modal__cover-field">
+        <label class="novel-modal__cover-upload" for="coverImage">
+          @if (coverPreview()) {
+          <img [src]="coverPreview()" alt="غلاف الرواية" />
+          } @else {
+          <div class="novel-modal__cover-placeholder">
+            <svg viewBox="0 0 24 24" width="26" height="26" fill="currentColor">
+              <path
+                d="M19 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2zM5 19l4-5 3 3.5L16 12l3 7H5z" />
+            </svg>
+            <span>إضافة غلاف</span>
+          </div>
+          }
+        </label>
+        <input id="coverImage" type="file" accept="image/*" class="novel-modal__cover-input"
+          (change)="onCoverSelected($event)" />
       </div>
 
-      <form class="novel-modal__form" [formGroup]="form" (ngSubmit)="createNovel()">
-        <div class="novel-modal__cover-field">
-          <label class="novel-modal__cover-upload" for="coverImage">
-            @if (coverPreview()) {
-              <img [src]="coverPreview()" alt="غلاف الرواية" />
-            } @else {
-              <div class="novel-modal__cover-placeholder">
-                <svg viewBox="0 0 24 24" width="26" height="26" fill="currentColor">
-                  <path d="M19 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2zM5 19l4-5 3 3.5L16 12l3 7H5z"/>
-                </svg>
-                <span>إضافة غلاف</span>
-              </div>
-            }
-          </label>
-          <input id="coverImage" type="file" accept="image/*" class="novel-modal__cover-input" (change)="onCoverSelected($event)" />
-        </div>
-
-        <div class="novel-modal__field">
-          <label for="title">عنوان الرواية</label>
-          <input id="title" type="text" formControlName="title" maxlength="200" placeholder="اكتب عنوانًا يليق بها..." />
-          @if (form.get('title')?.invalid && form.get('title')?.touched) {
-            <span class="novel-modal__error">العنوان مطلوب</span>
-          }
-        </div>
-
-        <div class="novel-modal__field">
-          <label for="description">وصف مختصر</label>
-          <textarea id="description" formControlName="description" maxlength="1000" rows="3" placeholder="اختياري"></textarea>
-        </div>
-
-        @if (errorMessage()) {
-          <p class="novel-modal__error novel-modal__error--general">{{ errorMessage() }}</p>
+      <div class="novel-modal__field">
+        <label for="title">عنوان الرواية</label>
+        <input id="title" type="text" formControlName="title" maxlength="200" placeholder="اكتب عنوانًا يليق بها..." />
+        @if (form.get('title')?.invalid && form.get('title')?.touched) {
+        <span class="novel-modal__error">العنوان مطلوب</span>
         }
+      </div>
 
-        <div class="novel-modal__actions">
-          <button type="submit" class="novel-modal__save" [disabled]="isLoading() || form.invalid">
-            @if (isLoading()) { جارٍ الإنشاء... } @else { إنشاء الرواية }
-          </button>
-          <button type="button" class="novel-modal__cancel" (click)="cancelCreate()" [disabled]="isLoading()">
-            إلغاء
-          </button>
-        </div>
-      </form>
-    </div>
+      <div class="novel-modal__field">
+        <label for="description">وصف مختصر</label>
+        <textarea id="description" formControlName="description" maxlength="1000" rows="3"
+          placeholder="اختياري"></textarea>
+      </div>
+
+      @if (errorMessage()) {
+      <p class="novel-modal__error novel-modal__error--general">{{ errorMessage() }}</p>
+      }
+
+      <div class="novel-modal__actions">
+        <button type="submit" class="novel-modal__save" [disabled]="isLoading() || form.invalid">
+          @if (isLoading()) { جارٍ الإنشاء... } @else { إنشاء الرواية }
+        </button>
+        <button type="button" class="novel-modal__cancel" (click)="cancelCreate()" [disabled]="isLoading()">
+          إلغاء
+        </button>
+      </div>
+    </form>
   </div>
+</div>
 }

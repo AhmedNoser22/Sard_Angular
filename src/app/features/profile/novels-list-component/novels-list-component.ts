@@ -25,6 +25,9 @@ export class NovelsListComponent {
   coverPreview = signal<string | null>(null);
   private coverFile: File | null = null;
 
+  deletingNovelId = signal<number | null>(null);
+  confirmingDeleteId = signal<number | null>(null);
+
   form = this.fb.group({
     title: ['', [Validators.required, Validators.maxLength(200)]],
     description: ['', Validators.maxLength(1000)]
@@ -41,6 +44,31 @@ export class NovelsListComponent {
     this.coverPreview.set(null);
     this.coverFile = null;
     this.errorMessage.set('');
+  }
+  askDelete(event: Event, novelId: number): void {
+    event.stopPropagation();
+    this.confirmingDeleteId.set(novelId);
+  }
+
+  cancelDelete(event: Event): void {
+    event.stopPropagation();
+    this.confirmingDeleteId.set(null);
+  }
+
+  confirmDelete(event: Event, novelId: number): void {
+    event.stopPropagation();
+    this.deletingNovelId.set(novelId);
+    this.novelService.deleteNovel(novelId).subscribe({
+      next: () => {
+        this.deletingNovelId.set(null);
+        this.confirmingDeleteId.set(null);
+        this.novelChanged.emit();
+      },
+      error: () => {
+        this.deletingNovelId.set(null);
+        this.errorMessage.set('حدث خطأ في حذف الرواية');
+      }
+    });
   }
 
   onCoverSelected(event: Event): void {
