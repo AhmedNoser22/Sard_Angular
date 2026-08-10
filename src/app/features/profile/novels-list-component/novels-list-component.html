@@ -7,9 +7,9 @@
     </button>
   </div>
 
-  @if (novels().length) {
+  @if (localNovels().length) {
   <div class="novels-list__grid">
-    @for (novel of novels(); track novel.id) {
+    @for (novel of localNovels(); track novel.id) {
     <article class="novel-card" (click)="openNovel(novel)">
       <div class="novel-card__cover-wrap">
         @if (novel.coverImageUrl) {
