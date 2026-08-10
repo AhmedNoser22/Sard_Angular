@@ -28,12 +28,17 @@
   --sard-border: #3c2224;
 }
 
-// ---- الهيدر وزرار "رواية جديدة" ----
+:host * {
+  box-sizing: border-box;
+}
+
 .novels-list {
   &__header {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
     margin-bottom: 18px;
   }
 
@@ -60,16 +65,25 @@
     box-shadow: 0 6px 18px rgba(122, 46, 50, 0.28);
     transition: background 0.2s ease, transform 0.15s;
 
-    &:hover { background: var(--sard-primary-dark); transform: translateY(-1px); }
-    &:active { transform: translateY(0); }
+    &:hover {
+      background: var(--sard-primary-dark);
+      transform: translateY(-1px);
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
   }
 
-  &__add-icon { font-size: 16px; line-height: 1; }
+  &__add-icon {
+    font-size: 16px;
+    line-height: 1;
+  }
 
   &__grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 16px;
   }
 
   &__empty {
@@ -83,7 +97,6 @@
   }
 }
 
-// ---- كارت الرواية ----
 .novel-card {
   background: var(--sard-card);
   border: 1px solid var(--sard-border);
@@ -103,15 +116,22 @@
     position: relative;
     width: 100%;
     aspect-ratio: 3 / 4;
+    overflow: hidden;
     background: var(--sard-tan);
+    isolation: isolate;
   }
 
   &__cover {
+    position: absolute;
+    inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
+    object-position: center;
+    display: block;
 
     &--placeholder {
+      position: static;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -125,23 +145,38 @@
     position: absolute;
     top: 10px;
     right: 10px;
+    z-index: 2;
     font-size: 11px;
     font-weight: 700;
     padding: 4px 10px;
     border-radius: 999px;
-    background: rgba(255, 255, 255, 0.9);
+    background: rgba(255, 255, 255, 0.92);
     color: var(--sard-maroon);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
 
-    &--Published { background: #4c7a4c; color: #fff; }
-    &--PendingPayment { background: #c98f2c; color: #fff; }
-    &--Draft { background: var(--sard-tan); color: var(--sard-maroon); }
+    &--Published {
+      background: #4c7a4c;
+      color: #fff;
+    }
+
+    &--PendingPayment {
+      background: #c98f2c;
+      color: #fff;
+    }
+
+    &--Draft {
+      background: var(--sard-tan);
+      color: var(--sard-maroon);
+    }
   }
 
-  &__body { padding: 14px 16px 16px; }
+  &__body {
+    padding: 12px 14px 14px;
+  }
 
   &__title {
     margin: 0 0 6px;
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 700;
     color: var(--sard-maroon);
     overflow: hidden;
@@ -151,7 +186,7 @@
 
   &__desc {
     margin: 0 0 10px;
-    font-size: 13px;
+    font-size: 12.5px;
     line-height: 1.6;
     color: var(--sard-text-light);
     display: -webkit-box;
@@ -164,11 +199,15 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: 8px;
     font-size: 12px;
     color: var(--sard-text-light);
   }
 
-  &__price { font-weight: 700; color: var(--sard-primary-dark); }
+  &__price {
+    font-weight: 700;
+    color: var(--sard-primary-dark);
+  }
 
   &__continue {
     display: inline-block;
@@ -179,9 +218,6 @@
   }
 }
 
-// ---- المودال: "رواية جديدة" ----
-// أسماء الـ classes هنا مطابقة بالظبط لملف الـ HTML بتاعك
-// (novel-modal-overlay هو الخلفية، novel-modal هو الصندوق الأبيض نفسه)
 .novel-modal-overlay {
   position: fixed;
   inset: 0;
@@ -207,7 +243,7 @@
   display: flex;
   flex-direction: column;
   gap: 16px;
-  animation: novel-pop-in 0.25s cubic-bezier(.2,.8,.3,1.1) both;
+  animation: novel-pop-in 0.25s cubic-bezier(.2, .8, .3, 1.1) both;
   font-family: 'Amiri', serif;
   direction: rtl;
 
@@ -216,12 +252,18 @@
     align-items: center;
     justify-content: space-between;
 
-    h3 { margin: 0; font-size: 19px; font-weight: 700; color: var(--sard-maroon); }
+    h3 {
+      margin: 0;
+      font-size: 19px;
+      font-weight: 700;
+      color: var(--sard-maroon);
+    }
   }
 
   &__close {
     width: 30px;
     height: 30px;
+    flex-shrink: 0;
     border: none;
     background: var(--sard-bg);
     color: var(--sard-text-light);
@@ -231,7 +273,11 @@
     align-items: center;
     justify-content: center;
     transition: background 0.2s, color 0.2s;
-    &:hover { background: var(--sard-tan); color: var(--sard-maroon); }
+
+    &:hover {
+      background: var(--sard-tan);
+      color: var(--sard-maroon);
+    }
   }
 
   &__form {
@@ -240,7 +286,6 @@
     gap: 16px;
   }
 
-  // ---- غلاف الرواية ----
   &__cover-field {
     display: flex;
     justify-content: center;
@@ -249,6 +294,7 @@
   &__cover-upload {
     width: 140px;
     height: 140px;
+    flex-shrink: 0;
     border-radius: 16px;
     border: 1.5px dashed var(--sard-border);
     background: var(--sard-bg);
@@ -259,9 +305,18 @@
     overflow: hidden;
     transition: border-color 0.2s, background 0.2s;
 
-    &:hover { border-color: var(--sard-primary); background: var(--sard-amber-glow); }
+    &:hover {
+      border-color: var(--sard-primary);
+      background: var(--sard-amber-glow);
+    }
 
-    img { width: 100%; height: 100%; object-fit: cover; }
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+    }
   }
 
   &__cover-placeholder {
@@ -274,18 +329,25 @@
     font-weight: 700;
   }
 
-  &__cover-input { display: none; }
+  &__cover-input {
+    display: none;
+  }
 
-  // ---- حقول النص ----
   &__field {
     display: flex;
     flex-direction: column;
     gap: 6px;
     text-align: right;
 
-    label { font-size: 13px; font-weight: 700; color: var(--sard-maroon); }
+    label {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--sard-maroon);
+    }
 
-    input, textarea {
+    input,
+    textarea {
+      width: 100%;
       font-family: inherit;
       font-size: 15px;
       color: var(--sard-text);
@@ -295,8 +357,16 @@
       padding: 11px 14px;
       resize: vertical;
       transition: border-color 0.2s, box-shadow 0.2s;
-      &:focus { outline: none; border-color: var(--sard-primary); box-shadow: 0 0 0 3px var(--sard-amber-glow); }
-      &::placeholder { color: var(--sard-tan); }
+
+      &:focus {
+        outline: none;
+        border-color: var(--sard-primary);
+        box-shadow: 0 0 0 3px var(--sard-amber-glow);
+      }
+
+      &::placeholder {
+        color: var(--sard-tan);
+      }
     }
   }
 
@@ -312,7 +382,11 @@
     }
   }
 
-  &__actions { display: flex; gap: 10px; margin-top: 4px; }
+  &__actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 4px;
+  }
 
   &__save {
     flex: 1;
@@ -326,8 +400,15 @@
     border-radius: 999px;
     cursor: pointer;
     transition: background 0.2s;
-    &:hover:not(:disabled) { background: var(--sard-primary-dark); }
-    &:disabled { opacity: 0.6; cursor: not-allowed; }
+
+    &:hover:not(:disabled) {
+      background: var(--sard-primary-dark);
+    }
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
   }
 
   &__cancel {
@@ -340,20 +421,89 @@
     padding: 11px 22px;
     border-radius: 999px;
     cursor: pointer;
-    &:hover:not(:disabled) { background: var(--sard-bg); }
+
+    &:hover:not(:disabled) {
+      background: var(--sard-bg);
+    }
   }
 }
 
-@keyframes novel-fade-in { from { opacity: 0; } to { opacity: 1; } }
-@keyframes novel-pop-in {
-  from { opacity: 0; transform: translateY(14px) scale(0.96); }
-  to { opacity: 1; transform: translateY(0) scale(1); }
+@keyframes novel-fade-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
+
+@keyframes novel-pop-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.96);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
 @keyframes novel-rise {
-  from { opacity: 0; transform: translateY(8px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 480px) {
+  .novels-list {
+    &__title {
+      font-size: 19px;
+    }
+
+    &__add-trigger {
+      padding: 8px 16px;
+      font-size: 13px;
+    }
+
+    &__grid {
+      grid-template-columns: repeat(auto-fill, minmax(135px, 1fr));
+      gap: 12px;
+    }
+  }
+
+  .novel-card {
+    &__body {
+      padding: 10px 11px 12px;
+    }
+
+    &__title {
+      font-size: 13.5px;
+    }
+
+    &__desc {
+      font-size: 11.5px;
+    }
+  }
+
+  .novel-modal {
+    padding: 20px 18px 18px;
+    border-radius: 18px;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .novel-card, .novel-modal-overlay, .novel-modal { animation: none !important; }
+
+  .novel-card,
+  .novel-modal-overlay,
+  .novel-modal {
+    animation: none !important;
+  }
 }
