@@ -1,7 +1,7 @@
 import { Injectable, NgZone, inject } from '@angular/core';
 import * as signalR from '@microsoft/signalr';
 import { Subject } from 'rxjs';
-import { environment } from '../../../environments/environment.development';
+import { environment } from '../../../environments/environment';
 import { Group, GroupMessage } from '../models/group/group.model';
 
 @Injectable({ providedIn: 'root' })

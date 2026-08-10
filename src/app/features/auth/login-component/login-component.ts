@@ -2,7 +2,7 @@ import { Component, inject, signal, AfterViewInit } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../core/services/authService';
-import { environment } from '../../../../environments/environment.development';
+import { environment } from '../../../../environments/environment';
 import { LoginRequest } from '../../../core/models/auth/login.model';
 
 @Component({

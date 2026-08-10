@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { environment } from '../../../environments/environment.development';
+import { environment } from '../../../environments/environment';
 import { AdminStats } from '../models/admin/admin-stats.model';
 import { AdminUser, AdminUserDetail } from '../models/admin/admin-user.model';
 import { AdminPost } from '../models/admin/admin-post.model';

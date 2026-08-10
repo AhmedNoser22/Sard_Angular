@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { environment } from '../../../environments/environment.development';
+import { environment } from '../../../environments/environment';
 import { NovelSummary } from '../models/profile/novel-summary.model';
 import { Chapter } from '../models/novel/chapter.model';
 import { CreateNovelRequest } from '../models/novel/create-novel.model';

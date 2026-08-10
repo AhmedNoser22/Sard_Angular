@@ -3,7 +3,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../core/services/authService';
 import { EmailStateService } from '../../../core/services/email-state.service';
-import { environment } from '../../../../environments/environment.development';
+import { environment } from '../../../../environments/environment';
 import { RegisterRequest } from '../../../core/models/auth/register.model';
 
 @Component({
