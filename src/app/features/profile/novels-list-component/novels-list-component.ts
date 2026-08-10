@@ -1,4 +1,4 @@
-import { Component, inject, input, output, signal } from '@angular/core';
+import { Component, effect, inject, input, output, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NovelSummary } from '../../../core/models/profile/novel-summary.model';
@@ -18,6 +18,12 @@ export class NovelsListComponent {
 
   novels = input.required<NovelSummary[]>();
   novelChanged = output<void>();
+
+  localNovels = signal<NovelSummary[]>([]);
+
+  private readonly syncNovels = effect(() => {
+    this.localNovels.set(this.novels());
+  });
 
   isCreating = signal(false);
   isLoading = signal(false);
@@ -45,6 +51,7 @@ export class NovelsListComponent {
     this.coverFile = null;
     this.errorMessage.set('');
   }
+
   askDelete(event: Event, novelId: number): void {
     event.stopPropagation();
     this.confirmingDeleteId.set(novelId);
@@ -58,13 +65,18 @@ export class NovelsListComponent {
   confirmDelete(event: Event, novelId: number): void {
     event.stopPropagation();
     this.deletingNovelId.set(novelId);
+
+    const previous = this.localNovels();
+    this.localNovels.update(list => list.filter(n => n.id !== novelId));
+    this.confirmingDeleteId.set(null);
+
     this.novelService.deleteNovel(novelId).subscribe({
       next: () => {
         this.deletingNovelId.set(null);
-        this.confirmingDeleteId.set(null);
-        this.novelChanged.emit();
+        this.novelChanged.emit(); // يبلغ الأب يزامن نسخته هو كمان
       },
       error: () => {
+        this.localNovels.set(previous); // رجّع الرواية لو الحذف فشل
         this.deletingNovelId.set(null);
         this.errorMessage.set('حدث خطأ في حذف الرواية');
       }
