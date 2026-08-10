@@ -48,6 +48,10 @@
     display: none;
   }
 
+  &__sidebar-close {
+    display: none;
+  }
+
   &__sidebar {
     width: 300px;
     flex-shrink: 0;
@@ -67,6 +71,7 @@
     &--head {
       flex-shrink: 0;
       padding: 18px 18px;
+      position: relative;
     }
 
     &--body {
@@ -276,29 +281,54 @@
     font-size: 15px;
     text-align: center;
   }
+
+  &__placeholder-new-btn {
+    background: var(--sard-primary);
+    color: #fff;
+    border: none;
+    font-family: inherit;
+    font-weight: 700;
+    font-size: 13.5px;
+    padding: 9px 20px;
+    border-radius: 999px;
+    cursor: pointer;
+
+    &:hover {
+      background: var(--sard-primary-dark);
+    }
+  }
 }
 
-// ===== Responsive: sidebar becomes a full-screen off-canvas drawer =====
+/* =========================================================
+   RESPONSIVE — sidebar becomes a full-screen off-canvas drawer.
+   !important is used on the handful of properties that control
+   layout mode / positioning, so this block always wins even if
+   older conflicting rules exist elsewhere in the stylesheet.
+   ========================================================= */
 @media (max-width: 860px) {
   .novel-page {
-    display: block;
+    display: block !important;
     height: 100%;
     padding: 0;
     overflow: hidden;
     position: relative;
 
     &__mobile-bar {
+      display: flex !important;
       position: fixed;
       inset-inline: 0;
       top: 0;
+      left: 0;
+      right: 0;
       z-index: 40;
-      display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 10px;
       padding: 10px 14px;
       background: var(--sard-bg);
       border-bottom: 1px solid var(--sard-border);
+      box-sizing: border-box;
+      width: 100%;
     }
 
     &__sidebar-toggle {
@@ -328,41 +358,59 @@
     }
 
     &__backdrop {
+      display: block !important;
       position: fixed;
       inset: 0;
-      background: rgba(30, 17, 18, 0.4);
+      background: rgba(30, 17, 18, 0.45);
       z-index: 50;
-      display: block;
-      animation: fadeIn 0.15s ease;
+      animation: novelPageFadeIn 0.15s ease;
     }
 
-    // key fix: fixed (not absolute) so it's positioned against the
-    // viewport, not against .novel-page which is itself constrained
+    &__sidebar-close {
+      display: flex !important;
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      align-items: center;
+      justify-content: center;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      border: none;
+      background: var(--sard-bg);
+      color: var(--sard-text-light);
+      cursor: pointer;
+    }
+
+    /* key fix: fixed (not absolute/static/relative), so the drawer
+       is positioned against the real viewport, full height & width,
+       instead of against a constrained ancestor. */
     &__sidebar {
-      position: fixed;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      left: auto;
-      height: 100dvh;
-      width: min(86vw, 320px);
+      display: flex !important;
+      position: fixed !important;
+      top: 0 !important;
+      right: 0 !important;
+      left: auto !important;
+      bottom: 0 !important;
+      height: 100dvh !important;
+      width: min(88vw, 320px) !important;
       max-width: 320px;
+      margin: 0 !important;
       z-index: 60;
-      padding: 14px;
-      margin: 0;
-      transform: translateX(100%);
+      padding: 16px 14px 14px;
+      transform: translateX(100%) !important;
       transition: transform 0.25s ease;
       background: var(--sard-bg);
       box-shadow: -12px 0 30px rgba(30, 17, 18, 0.18);
       box-sizing: border-box;
 
       &.open {
-        transform: translateX(0);
+        transform: translateX(0) !important;
       }
     }
 
     &__panel--head {
-      padding: 14px 16px;
+      padding: 40px 14px 14px;
     }
 
     &__panel--body {
@@ -370,6 +418,7 @@
     }
 
     &__editor {
+      display: block !important;
       height: 100%;
       padding: 60px 10px 10px;
       box-sizing: border-box;
@@ -399,7 +448,7 @@
   }
 }
 
-@keyframes fadeIn {
+@keyframes novelPageFadeIn {
   from {
     opacity: 0;
   }

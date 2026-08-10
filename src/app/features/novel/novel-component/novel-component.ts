@@ -88,6 +88,7 @@ export class NovelComponent implements OnInit {
 
   openChapter(chapter: Chapter): void {
     this.activeChapter.set(chapter);
+    this.isCreatingChapter.set(false);
     this.novelService.setLastReadChapter(this.novelId(), chapter.id).subscribe();
     this.router.navigate(['/novel', this.novelId(), 'chapter', chapter.id], { replaceUrl: true });
     this.isSidebarOpen.set(false);
@@ -113,6 +114,10 @@ export class NovelComponent implements OnInit {
 
   toggleSidebar(): void {
     this.isSidebarOpen.update(v => !v);
+  }
+
+  closeSidebar(): void {
+    this.isSidebarOpen.set(false);
   }
 
   setSidebarTab(tab: SidebarTab): void {
