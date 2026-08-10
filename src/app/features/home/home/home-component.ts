@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { environment } from '../../../../environments/environment';
 
@@ -41,7 +42,7 @@ interface AnalysisResult {
 export class HomeComponent implements OnInit, OnDestroy {
 
   // ─── Nav / Router ─────────────────────────────────────────────────────────
-  constructor(private router: Router, private cdr: ChangeDetectorRef) { }
+  constructor(private router: Router, private cdr: ChangeDetectorRef, private http: HttpClient) { }
 
   goToLogin(): void {
     this.router.navigate(['/auth/login']);
@@ -122,7 +123,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     { text: 'الجمال سينقذ العالم.', author: 'فيودور دوستويفسكي', era: 'الأدب الروسي · ١٨٦٩', initial: 'د' },
     { text: 'إذا لم تزد شيئًا على الدنيا، كنت أنت زائدًا عليها.', author: 'مصطفى صادق الرافعي', era: 'الأدب العربي الكلاسيكي', initial: 'ر' },
     { text: 'في حياة كل إنسان لحظة لا تعود الحياة بعدها كما كانت قبلها.', author: 'أحمد خالد توفيق', era: 'خواطر', initial: 'ف'},
-    { text: 'عليَّ أن أحيا بلا أحلام.',  author: 'أحمد خالد توفيق', era: 'يوتوبيا', initial: 'ع'},
+    { text: 'عليَّ أن أحيا بلا أحلام.',  author: 'أحمد خالد توفيق', era: 'يوتوبيا', initial: 'ع'},
     { text: 'كل الناس يعيشون حياتهم، لكن الكُتّاب يعيشونها مرتين.', author: 'نجيب محفوظ', era: 'نوبل الآداب · ١٩٨٨', initial: 'ن' },
     {text: 'من لديه سبب يعيش من أجله، يستطيع تحمل أي كيف.', author: 'فريدريش نيتشه', era: 'الفلسفة الألمانية',initial: 'ن'},
   ];
@@ -149,63 +150,24 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.analysisResult = null;
     this.analysisError = '';
 
-    const prompt = `
-أنت ناقد أدبي عربي متخصص.
-قيّم الفكرة التالية وأرجع JSON فقط بدون أي نص إضافي أو backticks.
-
-عنوان الرواية: ${this.novelTitle}
-وصف الرواية: ${this.novelDescription}
-
-الشكل المطلوب حرفياً:
-{
-  "genre": "نوع الرواية باختصار",
-  "score": 75,
-  "strengths": ["نقطة 1", "نقطة 2", "نقطة 3"],
-  "weaknesses": ["نقطة 1", "نقطة 2", "نقطة 3"],
-  "suggestions": ["اقتراح 1", "اقتراح 2", "اقتراح 3"],
-  "verdict": "رأي نهائي جملة أو اتنين بس"
-}
-`;
-
     try {
+      const result = await fetch(`${environment.apiUrl}/AIHome/analyze-novel`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          novelTitle: this.novelTitle,
+          novelDescription: this.novelDescription
+        })
+      });
 
-      const response = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${environment.geminiKey}`,
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            contents: [{ parts: [{ text: prompt }] }]
-          })
-        }
-      );
+      const data = await result.json();
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        this.analysisError = data.error?.message || 'حدث خطأ أثناء الاتصال بـ Gemini.';
+      if (!result.ok) {
+        this.analysisError = data?.message || 'حدث خطأ أثناء التحليل.';
         return;
       }
 
-      const candidate = data?.candidates?.[0];
-
-      if (!candidate) {
-        this.analysisError = 'Gemini لم يرجع أي رد.';
-        return;
-      }
-
-      const parts = candidate.content?.parts || [];
-      let raw = parts.map((p: any) => p.text || '').join('').trim();
-
-      // نظف الـ backticks لو Gemini بعتها رغم التعليمات
-      raw = raw.replace(/```json|```/g, '').trim();
-
-      if (!raw) {
-        this.analysisError = 'الرد وصل لكن بدون نص.';
-        return;
-      }
-
-      this.analysisResult = JSON.parse(raw) as AnalysisResult;
+      this.analysisResult = data as AnalysisResult;
       this.cdr.detectChanges();
 
     } catch (err) {
