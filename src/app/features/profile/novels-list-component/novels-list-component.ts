@@ -21,14 +21,14 @@ export class NovelsListComponent {
 
   localNovels = signal<NovelSummary[]>([]);
 
-  private readonly deletedIds = signal<Set<number>>(new Set());
+  private initialized = false;
 
   private readonly syncNovels = effect(() => {
     const incoming = this.novels();
-    const deleted = this.deletedIds();
-    this.localNovels.set(
-      deleted.size ? incoming.filter(n => !deleted.has(n.id)) : incoming
-    );
+    if (!this.initialized && incoming.length >= 0) {
+      this.localNovels.set(incoming);
+      this.initialized = true;
+    }
   });
 
   isCreating = signal(false);
@@ -78,12 +78,6 @@ export class NovelsListComponent {
 
     this.novelService.deleteNovel(novelId).subscribe({
       next: () => {
-
-        this.deletedIds.update(set => {
-          const next = new Set(set);
-          next.add(novelId);
-          return next;
-        });
         this.deletingNovelId.set(null);
         this.novelChanged.emit();
       },
