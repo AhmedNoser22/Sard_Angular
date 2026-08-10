@@ -19,6 +19,10 @@ export class NovelService {
     return this.http.post<NovelSummary>(this.baseUrl, request);
   }
 
+  deleteNovel(novelId: number): Observable<string> {
+    return this.http.delete<string>(`${this.baseUrl}/${novelId}`);
+  }
+
   updateNovel(novelId: number, request: UpdateNovelRequest): Observable<NovelSummary> {
     return this.http.put<NovelSummary>(`${this.baseUrl}/${novelId}`, request);
   }
@@ -45,6 +49,7 @@ export class NovelService {
   setLastReadChapter(novelId: number, chapterId: number): Observable<string> {
     return this.http.put<string>(`${this.baseUrl}/${novelId}/last-chapter/${chapterId}`, {});
   }
+
   updateSettings(novelId: number, request: UpdateNovelSettingsRequest): Observable<NovelSummary> {
     return this.http.put<NovelSummary>(`${this.baseUrl}/${novelId}/settings`, request);
   }
@@ -57,6 +62,7 @@ export class NovelService {
     return this.http.post<{ iframeUrl: string }>(
       `${this.baseUrl}/${novelId}/initiate-publish`, {});
   }
+
   purchaseNovel(novelId: number): Observable<{ checkoutUrl: string }> {
     return this.http.post<{ checkoutUrl: string }>(`${this.baseUrl}/${novelId}/purchase`, {});
   }
@@ -64,6 +70,7 @@ export class NovelService {
   hasPurchased(novelId: number): Observable<{ hasPurchased: boolean }> {
     return this.http.get<{ hasPurchased: boolean }>(`${this.baseUrl}/${novelId}/has-purchased`);
   }
+
   getPurchasedNovels(): Observable<PublishedNovel[]> {
     return this.http.get<PublishedNovel[]>(`${this.baseUrl}/purchased`);
   }
@@ -73,6 +80,7 @@ export class NovelService {
       responseType: 'blob'
     });
   }
+
   confirmPurchase(novelId: number, sessionId: string): Observable<any> {
     return this.http.post(`${this.baseUrl}/${novelId}/confirm-purchase`, { sessionId });
   }

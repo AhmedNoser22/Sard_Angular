@@ -7,7 +7,8 @@
   <div class="profile-page__inner">
     <app-profile-card [profile]="p" (profileUpdated)="onProfileUpdated()" />
     <app-profile-stats [profile]="p" />
-    <app-highlights [highlights]="p.highlights" [showBackLink]="false" (highlightChanged)="onProfileUpdated()" />
+    <app-highlights [showBackLink]="false" (highlightChanged)="onProfileUpdated()">
+    </app-highlights>
     <div id="novels">
     </div>
     <app-favorite-novels [favoriteNovels]="p.favoriteNovels" (changed)="onProfileUpdated()" />

@@ -1,4 +1,4 @@
-import { Component, inject, input, output, signal, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, inject, input, output, signal, OnInit } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { DatePipe } from '@angular/common';
 import { Highlight } from '../../../core/models/profile/Highlight.model';
@@ -11,14 +11,13 @@ import { ProfileService } from '../../../core/services/profile-service';
   templateUrl: './highlights-component.html',
   styleUrl: './highlights-component.scss'
 })
-export class HighlightsComponent implements OnInit, OnChanges {
+export class HighlightsComponent implements OnInit {
   private readonly profileService = inject(ProfileService);
   private readonly fb = inject(FormBuilder);
 
-  // Kept for embedded usage (e.g. inside the profile page), but the component
-  // no longer *relies* on it — it always fetches its own full list on init,
-  // which is what fixes highlights not showing up when this is opened directly.
-  highlights = input<Highlight[]>([]);
+  // No longer synced via ngOnChanges — this component owns its own state
+  // once it fetches from the server, so a stale parent re-render can't
+  // ever overwrite a local delete/add again.
   showBackLink = input<boolean>(true);
   highlightChanged = output<void>();
 
@@ -28,6 +27,7 @@ export class HighlightsComponent implements OnInit, OnChanges {
   isAdding = signal(false);
   isClosing = signal(false);
   isLoading = signal(false);
+  errorMessage = signal('');
 
   form = this.fb.group({
     content: ['', [Validators.required, Validators.maxLength(1000)]],
@@ -37,14 +37,6 @@ export class HighlightsComponent implements OnInit, OnChanges {
 
   ngOnInit(): void {
     this.fetchHighlights();
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    // If a parent passes a fresher list after an update elsewhere on the page,
-    // reflect it — but this is now a bonus sync path, not the only one.
-    if (changes['highlights'] && this.highlights()?.length) {
-      this.localHighlights.set([...this.highlights()]);
-    }
   }
 
   private fetchHighlights(): void {
@@ -100,8 +92,18 @@ export class HighlightsComponent implements OnInit, OnChanges {
   deleteHighlight(id: number): void {
     const previous = this.localHighlights();
     this.localHighlights.update(list => list.filter(h => h.id !== id));
+    this.errorMessage.set('');
+
     this.profileService.deleteHighlight(id).subscribe({
-      error: () => this.localHighlights.set(previous)
+      next: () => {
+        // tell the parent (profile page, etc.) to refresh its own copy
+        // so it doesn't hand us a stale list again later
+        this.highlightChanged.emit();
+      },
+      error: () => {
+        this.localHighlights.set(previous);
+        this.errorMessage.set('حدث خطأ أثناء حذف الأثر');
+      }
     });
   }
 }

@@ -2,10 +2,10 @@ import { Component, inject, signal, OnInit } from '@angular/core';
 import { ProfileService } from '../../../core/services/profile-service';
 import { Profile } from '../../../core/models/profile/profile.model';
 import { ProfileCardComponent } from "../profile-card-component/profile-card-component";
-import { HighlightsComponent } from "../highlights-component/highlights-component";
 import { ProfileStatsComponent } from "../profile-stats-component/profile-stats-component";
 import { SettingsComponent } from '../../settings/settings-component/settings-component';
 import { FavoriteNovelsComponent } from "../components/favorite-novels/favorite-novels";
+import { HighlightsComponent } from '../highlights-component/highlights-component';
 
 @Component({
   selector: 'app-profile',
