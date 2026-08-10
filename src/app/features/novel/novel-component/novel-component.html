@@ -13,15 +13,21 @@
 <div class="novel-page">
 
   <div class="novel-page__mobile-bar">
+    <a [routerLink]="['/novel']" class="novel-page__mobile-back">
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+        <path d="M14 19l-7-7 7-7v14z" />
+      </svg>
+      رجوع
+    </a>
+    @if (novel(); as n) {
+    <span class="novel-page__mobile-title">{{ n.title }}</span>
+    }
     <button type="button" class="novel-page__sidebar-toggle" (click)="toggleSidebar()">
       <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
         <path d="M3 5h18v2H3zm0 6h18v2H3zm0 6h18v2H3z" />
       </svg>
-      الفصول والإعدادات
+      الفصول
     </button>
-    @if (novel(); as n) {
-    <span class="novel-page__mobile-title">{{ n.title }}</span>
-    }
   </div>
 
   @if (isSidebarOpen()) {
