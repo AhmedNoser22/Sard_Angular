@@ -25,7 +25,6 @@ export class NovelsListComponent {
 
   private readonly syncNovels = effect(() => {
     const incoming = this.novels();
-    console.log('🔥 novels input changed, length:', incoming.length, 'initialized:', this.initialized);
     if (!this.initialized && incoming.length >= 0) {
       this.localNovels.set(incoming);
       this.initialized = true;
@@ -80,7 +79,6 @@ export class NovelsListComponent {
     this.novelService.deleteNovel(novelId).subscribe({
       next: () => {
         this.deletingNovelId.set(null);
-        this.novelChanged.emit();
       },
       error: () => {
         this.localNovels.set(previous);
