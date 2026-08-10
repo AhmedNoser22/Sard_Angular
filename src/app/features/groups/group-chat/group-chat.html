@@ -75,7 +75,7 @@
           </button>
         </div>
         }
-        } 
+        }
       </div>
       }
 
@@ -134,6 +134,10 @@
       }
     </div>
   </div>
+  @if (showMembers()) {
+  <button type="button" class="chat-sidebar__backdrop" aria-label="إغلاق القائمة" (click)="showMembers.set(false)">
+  </button>
+  }
 
   <div class="chat-main">
     <header class="chat-header">
@@ -181,10 +185,8 @@
         <div class="chat-bubble__avatar">{{ getInitial(msg.senderName) }}</div>
         }
         <div class="chat-bubble-col">
-          <div class="chat-bubble"
-                [class.chat-bubble--mine]="isMyMessage(msg)"
-                [class.chat-bubble--deleted]="msg.isDeleted"
-                [class.chat-bubble--entering]="isRecentlyAdded(msg.id)"
+          <div class="chat-bubble" [class.chat-bubble--mine]="isMyMessage(msg)"
+            [class.chat-bubble--deleted]="msg.isDeleted" [class.chat-bubble--entering]="isRecentlyAdded(msg.id)"
             (mousedown)="!msg.isDeleted && onBubblePressStart(msg.id, $event)" (mouseup)="onBubblePressEnd()"
             (mouseleave)="onBubblePressEnd()" (touchstart)="!msg.isDeleted && onBubblePressStart(msg.id, $event)"
             (touchend)="onBubblePressEnd()" (touchmove)="onBubblePressEnd()">
