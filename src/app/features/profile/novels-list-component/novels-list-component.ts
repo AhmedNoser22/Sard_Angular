@@ -21,8 +21,14 @@ export class NovelsListComponent {
 
   localNovels = signal<NovelSummary[]>([]);
 
+  private readonly deletedIds = signal<Set<number>>(new Set());
+
   private readonly syncNovels = effect(() => {
-    this.localNovels.set(this.novels());
+    const incoming = this.novels();
+    const deleted = this.deletedIds();
+    this.localNovels.set(
+      deleted.size ? incoming.filter(n => !deleted.has(n.id)) : incoming
+    );
   });
 
   isCreating = signal(false);
@@ -72,11 +78,17 @@ export class NovelsListComponent {
 
     this.novelService.deleteNovel(novelId).subscribe({
       next: () => {
+
+        this.deletedIds.update(set => {
+          const next = new Set(set);
+          next.add(novelId);
+          return next;
+        });
         this.deletingNovelId.set(null);
-        this.novelChanged.emit(); // يبلغ الأب يزامن نسخته هو كمان
+        this.novelChanged.emit();
       },
       error: () => {
-        this.localNovels.set(previous); // رجّع الرواية لو الحذف فشل
+        this.localNovels.set(previous);
         this.deletingNovelId.set(null);
         this.errorMessage.set('حدث خطأ في حذف الرواية');
       }
