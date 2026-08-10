@@ -8,6 +8,8 @@ import { ChapterEditorComponent } from '../components/chapter-editor/chapter-edi
 import { NovelsListComponent } from '../../profile/novels-list-component/novels-list-component';
 import { NovelSettingsComponent } from "../components/novel-settings/novel-settings";
 
+type SidebarTab = 'chapters' | 'settings';
+
 @Component({
   selector: 'app-novel',
   standalone: true,
@@ -32,6 +34,7 @@ export class NovelComponent implements OnInit {
   isLoading = signal(true);
   isCreatingChapter = signal(false);
   isSidebarOpen = signal(false);
+  activeSidebarTab = signal<SidebarTab>('chapters');
 
   novelId = signal(0);
 
@@ -111,6 +114,11 @@ export class NovelComponent implements OnInit {
   toggleSidebar(): void {
     this.isSidebarOpen.update(v => !v);
   }
+
+  setSidebarTab(tab: SidebarTab): void {
+    this.activeSidebarTab.set(tab);
+  }
+
   onNovelUpdated(updated: NovelSummary): void {
     this.novel.set(updated);
   }

@@ -50,32 +50,54 @@
       }
     </div>
 
-    <div class="novel-page__panel novel-page__panel--chapters">
-      <div class="novel-page__chapters-header">
-        <span>الفصول</span>
-        <button type="button" class="novel-page__new-chapter-btn" (click)="startNewChapter()">+ جديد</button>
+    <div class="novel-page__panel novel-page__panel--body">
+
+      <div class="novel-page__tabs">
+        <button type="button" class="novel-page__tab" [class.active]="activeSidebarTab() === 'chapters'"
+          (click)="setSidebarTab('chapters')">
+          الفصول
+        </button>
+        <button type="button" class="novel-page__tab" [class.active]="activeSidebarTab() === 'settings'"
+          (click)="setSidebarTab('settings')">
+          الإعدادات
+        </button>
       </div>
-      <div class="novel-page__panel novel-page__panel--settings">
+
+      @if (activeSidebarTab() === 'settings') {
+
+      <div class="novel-page__tab-content novel-page__tab-content--settings">
         @if (novel(); as n) {
         <app-novel-settings [novel]="n" (novelUpdated)="onNovelUpdated($event)" />
         }
       </div>
 
-      <div class="novel-page__chapters">
-        @if (isLoading()) {
-        <p class="novel-page__loading">جارٍ التحميل...</p>
-        } @else if (chapters().length) {
-        @for (ch of chapters(); track ch.id) {
-        <button type="button" class="novel-page__chapter-item" [class.active]="activeChapter()?.id === ch.id"
-          (click)="openChapter(ch)">
-          <span class="novel-page__chapter-order">{{ ch.order }}</span>
-          <span class="novel-page__chapter-name">{{ ch.title }}</span>
-        </button>
-        }
-        } @else {
-        <p class="novel-page__empty">لا توجد فصول بعد</p>
-        }
+      } @else {
+
+      <div class="novel-page__tab-content novel-page__tab-content--chapters">
+        <div class="novel-page__chapters-header">
+          <span>الفصول</span>
+          <button type="button" class="novel-page__new-chapter-btn" (click)="startNewChapter()">+ جديد</button>
+        </div>
+
+        <div class="novel-page__chapters">
+          @if (isLoading()) {
+          <p class="novel-page__loading">جارٍ التحميل...</p>
+          } @else if (chapters().length) {
+          @for (ch of chapters(); track ch.id) {
+          <button type="button" class="novel-page__chapter-item" [class.active]="activeChapter()?.id === ch.id"
+            (click)="openChapter(ch)">
+            <span class="novel-page__chapter-order">{{ ch.order }}</span>
+            <span class="novel-page__chapter-name">{{ ch.title }}</span>
+          </button>
+          }
+          } @else {
+          <p class="novel-page__empty">لا توجد فصول بعد</p>
+          }
+        </div>
       </div>
+
+      }
+
     </div>
   </aside>
 
