@@ -560,7 +560,9 @@
 .video-frame {
   position: relative;
   width: 100%;
-  padding-top: 56.25%;
+  max-width: 900px;
+  margin: 0 auto;
+  aspect-ratio: 16 / 9;
   border-radius: 20px;
   overflow: hidden;
   box-shadow: 0 10px 40px color-mix(in srgb, var(--sard-primary) 18%, transparent);
@@ -627,6 +629,7 @@
 .video-embed {
   width: 100%;
   height: 100%;
+  object-fit: cover;
   border: none;
   display: block;
 }
@@ -655,17 +658,17 @@
   }
 }
 
-.video-toggle-input:checked ~ .video-frame .video-poster {
+.video-toggle-input:checked~.video-frame .video-poster {
   opacity: 0;
   pointer-events: none;
 }
 
-.video-toggle-input:checked ~ .video-frame .video-embed-wrap {
+.video-toggle-input:checked~.video-frame .video-embed-wrap {
   opacity: 1;
   pointer-events: auto;
 }
 
-.video-toggle-input:checked ~ .video-frame .video-close-btn {
+.video-toggle-input:checked~.video-frame .video-close-btn {
   opacity: 1;
   pointer-events: auto;
 }
@@ -673,6 +676,12 @@
 @media (max-width: 640px) {
   .video-section {
     padding: 4px 16px 40px;
+  }
+
+  .video-frame {
+    aspect-ratio: 4 / 5;
+    max-height: 70vh; 
+    border-radius: 14px;
   }
 
   .video-title {
