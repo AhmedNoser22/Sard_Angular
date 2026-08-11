@@ -1,5 +1,11 @@
 <div class="home-page" dir="rtl">
 
+  <div class="ambient-bg" aria-hidden="true">
+    <span class="ambient-orb ambient-orb--1"></span>
+    <span class="ambient-orb ambient-orb--2"></span>
+    <span class="ambient-orb ambient-orb--3"></span>
+  </div>
+
   <!-- ===== NAVBAR ===== -->
   <nav class="navbar">
     <div class="navbar-inner">
@@ -128,6 +134,53 @@
             اكتشف رواياتي الآن
           </button>
         </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===== VIDEO GUIDE ===== -->
+  <section class="video-section" id="video-section">
+    <div class="video-inner">
+
+      <div class="video-header">
+        <span class="video-eyebrow">دليلك السريع</span>
+        <h2 class="video-title">تعرف على سرد في أقل من دقيقتين</h2>
+        <p class="video-sub">فيديو قصير يشرح كيف تكتشف الروايات، تنشر كتاباتك، وتستخدم كل ميزة في المنصة خطوة بخطوة</p>
+      </div>
+
+      <input type="checkbox" id="video-toggle" class="video-toggle-input" />
+
+      <div class="video-frame">
+
+        <label for="video-toggle" class="video-poster">
+          <svg class="video-poster-ring" viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="150" cy="150" r="120" fill="none" stroke="#ffffff" stroke-width="0.6" opacity="0.25" />
+            <circle cx="150" cy="150" r="95" fill="none" stroke="#ffffff" stroke-width="0.6" opacity="0.35" />
+          </svg>
+
+          <span class="video-play-btn" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="currentColor" width="26" height="26">
+              <path d="M8 5v14l11-7z" />
+            </svg>
+          </span>
+
+          <span class="video-poster-caption">اضغط لتشغيل الفيديو التعريفي</span>
+        </label>
+
+        <div class="video-embed-wrap">
+          <iframe
+            class="video-embed"
+            src="https://www.youtube-nocookie.com/embed/REPLACE_WITH_VIDEO_ID"
+            title="فيديو تعريفي بمنصة سرد"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen
+            loading="lazy">
+          </iframe>
+        </div>
+
+        <label for="video-toggle" class="video-close-btn" aria-label="إغلاق الفيديو">✕</label>
+
       </div>
 
     </div>
