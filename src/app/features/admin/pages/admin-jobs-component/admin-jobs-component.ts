@@ -49,6 +49,6 @@ export class AdminJobsComponent {
   private readonly sanitizer = inject(DomSanitizer);
 
   hangfireUrl: SafeResourceUrl = this.sanitizer.bypassSecurityTrustResourceUrl(
-    'https://localhost:7002/hangfire'
+    'https://sard.runasp.net/hangfire'
   );
 }
