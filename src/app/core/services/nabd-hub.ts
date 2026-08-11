@@ -8,6 +8,8 @@ import { AppNotification } from '../models/nabd/notification.model';
 @Injectable({ providedIn: 'root' })
 export class NabdHubService {
   private connection: signalR.HubConnection | null = null;
+  private startPromise: Promise<void> | null = null;
+  private joinedPosts = new Set<number>();
 
   newPost$ = new Subject<Post>();
   newReply$ = new Subject<{ postId: number; reply: Reply }>();
@@ -33,27 +35,66 @@ export class NabdHubService {
     this.connection.on('ReplyDeleted', (data: { postId: number; replyId: number }) => this.replyDeleted$.next(data));
     this.connection.on('ReceiveNotification', (n: AppNotification) => this.notification$.next({ ...n, isRead: false }));
 
-    this.connection.start().catch(err => console.error('SignalR error:', err));
+    this.connection.onreconnected(() => this.rejoinAllGroups());
+
+    this.startPromise = this.connection
+      .start()
+      .then(() => this.rejoinAllGroups())
+      .catch(err => {
+        console.error('SignalR error:', err);
+        throw err;
+      });
+  }
+
+  private async rejoinAllGroups(): Promise<void> {
+    if (!this.connection) return;
+    const state: signalR.HubConnectionState = this.connection.state;
+    if (state !== signalR.HubConnectionState.Connected) return;
+
+    for (const postId of this.joinedPosts) {
+      try {
+        await this.connection.invoke('JoinPost', postId);
+      } catch (err) {
+        console.error(`Failed to rejoin post-${postId}:`, err);
+      }
+    }
   }
 
   async joinPost(postId: number): Promise<void> {
+    this.joinedPosts.add(postId);
+
     if (!this.connection) return;
 
-    if (this.connection.state === signalR.HubConnectionState.Connected) {
+    const initialState: signalR.HubConnectionState = this.connection.state;
+    if (initialState === signalR.HubConnectionState.Connected) {
       await this.connection.invoke('JoinPost', postId);
-    } else {
-      this.connection.onreconnected(async () => {
-        await this.connection!.invoke('JoinPost', postId);
-      });
+      return;
+    }
+
+    
+    if (this.startPromise) {
+      try {
+        await this.startPromise;
+        if (!this.connection) return;
+        const stateAfterStart: signalR.HubConnectionState = this.connection.state;
+        if (stateAfterStart === signalR.HubConnectionState.Connected) {
+          await this.connection.invoke('JoinPost', postId);
+        }
+      } catch {
+     
+      }
     }
   }
 
   leavePost(postId: number): void {
+    this.joinedPosts.delete(postId);
     this.connection?.invoke('LeavePost', postId);
   }
 
   disconnect(): void {
+    this.joinedPosts.clear();
     this.connection?.stop();
     this.connection = null;
+    this.startPromise = null;
   }
 }
