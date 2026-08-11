@@ -169,14 +169,10 @@
         </label>
 
         <div class="video-embed-wrap">
-          <iframe
-            class="video-embed"
-            src="https://www.youtube-nocookie.com/embed/REPLACE_WITH_VIDEO_ID"
-            title="فيديو تعريفي بمنصة سرد"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen
-            loading="lazy">
-          </iframe>
+          <video class="video-embed" controls preload="none" poster="assets/videos/sard-tutorial-poster.jpg">
+            <source src="/sard.mp4" type="video/mp4" />
+            متصفحك لا يدعم تشغيل الفيديو.
+          </video>
         </div>
 
         <label for="video-toggle" class="video-close-btn" aria-label="إغلاق الفيديو">✕</label>
