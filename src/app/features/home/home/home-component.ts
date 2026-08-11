@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef, ViewChild, ElementRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
@@ -51,6 +51,20 @@ export class HomeComponent implements OnInit, OnDestroy {
     event?.preventDefault();
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
+
+@ViewChild('videoEl') videoEl!: ElementRef<HTMLVideoElement>;
+
+ngAfterViewInit() {
+  const observer = new IntersectionObserver(
+    ([entry]) => {
+      if (!entry.isIntersecting) {
+        this.videoEl.nativeElement.pause();
+      }
+    },
+    { threshold: 0.25 }
+  );
+  observer.observe(this.videoEl.nativeElement);
+}
 
   scrollToExplore(event?: Event): void {
     event?.preventDefault();
