@@ -139,9 +139,41 @@
 .nav-actions {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   justify-content: flex-end;
   justify-self: end;
+}
+
+.nav-login-btn {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  height: 40px;
+  padding: 0 16px;
+  border: 1px solid color-mix(in srgb, var(--sard-primary) 25%, transparent);
+  background: color-mix(in srgb, var(--sard-tan) 30%, transparent);
+  color: var(--sard-maroon);
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, transform 0.2s, box-shadow 0.2s;
+  white-space: nowrap;
+
+  &:hover {
+    color: var(--sard-primary-dark);
+    background: color-mix(in srgb, var(--sard-tan) 55%, transparent);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px color-mix(in srgb, var(--sard-primary) 15%, transparent);
+  }
+
+  &:active {
+    transform: translateY(0) scale(0.97);
+  }
+}
+
+.nav-login-text {
+  font-family: 'Amiri', serif;
+  font-size: 0.85rem;
+  font-weight: 700;
 }
 
 .nav-icon-btn {
@@ -171,6 +203,16 @@
 @media (max-width: 640px) {
   .nav-links {
     display: none;
+  }
+
+  .nav-login-text {
+    display: none;
+  }
+
+  .nav-login-btn {
+    width: 40px;
+    padding: 0;
+    justify-content: center;
   }
 }
 
