@@ -205,14 +205,28 @@
     display: none;
   }
 
-  .nav-login-text {
-    display: none;
+  .navbar-inner {
+    gap: 10px;
+  }
+
+  .nav-actions {
+    gap: 6px;
   }
 
   .nav-login-btn {
-    width: 40px;
-    padding: 0;
-    justify-content: center;
+    height: 36px;
+    padding: 0 12px;
+    gap: 5px;
+  }
+
+  .nav-login-text {
+    font-size: 0.76rem;
+  }
+
+  .nav-icon-btn {
+    width: 36px;
+    height: 36px;
+    flex-shrink: 0;
   }
 }
 
