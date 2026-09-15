@@ -44,9 +44,16 @@ export class HomeComponent implements OnInit, OnDestroy {
   // ─── Nav / Router ─────────────────────────────────────────────────────────
   constructor(private router: Router, private cdr: ChangeDetectorRef, private http: HttpClient) { }
 
+  isLoggingIn = false;
+
   goToLogin(): void {
-    this.router.navigate(['/auth/login']);
+    if (this.isLoggingIn) return;
+    this.isLoggingIn = true;
+    this.router.navigate(['/auth/login']).finally(() => {
+      this.isLoggingIn = false;
+    });
   }
+
   scrollToTop(event?: Event): void {
     event?.preventDefault();
     window.scrollTo({ top: 0, behavior: 'smooth' });

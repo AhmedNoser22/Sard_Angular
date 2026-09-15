@@ -25,12 +25,12 @@
 
       <div class="nav-links">
         <a href="#" class="nav-link" (click)="scrollToExplore($event)">استكشف</a>
-        <a class="nav-link nav-link--cta" (click)="goToLogin()">لنبدأ</a>
+        <a class="nav-link nav-link--cta" [class.is-loading]="isLoggingIn" (click)="goToLogin()">لنبدأ</a>
         <a href="#" class="nav-link" (click)="scrollToAI($event)">اكتب فكرتك</a>
       </div>
 
       <div class="nav-actions">
-        <button class="nav-login-btn" (click)="goToLogin()">
+        <button class="nav-login-btn" [class.is-loading]="isLoggingIn" (click)="goToLogin()">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="18" height="18">
             <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
             <circle cx="12" cy="7" r="4" />
