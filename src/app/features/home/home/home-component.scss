@@ -197,8 +197,17 @@
 }
 
 @keyframes loginPulse {
-  0%, 100% { transform: scale(1); filter: brightness(1); }
-  50% { transform: scale(0.96); filter: brightness(1.25); }
+
+  0%,
+  100% {
+    transform: scale(1);
+    filter: brightness(1);
+  }
+
+  50% {
+    transform: scale(0.96);
+    filter: brightness(1.25);
+  }
 }
 
 .nav-login-text {
@@ -795,6 +804,7 @@
   border-top: 1px solid color-mix(in srgb, var(--sard-primary) 15%, transparent);
   position: relative;
   z-index: 1;
+  scroll-margin-top: 88px;
 }
 
 .explore-inner {
@@ -917,6 +927,7 @@
   padding: 56px 32px;
   position: relative;
   z-index: 1;
+  scroll-margin-top: 88px;
 }
 
 .ai-inner {
@@ -1387,8 +1398,7 @@
   .hero-section,
   .ai-section,
   .explore-section {
-    padding-right: 16px;
-    padding-left: 16px;
+    scroll-margin-top: 68px;
   }
 
   .navbar-inner {
@@ -1523,7 +1533,7 @@
   }
 }
 
-.navbar-inner > * {
+.navbar-inner>* {
   animation: fadeInUp 0.5s ease both;
 }
 
