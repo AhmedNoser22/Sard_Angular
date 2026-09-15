@@ -15,12 +15,17 @@
   --sard-maroon: #ffb3c1;
   --sard-text: #f3e3e6;
   --sard-text-light: #c79aa4;
+  width: 100vw;
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
 
   min-height: 100vh;
   background-color: var(--sard-bg);
   font-family: system-ui, -apple-system, sans-serif;
   overflow-x: hidden;
-  position: relative;
 }
 
 * {
@@ -667,7 +672,7 @@
   justify-content: center;
   gap: 16px;
   cursor: pointer;
-  background: radial-gradient(circle at 30% 30%, var(--sard-primary) 0%, var(--sard-maroon-alt, var(--sard-tan)) 65%, #1a0c10 100%);
+  background: radial-gradient(circle at 30% 30%, var(--sard-primary) 0%, var(--sard-tan) 65%, #1a0c10 100%);
   transition: opacity 0.35s ease;
 }
 
