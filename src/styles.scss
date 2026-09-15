@@ -23,6 +23,8 @@ html[data-theme='dark'] {
 }
 
 html, body {
+  margin: 0;
+  padding: 0;
   background: var(--sard-bg);
   color: var(--sard-text);
   transition: background 0.2s ease, color 0.2s ease;
